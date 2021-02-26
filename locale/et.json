@@ -2,7 +2,7 @@
     "channelName": "Taevas TV7",
     "tizenFolder": "tizen",
     "configXmlId": "https://www.tv7.ee",
-    "configXmlVersion": "2.0.0",
+    "configXmlVersion": "2.0.1",
     "configXmlName": "TaevasTV7",
     "configXmlPackage": "PhfLvc3h22"
 }

@@ -3,19 +3,19 @@
 	width: 100%;
 } 
 
-.videoPlayerContainer {
+.apVideoPlayerContainer {
     width: 100%;
     height: 100%;
 }
 
-.controls {
+.apControls {
     width: 100%;
     height: 100%;
     position: absolute;
     display: none;
 }
 
-.gradient {
+.apGradient {
 	position: absolute;
     width: 100%;
     height: 100%;
@@ -24,7 +24,7 @@
     background: linear-gradient(0deg, #000000, transparent 70%);
 }
 
-.infoArea {
+.apInfoArea {
 	position: absolute;
 	left: 20px;
 	bottom: 140px;
@@ -33,7 +33,7 @@
     z-index: 100;
 }
 
-.durationCurrentTime {
+.apDurationCurrentTime {
     position: absolute;
     color: #ffffff;
     z-index: 100;
@@ -43,7 +43,7 @@
     font-weight: bold;
 }
 
-.statusBarContainer {
+.apStatusBarContainer {
     position: absolute;
     background-color: #eeeeee;
     width: calc(100% - 80px);
@@ -53,33 +53,33 @@
     margin: 0 40px;
 }
 
-.statusBar {
+.apStatusBar {
     position: relative;
     background-color: #0099CC;
     width: 0%;
     height: 10px;
 }
 
-.nameDesc {
+.apNameDesc {
 	color: #ffffff;
 	font-size: 48px;
 	font-weight: bold;
 	margin-bottom: 20px;
 }
 
-.caption,
-.episodeNumber {
+.apCaption,
+.apEpisodeNumber {
 	color: #ffffff;
 	font-size: 32px;
 	font-weight: bold;
 	margin-bottom: 8px;
 }
 
-.caption {
+.apCaption {
 	margin-bottom: 20px;
 }
 
-.playPauseIconContainer {
+.apPlayPauseIconContainer {
 	position: absolute;
 	width: 80px;
 	height: 80px;
@@ -96,7 +96,7 @@
     display: none;
 }
 
-.playPauseIcon {
+.apPlayPauseIcon {
 	width: 80px;
 	height: 80px;
 }

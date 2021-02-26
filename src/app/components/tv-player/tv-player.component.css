@@ -3,12 +3,12 @@
     height: 100%;
 }
 
-.videoPlayerContainer {
+.tpVideoPlayerContainer {
     width: 100%;
     height: 100%;
 }
 
-.programDetails {
+.tpProgramDetails {
     height: 120px;
     width: 100%;
     position: absolute;
@@ -52,7 +52,7 @@
     height: 120px;
 }
 
-.programName {
+.tpProgramName {
     color: #ffffff;
     font-size: 26px;
     font-weight: bold;
@@ -64,7 +64,7 @@
     margin-right: 14px;
 }
 
-.programDescription {
+.tpProgramDescription {
     color: #ffffff;
     font-size: 26px;
     height: 26px;
@@ -75,26 +75,26 @@
     margin-top: 8px;
 }
 
-.statusBarContainer {
+.tpStatusBarContainer {
     background-color: #eeeeee;
     width: 100%;
     height: 8px;
     margin-top: 18px;
 }
 
-.statusBar {
+.tpStatusBar {
     position: relative;
     background-color: #0099CC;
     width: 0%;
     height: 8px;
 }
 
-.nameTimeContainer {
+.tpNameTimeContainer {
     display: -webkit-flex;
     display: flex;
 }
 
-.dateTime {
+.tpDateTime {
     color: #ffffff;
     font-size: 26px;
     height: 26px;
@@ -103,7 +103,7 @@
     white-space: nowrap;
 }
 
-.comingProgramsText {
+.tpComingProgramsText {
     color: #ffffff;
     font-size: 26px;
     margin-top: 8px;
