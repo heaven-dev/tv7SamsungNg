@@ -1,9 +1,15 @@
-# tv7SamsungNg (Angular app)
+# tv7SamsungNg
 
-This Samsung smart TV application is implemented using the Angular 11. Application is tested with the following devices:
+This Samsung smart TV app is implemented using __Angular 11__. Project was generated with the [Angular CLI](https://cli.angular.io/) version __11.2.1__. Application is tested with the following devices:
   - Samsung smart TV (Tizen 5.0)
   - Samsung TV emulator (Tizen 3.2)
   - Samsung TV emulator (Tizen 6.0)
+
+## Demo
+
+Demo app running on Samsung TV emulator (Tizen 6.0).
+
+![Demo](https://github.com/heaven-dev/demo/blob/main/demo/demo.gif)
 
 ## Overview
 
