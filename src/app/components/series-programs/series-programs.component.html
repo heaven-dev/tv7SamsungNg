@@ -1,0 +1,33 @@
+<div id="mainView" class="mainView">
+
+    <div id="contentContainer" class="seriesProgramsContentContainer mainContentAnimationFadeIn">
+        <div id="seriesText" class="seriesText"></div>
+
+        <div id="seriesBusyLoader" class="busyLoader seriesProgramsBusyLoader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <div id="contentRows" class="contentRows">
+            <div id="seriesProgramsContainer" class="seriesProgramsContainer">
+                <div id="{{i}}_c" *ngFor="let s of seriesData; let i = index" class="seriesItem" [ngStyle]="{'height': rowItemHeight + 'px'}" tabindex="0">
+                    <img class="seriesImage" [ngStyle]="{'height': rowItemHeight + 'px', 'width': rowImageWidth + 'px'}" src="{{s.image_path}}" alt=""/>
+                    <div class="infoArea" [ngStyle]="{left: rowImageWidth + 'px'}">
+                        <div class="titleContainer">
+                            <img class="typeIcon" src="assets/episode.svg" alt=""/>
+                            <div id="nameDesc" class="nameDesc">{{s.name_desc}}</div>
+                        </div>
+
+                        <div class="detailsContainer">
+                            <div id="episodeNumber" class="episodeNumber" [ngStyle]="{'font-size': detailsFontSize + 'px'}">{{s.title_episode_number}}</div>
+                            <div id="duration" class="duration" [ngStyle]="{'font-size': detailsFontSize + 'px'}">{{s.title_duration_time}}</div>
+                            <div id="firstBroadcast" class="firstBroadcast" [ngStyle]="{'font-size': detailsFontSize + 'px'}">{{s.title_broadcast_date_time}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,33 @@
+<div id="mainView" class="mainView">
+    <div id="contentContainer" class="guideContentContainer mainContentAnimationFadeIn" tabindex="0">
+        <div id="guideBusyLoader" class="busyLoader guideBusyLoader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <div class="datesContainer">
+            <div class="dates">
+                <div id="r_{{i}}" *ngFor="let d of dates; let i = index" class="dateItem" tabindex="0">{{d.label}}</div>
+            </div>
+        </div>
+        
+        <div id="contentRows" class="contentRows">
+            <div id="guideContainer" class="guideContainer">
+                <div id="{{j}}_c" *ngFor="let g of guideDateData; let j = index" class="guideItem" [ngStyle]="{'height': rowItemHeight + 'px'}" tabindex="0">
+                    <img class="guideImage" [ngStyle]="{'height': rowItemHeight + 'px', 'width': rowImageWidth + 'px'}" src="{{g.image_path}}" alt=""/>
+                    <div class="guideInfoArea" [ngStyle]="{'left': rowImageWidth + 'px'}">	
+                        <div class="guideTitleContainer">
+                            <div id="ongoingProgram_{{j}}" class="guideOngoingProgram ongoingBlink"></div>
+                            <div id="time" class="guideTime">{{g.startEndLocal}}</div>
+                            <div id="nameDesc" class="guideNameDesc">{{g.name_desc}}</div>
+                        </div>
+
+                        <div id="caption" class="caption">{{g.caption}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

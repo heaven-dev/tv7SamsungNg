@@ -1,0 +1,36 @@
+.mainView {
+	height: calc(100% - 90px);
+}
+
+.platformInfoContentContainer {
+    height: 100%;
+	outline: none;
+}
+
+.platformInfoContent {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+.platformInfoBusyLoader {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	z-index: 100;
+	display: none;
+}
+
+.platformInfoTable {
+	width: 100%;
+}
+
+.platformInfoTable tr td {
+	color: #444444;
+	font-size: 34px;
+	padding: 6px 14px;
+}

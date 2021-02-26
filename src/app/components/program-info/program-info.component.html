@@ -1,0 +1,38 @@
+<div id="mainView" class="mainView">
+    <div id="contentContainer" class="programInfoContentContainer mainContentAnimationFadeIn">
+        <div id="programInfoBusyLoader" class="busyLoader programInfoBusyLoader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <div class="gradient" [ngStyle]="{'height': contentHeight + 'px'}"></div>
+        <img id="backgroundImage" class="backgroundImage" [ngStyle]="{'height': contentHeight + 'px'}" src="" alt="" tabindex="0" />
+
+        <div id="aspectRatioText" class="aspectRatioText"></div>
+
+        <div id="addedToFavoritesText" class="addedToFavoritesText"></div>
+        <div id="removedFromFavoritesText" class="removedFromFavoritesText"></div>
+
+        <div id="favoriteIconContainer" class="favoriteIconContainer" tabindex="0">
+            <img id="favoriteIcon" class="favoriteIcon" src="assets/favorites_not_selected.svg" alt="" />
+        </div>
+
+        <div id="playIconContainer" class="playIconContainer" tabindex="0">
+            <img class="playIcon" src="assets/play.svg" alt="image/svg+xml" />
+        </div>
+
+        <div class="infoArea">
+            <div id="nameDesc" class="nameDesc"></div>
+            <div id="caption" class="caption"></div>
+            <div id="episodeNumber" class="episodeNumber"></div>
+            <div id="duration" class="duration"></div>
+            <div id="firstBroadcast" class="firstBroadcast"></div>
+        </div>
+
+        <div id="isInArchiveIconContainer" class="isInArchiveIconContainer" tabindex="0">
+            <img id="isInArchiveIcon" class="isInArchiveIcon" src="assets/archive_white.svg" alt="" />
+        </div>
+    </div>
+</div>

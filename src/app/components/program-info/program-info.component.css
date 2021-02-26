@@ -1,0 +1,193 @@
+.mainView {
+	height: calc(100% - 90px);
+}
+
+.programInfoContentContainer {
+	overflow: hidden;
+    height: 100%;
+	position: relative;
+	outline: none;
+}
+
+.backgroundImage {
+	width: calc(100% - 10px);
+	height: calc(100% - 20px);
+	margin-top: 10px;
+	outline: none;
+}
+
+.gradient {
+	position: absolute;
+	width: calc(100% - 10px);
+	height: calc(100% - 20px);
+	margin-top: 10px;
+	background: -webkit-linear-gradient(0deg, #000000, transparent 70%);
+	background: linear-gradient(0deg, #000000, transparent 70%);
+}
+
+.infoArea {
+	position: absolute;
+	left: 20px;
+	bottom: 40px;
+	right: 30px;
+	padding: 0 20px;
+}
+
+.nameDesc {
+	color: #ffffff;
+	font-size: 48px;
+	font-weight: bold;
+	margin-bottom: 20px;
+}
+
+.caption,
+.episodeNumber,
+.duration,
+.firstBroadcast {
+	color: #ffffff;
+	font-size: 32px;
+	font-weight: bold;
+	margin-bottom: 8px;
+}
+
+.caption {
+	margin-bottom: 20px;
+}
+
+.playIconContainer {
+	position: absolute;
+	width: 80px;
+	height: 80px;
+	background-color: #ffffff;
+	opacity: 0.7;
+	border-radius: 50%;
+	outline: none;
+	z-index: 200;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	padding: 8px;
+	border: 2px solid #000000;
+	display: none;
+}
+
+.favoriteIconContainer {
+	position: absolute;
+	width: 80px;
+	height: 80px;
+	background-color: #ffffff;
+	opacity: 0.7;
+	border-radius: 50%;
+	outline: none;
+	z-index: 200;
+	top: 40px;
+	right: 40px;
+	padding: 8px;
+	border: 2px solid #000000;
+	display: none;
+}
+
+.isInArchiveIconContainer {
+	position: absolute;
+	width: 60px;
+	height: 60px;
+	border: none;
+	outline: none;
+	background-color: transparent;
+	z-index: 200;
+	bottom: 40px;
+	right: 40px;
+}
+
+.playIconContainer:focus,
+.favoriteIconContainer:focus {
+	background-color: #0099CC;
+	opacity: 1;
+}
+
+.playIcon,
+.favoriteIcon {
+	width: 80px;
+	height: 80px;
+}
+
+.isInArchiveIcon {
+	width: 60px;
+	height: 60px;
+}
+
+.addedToFavoritesText,
+.removedFromFavoritesText {
+	position: absolute;
+	color: #ffffff;
+	font-size: 32px;
+	font-weight: bold;
+	background-color: #444444;
+	padding: 10px 20px;
+	border-radius: 10px;
+	top: 64px;
+	display: none;
+	left: 50%;
+	-webkit-transform: translateX(-50%);
+	transform: translateX(-50%);
+	-webkit-box-shadow: 5px 5px 24px 5px #000000; 
+	box-shadow: 5px 5px 24px 5px #000000;
+	-webkit-animation: textFadeOut 1.5s linear forwards;
+	animation: textFadeOut 1.5s linear forwards;
+}
+
+.aspectRatioText {
+	position: absolute;
+	color: #ffffff;
+	font-size: 32px;
+	font-weight: bold;
+	background-color: #444444;
+	padding: 10px 20px;
+	border-radius: 10px;
+	top: 40px;
+	left: 30px;
+	display: none;
+	-webkit-box-shadow: 5px 5px 24px 5px #000000; 
+	box-shadow: 5px 5px 24px 5px #000000;
+}
+
+.programInfoBusyLoader {
+	position: absolute;
+	top: 60%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -60%);
+	transform: translate(-50%, -60%);
+	z-index: 201;
+	display: none;
+}
+
+@-webkit-keyframes textFadeOut { 
+	0% {
+		opacity: 1;
+		display: block;
+	}
+	25% {
+		opacity: 1;
+		display: block;
+	}
+	100% {
+		opacity: 0;
+		display: none;
+	}
+}
+
+@keyframes textFadeOut { 
+	0% {
+		opacity: 1;
+		display: block;
+	}
+	25% {
+		opacity: 1;
+		display: block;
+	}
+	100% {
+		opacity: 0;
+		display: none;
+	}
+}

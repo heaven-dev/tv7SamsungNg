@@ -1,0 +1,28 @@
+<div id="mainView" class="mainView">
+    <div id="contentContainer" class="searchResultContentContainer mainContentAnimationFadeIn">
+        <div id="searchResultText" class="searchResultText" tabindex="0"></div>
+        <div id="noHitsText" class="noHitsText"></div>
+
+        <div id="searchResultBusyLoader" class="busyLoader searchResultBusyLoader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <div id="contentRows" class="contentRows">
+            <div id="searchResultContainer" class="searchResultContainer">
+                <div id="{{i}}_c" *ngFor="let r of searchData; let i = index" class="searchItem" [ngStyle]="{'height': rowItemHeight + 'px'}" tabindex="0">
+                    <img class="searchImage" [ngStyle]="{'height': rowItemHeight + 'px', 'width': rowImageWidth + 'px'}" src="{{r.image_path}}" alt=""/>
+                    <div class="searchResultInfoArea" [ngStyle]="{'left': rowImageWidth + 'px'}">
+                        <div class="searchResultTitleContainer">
+                            <img class="searchResultTypeIcon" src="{{isSeries(r.type) ? 'assets/series.svg' : 'assets/episode.svg'}}" alt=""/>
+                            <div id="nameDesc" class="searchResultNameDesc">{{r.name_desc}}</div>
+                        </div>
+                        <div id="caption" class="searchResultCaption">{{r.caption}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

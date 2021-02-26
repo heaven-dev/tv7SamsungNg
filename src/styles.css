@@ -1,0 +1,106 @@
+@import '~video.js/dist/video-js.css';
+
+.body {
+	margin: 0;
+	padding: 0;
+	background-color: #ffffff;
+    height: 100%;
+    width: 100%;
+}
+
+/*
+	loading.io CSS spinner: https://loading.io/css/
+*/
+.busyLoader {
+    position: relative;
+    width: 60px;
+    height: 60px;
+}
+
+.busyLoader div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    margin: 7px;
+    border: 7px solid #0099CC;
+    border-radius: 50%;
+    border-color: #0099CC transparent transparent transparent;
+    -webkit-animation: busyLoader 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    animation: busyLoader 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+
+.busyLoader div:nth-child(1) {
+    -webkit-animation-delay: -0.45s;
+    animation-delay: -0.45s;
+}
+
+.busyLoader div:nth-child(2) {
+    -webkit-animation-delay: -0.3s;
+    animation-delay: -0.3s;
+}
+
+.busyLoader div:nth-child(3) {
+    -webkit-animation-delay: -0.15s;
+    animation-delay: -0.15s;
+}
+
+@-webkit-keyframes busyLoader {
+    0% {
+        -webkit-transform: rotate(0deg); 
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes busyLoader {
+    0% {
+        -webkit-transform: rotate(0deg); 
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+.mainContentAnimationFadeIn,
+.categoriesAnimationFadeIn,
+.rowAnimationFadeIn {
+	-webkit-animation: contentAnimationFadeIn 0.9s linear;
+	animation: contentAnimationFadeIn 0.9s linear;	
+}
+
+@-webkit-keyframes contentAnimationFadeIn {
+	0% {
+		opacity: 0;
+	}
+	10% {
+		opacity: 0;
+	}
+	25% {
+		opacity: 0.1;
+	}
+	100% {
+		opacity: 1
+	}
+}
+
+@keyframes contentAnimationFadeIn {
+	0% {
+		opacity: 0;
+	}
+	10% {
+		opacity: 0;
+	}
+	25% {
+		opacity: 0.1;
+	}
+	100% {
+		opacity: 1
+	}
+}

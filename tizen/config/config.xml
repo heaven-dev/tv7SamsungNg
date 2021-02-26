@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns:tizen="http://tizen.org/ns/widgets" xmlns="http://www.w3.org/ns/widgets" id="<%= configXmlId %>" version="<%= configXmlVersion %>" viewmodes="fullscreen">
+    <access origin="*" subdomains="true"></access>
+    <tizen:application id="<%= configXmlPackage %>.<%= configXmlName %>" package="<%= configXmlPackage %>" required_version="3.0"/>
+    <author href="<%= configXmlId %>"><%= channelName %></author>
+    <content src="index.html"/>
+    <tizen:content-security-policy>connect-src 'self' http: https:; img-src 'self' data: https: http:;</tizen:content-security-policy>
+    <description>When the content truly matters</description>
+    <description xml:lang="en-gb">When the content truly matters</description>
+    <description xml:lang="fi-fi">Kun sisältö ratkaisee</description>
+    <description xml:lang="et-ee">Kui sisu on oluline</description>
+    <description xml:lang="ru-ru">Когда содержание имеет значение</description>
+    <description xml:lang="hy-am">Когда содержание имеет значение</description>
+    <description xml:lang="uk-ua">Когда содержание имеет значение</description>
+    <description xml:lang="sv-se">När innehållet avgör</description>
+    <feature name="http://tizen.org/feature/screen.size.all"/>
+    <icon src="tv7icon_117x117.png"/>
+    <license href="https://github.com/heaven-dev/tv7SamsungWebApp/blob/master/LICENSE.md">MIT</license>
+    <tizen:metadata key="http://samsung.com/tv/metadata/use.voiceguide" value="false"/>
+    <tizen:metadata key="http://samsung.com/tv/metadata/prelaunch.support" value="false"/>
+    <tizen:metadata key="http://samsung.com/tv/metadata/auto.update" value="true"/>
+    <name><%= configXmlName %></name>
+    <name xml:lang="en-gb">Heaven TV7</name>
+    <name xml:lang="fi-fi">Taivas TV7</name>
+    <name xml:lang="et-ee">Taevas TV7</name>
+    <name xml:lang="ru-ru">Небеса ТВ7</name>
+    <name xml:lang="hy-am">Небеса ТВ7</name>
+    <name xml:lang="uk-ua">Небеса ТВ7</name>
+    <name xml:lang="sv-se">Himlen TV7</name>
+    <tizen:privilege name="http://developer.samsung.com/privilege/network.public"/>
+    <tizen:privilege name="http://tizen.org/privilege/application.launch"/>
+    <tizen:privilege name="http://tizen.org/privilege/tizen"/>
+    <tizen:privilege name="http://tizen.org/privilege/http"/>
+    <tizen:privilege name="http://tizen.org/privilege/internet"/>
+    <tizen:privilege name="http://tizen.org/privilege/tv.audio"/>
+    <tizen:privilege name="http://tizen.org/privilege/tv.display"/>
+    <tizen:privilege name="http://tizen.org/privilege/tv.inputdevice"/>
+    <tizen:privilege name="http://tizen.org/privilege/tv.window"/>
+    <tizen:privilege name="http://tizen.org/privilege/system"/>
+    <tizen:profile name="tv-samsung"/>
+    <tizen:setting screen-orientation="landscape" context-menu="disable" background-support="disable" pointing-device-support="disable" encryption="disable" install-location="auto" hwkey-event="enable"/>
+</widget>

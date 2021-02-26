@@ -1,0 +1,124 @@
+.mainView {
+	height: calc(100% - 90px);
+}
+
+.favoritesContentContainer {
+	overflow: hidden;
+	height: 100%;
+}
+
+.contentRows {
+	height: 100%;
+	overflow: hidden;
+}
+
+.favoritesContainer {
+	height: 100%;
+	margin: 50px 20px 20px 10px;
+	position: relative;
+}
+
+.favoritesItem {
+	position: relative;
+	width: calc(100% - 20px);
+	border: 10px solid #444444;
+	outline: none;
+	border-radius: 4px;
+	margin-bottom: 20px;
+}
+
+.favoritesItem:focus {
+	border: 10px solid #0099CC;
+	border-radius: 4px;
+	background-color: #dddddd;
+	/*
+	-webkit-box-shadow: 0px 0px 30px 0px #0099CC;
+	box-shadow: 0px 0px 30px 0px #0099CC;
+	*/
+}
+
+.favoritesImage {
+	width: 30%;
+	height: 100%;
+}
+
+.favoritesBusyLoader {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	z-index: 100;
+	display: none;
+}
+
+.favoritesInfoArea {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	padding: 10px 20px;
+	overflow-y: hidden;
+}
+
+.favoritesTitleContainer {
+	display: -webkit-flex;
+	display: flex;
+}
+
+.favoritesTypeIcon {
+	width: 37px;
+	min-width: 37px;
+	height: 37px;
+	background-color: #cccccc;
+    border-radius: 50%;
+	margin-right: 10px;
+	border: 1px solid #444444;
+}
+
+.favoritesNameDesc {
+	color: #444444;
+	font-size: 32px;
+	font-weight: bold;
+	margin-bottom: 10px;
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.favoritesCaption {
+	color: #444444;
+	font-size: 28px;
+	font-weight: bold;
+	padding-right: 20px;
+}
+
+.favoritesText {
+	position: fixed;
+	z-index: 100;
+	background-color: #fff;
+	width: 100%;
+	font-size: 32px;
+	font-weight: bold;
+	color: #444444;
+	height: 50px;
+	line-height: 50px;
+	padding-left: 12px;
+	white-space: nowrap;
+    overflow: hidden;
+	text-overflow: ellipsis;
+	outline: none;
+}
+
+.noFavoritesText {
+	background-color: #fff;
+	font-size: 32px;
+	font-weight: bold;
+	color: #444444;
+	display: none;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}

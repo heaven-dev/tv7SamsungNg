@@ -1,0 +1,94 @@
+<div id="mainView" class="mainView">
+    <div id="contentContainer" class="searchContentContainer mainContentAnimationFadeIn" tabindex="0">
+
+        <div id="searchBusyLoader" class="busyLoader searchBusyLoader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <div class="textFieldAndkeyboardContainer">
+            <div id="searchTextField" class="searchTextField"></div>
+
+            <div id="keyboardContainer" class="keyboardContainer">
+                <div id="row1" class="keyboardRow">
+                    <ng-container *ngIf="keyboardType === 1 || keyboardType === 2">
+                        <div id="0_{{i}}" class="key" *ngFor="let k of row1Normal; let i = index"
+                            [ngStyle]="{'width': keyWidthAndHeight + 'px', 'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px', 'font-size': keyFontSize + 'px'}" 
+                            tabindex="0">{{isLowerCase() ? k.n : k.c}}</div>
+                    </ng-container>
+
+                    <ng-container *ngIf="keyboardType === 3">
+                        <div id="0_{{i}}" class="key" *ngFor="let k of row1Special; let i = index"
+                            [ngStyle]="{'width': keyWidthAndHeight + 'px', 'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px', 'font-size': keyFontSize + 'px'}"  
+                            tabindex="0">{{k.n}}</div>
+                    </ng-container>
+                </div>
+
+                <div id="row2" class="keyboardRow">
+                    <ng-container *ngIf="keyboardType === 1 || keyboardType === 2">
+                        <div id="1_{{i}}" class="key" *ngFor="let k of row2Normal; let i = index"
+                            [ngStyle]="{'width': keyWidthAndHeight + 'px', 'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px', 'font-size': keyFontSize + 'px'}" 
+                            tabindex="0">{{isLowerCase() ? k.n : k.c}}</div>
+                    </ng-container>
+
+                    <ng-container *ngIf="keyboardType === 3">
+                        <div id="1_{{i}}" class="key" *ngFor="let k of row2Special; let i = index"
+                            [ngStyle]="{'width': keyWidthAndHeight + 'px', 'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px', 'font-size': keyFontSize + 'px'}"  
+                            tabindex="0">{{k.n}}</div>
+                    </ng-container>
+                </div>
+
+                <div id="row3" class="keyboardRow">
+                    <ng-container *ngIf="keyboardType === 1 || keyboardType === 2">
+                        <div id="2_{{i}}" class="key" *ngFor="let k of row3Normal; let i = index"
+                            [ngStyle]="{'width': keyWidthAndHeight + 'px', 'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px', 'font-size': keyFontSize + 'px'}" 
+                            tabindex="0">{{isLowerCase() ? k.n : k.c}}</div>
+
+                        <div id="2_{{columnImageBtnIndex(1)}}" class="key" 
+                            [ngStyle]="{'width': keyWidthAndHeight + 'px', 'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px'}" key="space" tabindex="0">
+                            <img id="spaceIcon" [ngStyle]="{'width': iconWidth + 'px', 'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px'}" src="assets/space.svg" />
+                        </div>
+                        <div id="2_{{columnImageBtnIndex(2)}}" class="key" 
+                            [ngStyle]="{'width': keyWidthAndHeight + 'px', 'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px'}" key="backSpace" tabindex="0">
+                            <img id="backspaceIcon" [ngStyle]="{'width': iconWidth + 'px', 'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px'}" src="assets/backspace.svg" />
+                        </div>
+                        <div id="2_{{columnImageBtnIndex(3)}}" class="key" 
+                            [ngStyle]="{'width': keyWidthAndHeight + 'px', 'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px'}" key="capslock" tabindex="0">
+                            <img id="capslockIcon" [ngStyle]="{'width': iconWidth + 'px', 'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px'}" src="assets/capslock.svg" />
+                        </div>
+                        <div id="2_{{columnImageBtnIndex(4)}}" class="key" 
+                            [ngStyle]="{'width': keyWidthAndHeight + 'px', 'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px'}" key="specialChars" tabindex="0">
+                            <img id="specialCharsIcon" [ngStyle]="{'width': iconWidth + 'px', 'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px'}" src="assets/specialchar.svg" />
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="keyboardType === 3">
+                        <div id="2_{{i}}" class="key" *ngFor="let k of row3Special; let i = index"
+                            [ngStyle]="{'width': keyWidthAndHeight + 'px', 'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px', 'font-size': keyFontSize + 'px'}"  
+                            tabindex="0">{{k.n}}</div>
+
+                        <div id="2_{{columnImageBtnIndex(1)}}" class="key" 
+                            [ngStyle]="{'width': keyWidthAndHeight + 'px', 'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px'}" key="space" tabindex="0">
+                            <img id="spaceIcon" [ngStyle]="{'width': iconWidth + 'px', 'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px'}" src="assets/space.svg" />
+                        </div>
+                        <div id="2_{{columnImageBtnIndex(2)}}" class="key" 
+                            [ngStyle]="{'width': keyWidthAndHeight + 'px', 'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px'}" key="backSpace" tabindex="0">
+                            <img id="backspaceIcon" [ngStyle]="{'width': iconWidth + 'px', 'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px'}" src="assets/backspace.svg" />
+                        </div>
+                        <div id="2_{{columnImageBtnIndex(3)}}" class="key" 
+                            [ngStyle]="{'width': keyWidthAndHeight + 'px', 'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px'}" key="letterChars" tabindex="0">
+                            <img id="capslockIcon" [ngStyle]="{'width': iconWidth + 'px', 'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px'}" src="assets/letter.svg" />
+                        </div>
+                    </ng-container>
+                </div>
+
+                <div id="row4" class="keyboardRow">
+                    <div id="searchKey" class="key textKey" [ngStyle]="{'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px', 'font-size': keyFontSize + 'px'}" key="search" tabindex="0">{{getSearchText()}}</div>
+                    <div id="clearKey" class="key textKey" [ngStyle]="{'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px', 'font-size': keyFontSize + 'px'}" key="clear" tabindex="0">{{getClearText()}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

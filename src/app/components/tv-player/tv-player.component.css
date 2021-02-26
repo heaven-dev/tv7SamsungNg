@@ -1,0 +1,120 @@
+.tvPlayerContainer {
+    width: 100%;
+    height: 100%;
+}
+
+.videoPlayerContainer {
+    width: 100%;
+    height: 100%;
+}
+
+.programDetails {
+    height: 120px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    background-color: #444444;
+    z-index: 200;
+    opacity: 0.9;
+    display: none;
+}
+
+.programDetailsContent {
+    width: calc(100% - 220px);
+    height: calc(100px - 20px);
+    padding: 10px;
+}
+
+.programDetailsContent:div:first-child {
+    position: relative;
+}
+
+.programDetailsLeftIcon {
+    width: 100px;
+    height: 120px;
+    line-height: 120px;
+}
+
+.programDetailsRightIcon {
+    width: 100px;
+    height: 120px;
+    line-height: 120px;
+    margin-left: auto;
+}
+
+.leftArrorIcon {
+    width: 100px;
+    height: 120px;
+}
+
+.rightArrorIcon {
+    width: 100px;
+    height: 120px;
+}
+
+.programName {
+    color: #ffffff;
+    font-size: 26px;
+    font-weight: bold;
+    height: 26px;
+    line-height: 26px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 14px;
+}
+
+.programDescription {
+    color: #ffffff;
+    font-size: 26px;
+    height: 26px;
+    line-height: 26px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 8px;
+}
+
+.statusBarContainer {
+    background-color: #eeeeee;
+    width: 100%;
+    height: 8px;
+    margin-top: 18px;
+}
+
+.statusBar {
+    position: relative;
+    background-color: #0099CC;
+    width: 0%;
+    height: 8px;
+}
+
+.nameTimeContainer {
+    display: -webkit-flex;
+    display: flex;
+}
+
+.dateTime {
+    color: #ffffff;
+    font-size: 26px;
+    height: 26px;
+    line-height: 26px;
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+.comingProgramsText {
+    color: #ffffff;
+    font-size: 26px;
+    margin-top: 8px;
+}
+
+.tvPlayerBusyLoader {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	z-index: 201;
+	display: none;
+}

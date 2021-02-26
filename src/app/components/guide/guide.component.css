@@ -1,0 +1,178 @@
+.mainView {
+	height: calc(100% - 90px);
+}
+
+.guideContentContainer {
+    height: 100%;
+	outline: none;
+}
+
+.contentRows {
+	height: 100%;
+	overflow: hidden;
+}
+
+.guideContainer {
+	height: 100%;
+	margin: 0 20px 20px 10px;
+	position: relative;
+}
+
+.guideBusyLoader {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	z-index: 201;
+	display: none;
+}
+
+.datesContainer {
+	overflow: hidden;
+}
+
+.dates {
+	display: -webkit-flex;
+	display: flex;
+	background-color: #ffffff;
+	z-index: 100;
+	width: 100%;
+	margin-bottom: 10px;
+
+	overflow: hidden;
+}
+
+.dateItem {
+	background-color: #eeeeee;
+	height: 60px;
+	line-height: 60px;
+	width: 14.285714286%;
+	margin-top: 20px;
+	margin-right: 20px;
+	outline: none;
+	border: 10px solid #444444;
+	color: #444444;
+	font-size: 38px;
+	font-weight: bold;
+	text-align: center;
+	border-radius: 4px;
+	padding: 0 6px;
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dateItem:first-child {
+	margin-left: 10px;
+}
+
+.dateItem:focus {
+	border: 10px solid #0099CC;
+	border-radius: 4px;
+}
+
+.dateItemSelected {
+	background-color: #0099CC;
+}
+
+.guideItem {
+	position: relative;
+	width: calc(100% - 20px);
+	border: 10px solid #444444;
+	outline: none;
+	border-radius: 4px;
+	margin-bottom: 20px;
+}
+
+.guideItem:focus {
+	border: 10px solid #0099CC;
+	border-radius: 4px;
+	background-color: #dddddd;
+}
+
+.guideImage {
+	width: 30%;
+	height: 100%;
+}
+
+.guideInfoArea {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	padding: 6px 20px;
+	overflow-y: hidden;
+}
+
+.guideTitleContainer {
+	display: -webkit-flex;
+	display: flex;
+	height: 42px;
+	line-height: 42px;
+}
+
+.guideOngoingProgram {
+	width: 30px;
+	min-width: 30px;
+    height: 30px;
+	background-color: #cf1042;
+    border-radius: 50%;
+	margin: auto 10px auto 0;
+	display: none;
+}
+
+.guideTime {
+	color: #444444;
+	font-size: 32px;
+	font-weight: bold;
+	margin: auto 0;
+	min-width: -webkit-fit-content;
+	min-width: fit-content;
+	white-space: nowrap;
+}
+
+.guideNameDesc {
+	color: #444444;
+	font-size: 32px;
+	font-weight: bold;
+	white-space: nowrap;
+    overflow: hidden;
+	text-overflow: ellipsis;
+	margin: auto 0 auto 14px;
+}
+
+.caption {
+	color: #444444;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.ongoingBlink {
+	-webkit-animation: ongoingBlink 3s ease-in-out infinite;
+	animation: ongoingBlink 3s ease-in-out infinite;
+}
+
+@-webkit-keyframes ongoingBlink {
+	0% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.5;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes ongoingBlink {
+	0% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.5;
+	}
+	100% {
+		opacity: 1;
+	}
+}

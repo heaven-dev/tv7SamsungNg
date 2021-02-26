@@ -1,0 +1,74 @@
+.mainView {
+	height: calc(100% - 90px);
+}
+
+.searchContentContainer {
+    overflow: hidden;
+    height: calc(100% - 20px);
+    outline: none;
+    padding: 10px 10px 10px 0;
+}
+
+.textFieldAndkeyboardContainer {
+	position: absolute;
+    top: 50%;
+    left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+.searchTextField {
+	height: 60px;
+    line-height: 60px;
+    width: calc(100% - 48px);
+    font-size: 50px;
+    border: 1px solid #444;
+    color: #444;
+    background-color: #fafafa;
+    border-radius: 8px;
+    margin: 0 4px 20px 4px;
+    padding: 4px 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    outline: 0;
+}
+
+.keyboardContainer {
+	height: calc(100% - 170px);
+	width: 100%;
+}
+
+.keyboardRow {
+	display: -webkit-flex;
+	display: flex;
+	justify-content: center;
+}
+
+.key {
+	font-weight: bold;
+	border: 6px solid #444444;
+	border-radius: 8px;
+	margin: 4px;
+	outline: none;
+	text-align: center;
+}
+
+.key:focus {
+	background-color: #0099CC;
+}
+
+.textKey {
+	width: auto;
+	padding: 0 20px;
+}
+
+.searchBusyLoader {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	z-index: 201;
+	display: none;
+}

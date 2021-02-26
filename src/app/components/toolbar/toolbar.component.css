@@ -1,0 +1,46 @@
+.toolbarContainer {
+    display: none;
+}
+
+.toolbar {
+	display: -webkit-flex;
+	display: flex;
+	width: 100%;
+	background-color: #eeeeee;
+}
+
+.toolbarTextContainer {
+	margin-left: 30px;
+	height: 90px;
+	line-height: 90px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.toolbarImageContainer {
+	margin-left: auto;
+	padding-right: 10px;
+	height: 90px;
+	line-height: 90px;
+	vertical-align: middle;
+}
+
+.toolbarText {
+	font-size: 46px;
+	font-weight: bold;
+	position: relative;
+  	display: inline-block;
+	color: #444444;
+	padding-right: 10px;
+	height: 90px;
+	line-height: 90px;
+}
+
+.toolbarLogoImage {
+	margin-right: 20px;
+	margin-left: auto;
+	height: 60px;
+	position: relative;
+	vertical-align: middle;
+}

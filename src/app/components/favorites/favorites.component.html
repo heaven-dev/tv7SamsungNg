@@ -1,0 +1,28 @@
+<div id="mainView" class="mainView">
+    <div id="contentContainer" class="favoritesContentContainer mainContentAnimationFadeIn">
+        <div id="favoritesText" class="favoritesText" tabindex="0"></div>
+        <div id="noFavoritesText" class="noFavoritesText"></div>
+
+        <div id="favoritesBusyLoader" class="busyLoader favoritesBusyLoader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <div id="contentRows" class="contentRows">
+            <div id="favoritesContainer" class="favoritesContainer">
+                <div id="{{i}}_c" *ngFor="let f of favoritesData; let i = index" class="favoritesItem" style="height: {{rowItemHeight}}px" tabindex="0">
+                    <img class="favoritesImage" style="height: {{rowItemHeight}}px; width: {{rowImageWidth}}px" src="{{f.image_path}}" alt=""/>
+                    <div class="favoritesInfoArea" style="left: {{rowImageWidth}}px">
+                        <div class="favoritesTitleContainer">
+                            <img class="favoritesTypeIcon" src="assets/episode.svg" alt=""/>
+                            <div id="nameDesc" class="favoritesNameDesc">{{f.name_desc}}</div>
+                        </div>
+                        <div id="caption" class="favoritesCaption">{{f.caption}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

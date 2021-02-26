@@ -1,0 +1,82 @@
+.sidebar {
+    position: relative;
+    background-color: #eeeeee;
+    margin-right: 10px;
+    float: left;
+    display: none;
+}
+
+.tvIconContainer,
+.archiveIconContainer,
+.guideIconContainer,
+.searchIconContainer,
+.favoritesIconContainer,
+.platformInfoIconContainer {
+    height: 70px;
+    line-height: 70px;
+    text-align: center;
+    outline: none;
+    vertical-align: middle;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.platformInfoIconContainer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.selectedIcon {
+    background-color: #aaaaaa;
+}
+
+.tvIconContainer div:first-child,
+.archiveIconContainer div:first-child,
+.guideIconContainer div:first-child,
+.searchIconContainer div:first-child,
+.favoritesIconContainer div:first-child,
+.platformInfoIconContainer div:first-child {
+    text-align: center;
+    width: 70px;
+    min-width: 70px;
+}
+
+.tvIconContainer:focus,
+.archiveIconContainer:focus,
+.guideIconContainer:focus,
+.searchIconContainer:focus,
+.favoritesIconContainer:focus,
+.platformInfoIconContainer:focus {
+    outline: none;
+    background-color: #0099CC;
+}
+
+.tvIcon,
+.archiveIcon,
+.guideIcon,
+.searchIcon,
+.favoritesIcon,
+.platformInfoIcon {
+    width: 50px;
+    height: 50px;
+    vertical-align: middle;
+}
+
+
+.tvIconText,
+.archiveIconText,
+.guideIconText,
+.searchIconText,
+.favoritesIconText,
+.platformInfoIconText {
+	font-size: 32px;
+	font-weight: bold;
+	margin-left: 8px;
+	margin-right: 20px;
+	color: #444444;
+	vertical-align: middle;
+	z-index: 101;
+    display: none;
+    white-space: nowrap;
+}

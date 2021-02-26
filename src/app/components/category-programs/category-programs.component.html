@@ -1,0 +1,28 @@
+<div id="mainView" class="mainView">
+    <div id="contentContainer" class="categoryProgramsContentContainer mainContentAnimationFadeIn">
+        <div id="categoryText" class="categoryText"></div>
+
+        <div id="categoryProgramsBusyLoader" class="busyLoader categoryProgramsBusyLoader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        
+        <div id="contentRows" class="contentRows">
+            <div id="categoryProgramsContainer" class="categoryProgramsContainer">
+                <div id="{{i}}_c" *ngFor="let c of categoryProgramData; let i = index" class="categoryProgramItem" [ngStyle]="{'height': rowItemHeight + 'px'}" tabindex="0">
+                    <img class="categoryProgramImage" [ngStyle]="{'height': rowItemHeight + 'px', 'width': rowImageWidth + 'px'}" src="{{c.image_path}}" alt=""/>
+                    <div class="infoArea" [ngStyle]="{'left': rowImageWidth + 'px'}">	
+                        <div class="titleContainer">
+                            <img class="typeIcon" src="{{isSeries(c.sid) ? 'assets/series.svg' : 'assets/episode.svg'}}" alt=""/>
+                            <div id="nameDesc" class="nameDesc">{{c.name_desc}}</div>
+                        </div>
+
+                        <div id="caption" class="caption">{{c.caption}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

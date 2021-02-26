@@ -1,0 +1,16 @@
+.landingContentContainer {
+	position: absolute;
+    top: 50%;
+    left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+.loadLogo {
+	width: 580px;
+}
+
+.busyLoader {
+	margin: 10px auto 0 auto;
+}
+

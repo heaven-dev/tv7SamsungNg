@@ -1,0 +1,32 @@
+<div class="archivePlayerContainer" [ngStyle]="{'height': windowHeight + 'px'}">
+    <div id="archivePlayerBusyLoader" class="busyLoader archivePlayerBusyLoader">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+
+    <div id="controls" class="controls">
+        <div id="gradient" class="gradient"></div>
+
+        <div class="infoArea">
+            <div id="nameDesc" class="nameDesc"></div>
+            <div id="caption" class="caption"></div>
+            <div id="episodeNumber" class="episodeNumber"></div>
+        </div>
+
+        <div id="durationCurrentTime" class="durationCurrentTime"></div>
+
+        <div id="statusBarContainer" class="statusBarContainer">
+            <div id="statusBar" class="statusBar"></div>
+        </div>
+    </div>
+
+    <div id="playPauseIconContainer" class="playPauseIconContainer" tabindex="0">
+        <img id="playPauseIcon" class="playPauseIcon" src="assets/play.svg" alt="" />
+    </div>
+
+    <div class="videoPlayerContainer">
+        <video id="videoPlayer" class="video-js" #target playsinline></video>
+    </div>
+</div>

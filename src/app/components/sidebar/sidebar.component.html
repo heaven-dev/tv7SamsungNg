@@ -1,0 +1,43 @@
+<div id="sidebar" class="sidebar" [ngStyle]="{'height': sidebarHeight}">
+    <div id="tvIconContainer" class="tvIconContainer" (focus)="focusInToMenuEvent(this)" (focusout)="focusOutFromMenuEvent(this)" tabindex="0">	
+        <div>
+            <img id="tvIcon" class="tvIcon" src="assets/tv.svg" alt=""/>
+        </div>
+        <div id="tvIconText" class="tvIconText"></div>
+    </div>
+
+    <div id="archiveIconContainer" class="archiveIconContainer" (focus)="focusInToMenuEvent(this)" (focusout)="focusOutFromMenuEvent(this)" tabindex="0">	
+        <div>
+            <img id="archiveIcon" class="archiveIcon" src="assets/archive.svg" alt=""/>
+        </div>
+        <div id="archiveIconText" class="archiveIconText"></div>
+    </div>
+
+    <div id="guideIconContainer" class="guideIconContainer" (focus)="focusInToMenuEvent(this)" (focusout)="focusOutFromMenuEvent(this)" tabindex="0">	
+        <div>
+            <img id="guideIcon" class="guideIcon" src="assets/guide.svg" alt=""/>
+        </div>
+        <div id="guideIconText" class="guideIconText"></div>
+    </div>
+
+    <div id="searchIconContainer" class="searchIconContainer" (focus)="focusInToMenuEvent(this)" (focusout)="focusOutFromMenuEvent(this)" tabindex="0">	
+        <div>
+            <img id="searchIcon" class="searchIcon" src="assets/search.svg" alt=""/>
+        </div>
+        <div id="searchIconText" class="searchIconText"></div>
+    </div>
+
+    <div id="favoritesIconContainer" class="favoritesIconContainer" (focus)="focusInToMenuEvent(this)" (focusout)="focusOutFromMenuEvent(this)" tabindex="0">	
+        <div>
+            <img id="favoritesIcon" class="favoritesIcon" src="assets/favorites.svg" alt=""/>
+        </div>
+        <div id="favoritesIconText" class="favoritesIconText"></div>
+    </div>
+
+    <div id="platformInfoIconContainer" class="platformInfoIconContainer" (focus)="focusInToMenuEvent(this)" (focusout)="focusOutFromMenuEvent(this)" tabindex="0">	
+        <div>
+            <img id="platformInfoIcon" class="platformInfoIcon" src="assets/settings.svg" alt=""/>
+        </div>
+        <div id="platformInfoIconText" class="platformInfoIconText"></div>
+    </div>
+</div>

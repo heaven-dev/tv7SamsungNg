@@ -1,0 +1,217 @@
+.tvMainContentContainer {
+	padding: 10px;
+	height: 100%;
+}
+
+.tvContentItem {
+	position: relative;
+	width: calc(50% - 5px);
+	min-width: calc(50% - 5px);
+	max-width: calc(50% - 5px);
+	height: 100%;
+	margin-right: 5px;
+}
+
+.nextProgramsContentItem {
+	position: relative;
+	width: 100%;
+	height: 50%;
+}
+
+.contentImage {
+	height: 100%;
+	position: relative;
+	width: calc(100% - 12px);
+	max-height: calc(100% - 12px);
+	border: 6px solid #444444;
+	display: none;
+}
+
+.nextProgramsText {
+	color: #444444;
+	font-size: 32px;
+	font-weight: bold;
+	line-height: 28px;
+	padding: 10px;
+}
+
+.statusBarContainer {
+	position: absolute;
+	margin: 0 6px;
+	background-color: #eeeeee;
+	width: calc(100% - 14px);
+	height: 8px;
+	bottom: 6px;
+}
+
+.statusBar {
+	position: relative;
+	background-color: #0099CC;
+	width: 0%;
+	height: 8px;
+}
+
+.descText {
+	position: absolute;
+	background-color: #444444;
+	color: #ffffff;
+	opacity: 0.8;
+	height: 32px;
+	line-height: 32px;
+	margin: 0 6px;
+	width: calc(100% - 20px);
+	padding: 0 4px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 30px;
+	bottom: 14px;
+}
+
+.playButtonContainer {
+	position: absolute;
+	background-color: transparent;
+	z-index: 200;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+.playButton {
+	width: 80px;
+	height: 80px;
+	z-index: 100;
+	border-radius: 50%;
+	background-color: #ffffff;
+	opacity: 0.7;
+	border: 2px solid #000000;
+	outline: none;
+}
+
+.playButton:focus {
+	background-color: #0099CC;
+	opacity: 1;
+	outline: none;
+}
+
+.playIcon {
+	width: 80px;
+	height: 80px;
+}
+
+.nextProgramsRow {
+	display: -webkit-flex;
+	display: flex;
+	position: relative;
+	height: 50%;
+	max-height: calc(50% - 14px);
+}
+
+.imageAndDescription {
+	max-width: 20%;
+	min-width: 20%;
+	height: 100%;
+}
+
+.nextProgramsImg {
+	width: 100%;
+	height: 100%;
+	max-height: 100%;
+}
+
+.nextProgramsDesc {
+	height: 32px;
+	width: calc(20% - 16px);
+	background-color: #444444;
+	color: #ffffff;
+	line-height: 32px;
+	padding: 0 8px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	position: absolute;
+	font-size: 30px;
+	opacity: 0.8;
+	bottom: 0;
+}
+
+.tvAndGuideContainer {
+	display: -webkit-flex;
+	display: flex;
+	height: 50%;
+}
+
+.guideContainer {
+	width: calc(50% - 5px);
+	min-width: calc(50% - 5px);
+	max-width: calc(50% - 5px);
+	height: 100%;
+	margin-left: 5px;
+	border: 1px solid transparent;
+}
+
+.guideHeader {
+	display: -webkit-flex;
+	display: flex;
+	color: #444444;
+	font-size: 32px;
+	font-weight: bold;
+	height: 28px;
+	line-height: 28px;
+	padding: 0 0 4px 0;
+	margin-right: 10px;
+}
+
+.guideRowsContainer {
+	height: calc(100% - 32px);
+	margin-right: 20px;
+}
+
+.guideTableTimeCol,
+.guideTableName {
+	font-weight: bold;
+}
+
+.guideTableText {
+	color: #444444;
+}
+
+.guideTableTimeCol {
+	padding-left: 16px;
+	float: left;
+}
+
+.guideTableNameDescCol {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	padding-left: 16px;
+}
+
+.upDownIconContainer {
+	margin-left: auto;
+}
+
+.upDownIcon {
+	vertical-align: middle;
+	height: 36px;
+	border: 1px solid #000000;
+    border-radius: 50%;
+}
+
+.upDownIcon:focus {
+	background-color: #0099CC;
+	border-radius: 50%;
+	outline: none;
+}
+
+.tvmainBusyLoader {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	z-index: 201;
+	display: none;
+}
