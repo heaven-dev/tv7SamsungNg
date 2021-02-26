@@ -46,7 +46,7 @@ Clone this repository to your computer disk.
     - Build __swedish__: __npm run build-sv__
     - Build __russian__: __npm run build-ru__
     - Build __all__: __npm run build-all__
-  - Build is created under the __root folder__ of this project for example __tizen/project/fi__ and respectively to each locale.
+  - Build is created under the __root folder__ of this project for example __tizen/dist/fi__ and respectively to each locale.
       
 ### Download and install Tizen studio
   - Download Tizen studio from [here](https://developer.tizen.org/development/tizen-studio/download).
@@ -60,7 +60,7 @@ Clone this repository to your computer disk.
   - Start Tizen studio.
   - Select workspace folder and launch.
   - Select __File -> Import -> Tizen project__.
-    - Select location for example (__projectRoot/tizen/project/fi__). Similarly you can import each project to select folder of the locale for example __projectRoot/tizen/project/et__, __projectRoot/tizen/project/sv__ or __projectRoot/tizen/project/ru__.
+    - Select location for example (__projectRoot/tizen/dist/fi__). Similarly you can import each project to select folder of the locale for example __projectRoot/tizen/dist/et__, __projectRoot/tizen/dist/sv__ or __projectRoot/tizen/dist/ru__.
     - Select __Next__.
     - Select profile __samsung-tv__ and version __6.0__ and select __Next__.
   - Now you should see the project on IDE.
@@ -90,10 +90,10 @@ Clone this repository to your computer disk.
   - Probably you have to a create certificate profile (__Tools -> Certificate Manager__) and a Samsung account to run the application on TV.
 
 ### Run application on a browser
-  - Prepare app by editing this line: [locale.service.ts](https://github.com/heaven-dev/tv7SamsungNg/blob/master/src/app/servives/locale.service.ts#L7)
+  - Prepare app by editing this line: [locale.service.ts](https://github.com/heaven-dev/tv7SamsungNg/blob/main/src/app/services/locale.service.ts#L7)
     - Add one of the following locale (__fi__, __et__, __ru__ or __sv__) to the file.
     - You don't need to care about this file if you build the app with a build command for example __npm run build-fi__. In that case the gulp automatically edits the file.
-    - Set [this](https://github.com/heaven-dev/tv7SamsungNg/blob/master/src/app/helpers/constants.js#L1) flag to __true__.
+    - Set [this](https://github.com/heaven-dev/tv7SamsungNg/blob/main/src/app/helpers/constants.ts#L1) flag to __true__.
   - Run command __ng serve__ in the project root.
   - Navigate to __http://localhost:4200__ and the app is starting.
 
