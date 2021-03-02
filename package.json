@@ -1,6 +1,6 @@
 {
-  "name": "angular-tv7",
-  "version": "0.0.0",
+  "name": "tv7samsungng",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -13,6 +13,17 @@
     "build-all": "gulp fi && gulp et && gulp ru && gulp sv",
     "clean-builds": "gulp cleanBuilds"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heaven-dev/tv7SamsungNg"
+  },
+  "keywords": [
+    "samsung-smart-tv",
+    "smart-tv"
+  ],
+  "author": "heaven-dev",
+  "license": "MIT",
+  "homepage": "https://github.com/heaven-dev/tv7SamsungNg#readme",
   "private": true,
   "dependencies": {
     "@angular/animations": "~11.2.1",
