@@ -334,13 +334,9 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     if (this.player && !this.player.paused()) {
       this.player.pause();
 
-      let elem = this.commonService.getElementById('playPauseIcon');
-      if (elem) {
-        elem.setAttribute('src', 'assets/pause.svg');
-        this.cdRef.detectChanges();
-      }
+      this.commonService.showElementById('pauseIconContainer');
 
-      this.showPlayPauseIcon();
+      this.showPlayPauseIcon(false);
     }
   }
 
@@ -354,21 +350,21 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     if (this.player && this.player.paused()) {
       this.player.play();
 
-      let elem = this.commonService.getElementById('playPauseIcon');
-      if (elem) {
-        elem.setAttribute('src', 'assets/play.svg');
-      }
+      this.commonService.showElementById('playIconContainer');
 
-      this.showPlayPauseIcon();
+      this.showPlayPauseIcon(true);
     }
   }
 
-  showPlayPauseIcon(): void {
-    let elem = this.commonService.getElementById('playPauseIconContainer');
+  showPlayPauseIcon(isPlayIcon: boolean): void {
+    const elementId = isPlayIcon ? 'playIconContainer' : 'pauseIconContainer';
+
+    let elem = this.commonService.getElementById(elementId);
     if (elem) {
       elem.classList.add('playPauseIconFadeOut');
 
       setTimeout(() => {
+        this.commonService.hideElementById(elementId);
         elem.classList.remove('playPauseIconFadeOut');
       }, this.iconAnimationDuration)
     }

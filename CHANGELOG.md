@@ -1,3 +1,14 @@
+# 02.03.2021 14:10
+
+### Bug Fixes
+
+* New version numbers.
+
+### Features
+
+* Fixed play/pause icon issue on archive player page. 
+
+
 # 26.02.2021 13:18
 
 ### Bug Fixes
