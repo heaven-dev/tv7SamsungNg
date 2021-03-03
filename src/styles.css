@@ -13,9 +13,16 @@
 */
 .busyLoader {
     position: relative;
-    width: 80px;
-    height: 80px;
-  }
+    width: 100px;
+    height: 100px;
+}
+
+.busyLoaderBorder {
+    border: 2px solid #444444;
+    padding: 9px;
+    border-radius: 10px;
+    background-color: #eeeeee;
+}
 
 .busyLoader div {
     -webkit-transform-origin: 50px 50px;
