@@ -5,7 +5,7 @@ This Samsung smart TV app is implemented using __Angular 11__. Project was gener
   - Samsung TV emulator (API version 3.2)
   - Samsung TV emulator (API version 6.0)
 
-## Similar app on other TV platforms
+## Similar app on the other TV platforms
   - [LG](https://github.com/heaven-dev/tv7LgSpa)
   - Android:
     - [fi](https://github.com/heaven-dev/taivasTv7Android)
