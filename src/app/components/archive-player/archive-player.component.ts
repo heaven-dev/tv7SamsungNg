@@ -60,6 +60,8 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
   playerOptions: any = null;
 
   keydownListener: Function;
+  visibilityChangeListener: Function = null;
+
   player: videojs.Player;
 
   constructor(
@@ -115,26 +117,12 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
       }
     }
 
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden && !this.player.paused()) {
-        this.stopTimeout();
-        this.updateControls(this.videoCurrentTime);
-
-        this.showControls();
-        this.addProgramDetails();
-        this.pausePlayer();
-      }
-      else {
-        const isConnected = this.commonService.isConnectedToGateway();
-        if (!isConnected) {
-          this.commonService.showElementById('noNetworkConnection');
-        }
-      }
-
-    });
-
     this.keydownListener = this.renderer.listen('document', 'keydown', e => {
       this.keyDownEventListener(e);
+    });
+
+    this.visibilityChangeListener = this.renderer.listen('document', 'visibilitychange', e => {
+      this.visibilityChange(e);
     });
 
     console.log('video.js options: ', this.playerOptions);
@@ -178,10 +166,15 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     this.release();
   }
 
-  removeKeydownEventListener(): void {
+  removeEventListeners(): void {
     if (this.keydownListener) {
       this.keydownListener();
       this.keydownListener = null;
+    }
+
+    if (this.visibilityChangeListener) {
+      this.visibilityChangeListener();
+      this.visibilityChangeListener = null;
     }
   }
 
@@ -330,6 +323,17 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     }
   }
 
+  visibilityChange(e: any): void {
+    if (document.hidden && !this.player.paused()) {
+      this.stopTimeout();
+      this.updateControls(this.videoCurrentTime);
+
+      this.showControls();
+      this.addProgramDetails();
+      this.pausePlayer();
+    }
+  }
+
   pausePlayer(): void {
     if (this.player && !this.player.paused()) {
       this.player.pause();
@@ -418,7 +422,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
       this.player = null;
     }
 
-    this.removeKeydownEventListener();
+    this.removeEventListeners();
   }
 
   showControls(): void {
