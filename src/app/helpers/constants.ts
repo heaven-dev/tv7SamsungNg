@@ -124,6 +124,7 @@ export const guidePageStateKey = 'guidePageStateKey';
 export const selectedCategoryKey = 'selectedCategoryKey';
 export const searchTextKey = 'searchTextKey';
 export const favoritesDataKey = 'favoritesDataKey';
+export const visiblePageKey = 'visiblePageKey';
 
 export const channelUrlKey = 'channelUrlKey';
 

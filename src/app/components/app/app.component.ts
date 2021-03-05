@@ -41,22 +41,46 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (runOnBrowser) {
+      this.removeNetworkStateListener();
+    }
+
     this.subSelectedIcon.unsubscribe();
   }
 
   enableNetworkStateListener(): void {
     if (!runOnBrowser) {
+      // App running on emulator or TV
+
       // @ts-ignore
       webapis.network.addNetworkStateChangeListener((value: any) => {
         // @ts-ignore
         if (value == webapis.network.NetworkState.GATEWAY_DISCONNECTED) {
-          this.commonService.showElementById('noNetworkConnection');
+          this.showNoConnectionElement();
         }
         // @ts-ignore
         else if (value == webapis.network.NetworkState.GATEWAY_CONNECTED) {
-          this.commonService.hideElementById('noNetworkConnection');
+          this.hideNoConnectionElement();
         }
       });
     }
+    else {
+      // App running on browser
+      window.addEventListener('online', this.hideNoConnectionElement);
+      window.addEventListener('offline', this.showNoConnectionElement);
+    }
+  }
+
+  removeNetworkStateListener(): void {
+    window.removeEventListener('online', this.hideNoConnectionElement);
+    window.removeEventListener('offline', this.showNoConnectionElement);
+  }
+
+  hideNoConnectionElement(): void {
+    this.commonService.hideElementById('noNetworkConnection');
+  }
+
+  showNoConnectionElement(): void {
+    this.commonService.showElementById('noNetworkConnection');
   }
 }

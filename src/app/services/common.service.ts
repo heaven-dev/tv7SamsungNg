@@ -14,7 +14,8 @@ import {
   seriesPageStateKey,
   guidePageStateKey,
   favoritesPageStateKey,
-  originPageKey
+  originPageKey,
+  visiblePageKey
 } from '../helpers/constants';
 
 @Injectable({
@@ -262,6 +263,10 @@ export class CommonService {
       return webapis.network.isConnectedToGateway();
     }
     else {
+      if (navigator) {
+        return navigator.onLine;
+      }
+
       return true;
     }
   }
@@ -302,6 +307,7 @@ export class CommonService {
       this.setOriginPage(fromPage);
     }
 
+    this.cacheValue(visiblePageKey, toPage);
     this.router.navigate([toPage]);
   }
 

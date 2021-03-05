@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy, Renderer2, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { CommonService } from '../../services/common.service';
 import { ProgramScheduleService } from '../../services/program-schedule.service';
@@ -43,7 +42,6 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
   player: videojs.Player;
 
   constructor(
-    private router: Router,
     private renderer: Renderer2,
     private commonService: CommonService,
     private programScheduleService: ProgramScheduleService,
@@ -202,7 +200,7 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
     this.release();
     this.removeKeydownEventListener();
 
-    this.router.navigate([tvMainPage]);
+    this.commonService.toPage(tvMainPage, tvMainPage);
   }
 
   addInterval(): void {

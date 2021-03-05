@@ -1,5 +1,4 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { LocaleService } from '../../services/locale.service';
 
@@ -18,7 +17,6 @@ export class LandingComponent implements OnInit, AfterViewInit {
   loadLogo: string = '';
 
   constructor(
-    private router: Router,
     private commonService: CommonService,
     private localeService: LocaleService,
     private programScheduleService: ProgramScheduleService
@@ -59,7 +57,7 @@ export class LandingComponent implements OnInit, AfterViewInit {
   }
 
   openTvMainPage() {
-    this.router.navigate([tvMainPage]);
+    this.commonService.toPage(tvMainPage, null);
   }
 
   readPlatformInfo(): void {
