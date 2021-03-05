@@ -1,9 +1,9 @@
 # tv7SamsungNg
 
 This Samsung smart TV app is implemented using __Angular 11__. Project was generated with the [Angular CLI](https://cli.angular.io/) version __11.2.1__. Application is tested with the following devices:
-  - Samsung smart TV (API version 5.0)
-  - Samsung TV emulator (API version 3.2)
-  - Samsung TV emulator (API version 6.0)
+  - Samsung smart TV (Tizen version 5.0)
+  - Samsung TV emulator (Tizen version 3.2)
+  - Samsung TV emulator (Tizen version 6.0)
 
 ## Similar app on the other TV platforms
   - [LG](https://github.com/heaven-dev/tv7LgSpa)
@@ -15,7 +15,7 @@ This Samsung smart TV app is implemented using __Angular 11__. Project was gener
 
 ## Demo
 
-App running on Samsung TV emulator (API version 6.0).
+App running on Samsung TV emulator (Tizen version 6.0).
 
 ![Demo](https://github.com/heaven-dev/demo/blob/main/demo/demo.gif)
 
@@ -111,12 +111,13 @@ Clone this repository to your computer disk.
   - Run command __ng serve__ in the project root.
   - Navigate to __http://localhost:4200__ and the app is starting.
 
-### TV or emulator API version required to run this application 
-  - __API version 3.0 TV or newer__ (release year of API version 3.0 TV is 2017)
+### TV or emulator Tizen version required to run this application 
+  - __Tizen version 3.0 TV or newer__ (release year of Tizen version 3.0 TV is 2017)
     - Tizen TV [web engine](https://developer.samsung.com/smarttv/develop/specifications/web-engine-specifications.html)
     - Tizen TV [general specifications](https://developer.samsung.com/smarttv/develop/specifications/general-specifications.html)
 
 ### Useful links
+  - [Samsung Smart TV](https://developer.samsung.com/smarttv/develop/getting-started/quick-start-guide.html)
   - [Tizen TV](https://developer.tizen.org/tizen/tv) developer web pages.
   - [Command Line Interface (CLI) Commands](https://developer.tizen.org/development/tizen-studio/web-tools/cli)
   - [Application Signing and Certificates](https://docs.tizen.org/application/web/tutorials/sign-certificate/)

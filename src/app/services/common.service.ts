@@ -257,12 +257,13 @@ export class CommonService {
   }
 
   isConnectedToGateway(): any {
-    let result = false;
-    if (navigator) {
-      result = navigator.onLine;
+    if (!runOnBrowser) {
+      // @ts-ignore
+      return webapis.network.isConnectedToGateway();
     }
-
-    return result;
+    else {
+      return true;
+    }
   }
 
   elementExist(element: string): boolean {
