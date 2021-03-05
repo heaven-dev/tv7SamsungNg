@@ -13,6 +13,7 @@ import {
   categoriesPageStateKey,
   seriesPageStateKey,
   guidePageStateKey,
+  searchPageStateKey,
   favoritesPageStateKey,
   originPageKey,
   visiblePageKey
@@ -331,6 +332,7 @@ export class CommonService {
     this.removeValueFromCache(categoriesPageStateKey);
     this.removeValueFromCache(seriesPageStateKey);
     this.removeValueFromCache(guidePageStateKey);
+    this.removeValueFromCache(searchPageStateKey);
     this.removeValueFromCache(favoritesPageStateKey);
   }
 

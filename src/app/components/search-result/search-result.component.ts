@@ -5,7 +5,7 @@ import { AppService } from '../../services/app.service';
 import { LocaleService } from '../../services/locale.service';
 import { ArchiveService } from '../../services/archive.service';
 import {
-  searchTextKey,
+  searchPageStateKey,
   searchResultPage,
   seriesProgramsPage,
   nullValue,
@@ -93,10 +93,11 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
       this.restorePageState(pageState);
     }
     else {
-      const queryString = this.commonService.getValueFromCache(searchTextKey);
-      if (queryString) {
-        //console.log('Query string: ', queryString);
-        this.searchByString(queryString);
+      const searchPageState = this.commonService.getValueFromCache(searchPageStateKey);
+      if (searchPageState) {
+        //console.log('Search page state: ', searchPageState);
+        const { searchText } = this.commonService.stringToJson(searchPageState);
+        this.searchByString(searchText);
       }
     }
   }

@@ -19,7 +19,7 @@ import {
   guideIconContainer,
   searchIconContainer,
   defaultRowCol,
-  searchTextKey,
+  searchPageStateKey,
   favoritesIconContainer,
   platformInfoIconContainer,
   clearKey,
@@ -54,6 +54,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
   keyWidthAndHeight: number = 0;
   keyFontSize: number = 0;
   iconWidth: number = 0;
+  searchTextFieldWidth: number = 0;
 
   keydownListener: Function = null;
 
@@ -99,7 +100,16 @@ export class SearchComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.restoreSearchText();
+    setTimeout(() => {
+      const pageState = this.commonService.getValueFromCache(searchPageStateKey);
+      if (pageState) {
+        this.restorePageState(pageState);
+      }
+      else {
+        this.readSearchTextFieldWidth();
+        this.setSearchTextFieldWidth();
+      }
+    });
 
     this.commonService.removeOriginPage();
 
@@ -269,16 +279,14 @@ export class SearchComponent implements OnInit, AfterViewInit {
     }
   }
 
-  restoreSearchText(): void {
-    const page = this.commonService.getOriginPage();
-    if (page && page === searchResultPage) {
-      const searchText = this.commonService.getValueFromCache(searchTextKey);
-      if (searchText) {
-        //console.log('Add cached search text: ', searchText);
+  restorePageState(pageState: any): void {
+    if (pageState) {
+      pageState = this.commonService.stringToJson(pageState);
+      this.searchTextFieldWidth = pageState.searchTextFieldWidth;
 
-        this.commonService.addToElement('searchTextField', searchText);
-        this.commonService.removeValueFromCache(searchTextKey);
-      }
+      this.setSearchTextFieldWidth();
+      this.commonService.addToElement('searchTextField', pageState.searchText);
+      this.commonService.removeValueFromCache(searchPageStateKey);
     }
   }
 
@@ -329,9 +337,14 @@ export class SearchComponent implements OnInit, AfterViewInit {
         else if (key === 'search' && value && value.length > 0) {
           //console.log('Search text: ', value);
 
-          this.commonService.cacheValue(searchTextKey, value);
           this.removeKeydownEventListener();
+          
+          const pageState = {
+            searchText: value,
+            searchTextFieldWidth: this.searchTextFieldWidth
+          };
 
+          this.commonService.cacheValue(searchPageStateKey, this.commonService.jsonToString(pageState));
           this.commonService.toPage(searchResultPage, searchPage);
         }
       }
@@ -380,5 +393,19 @@ export class SearchComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.commonService.focusToElement(defaultRowCol);
     });
+  }
+
+  readSearchTextFieldWidth(): void {
+    let elem = this.commonService.getElementById('searchTextField');
+    if (elem) {
+      this.searchTextFieldWidth = elem.offsetWidth - 40;
+    }
+  }
+
+  setSearchTextFieldWidth(): void {
+    let elem = this.commonService.getElementById('searchTextField');
+    if (elem) {
+      elem.style.width = this.searchTextFieldWidth + 'px';
+    }
   }
 }

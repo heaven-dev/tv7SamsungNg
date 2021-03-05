@@ -121,8 +121,8 @@ export const favoritesPageStateKey = 'favoritesPageStateKey';
 export const categoriesPageStateKey = 'categoriesPageStateKey';
 export const seriesPageStateKey = 'seriesPageStateKey';
 export const guidePageStateKey = 'guidePageStateKey';
+export const searchPageStateKey = 'searchPageStateKey';
 export const selectedCategoryKey = 'selectedCategoryKey';
-export const searchTextKey = 'searchTextKey';
 export const favoritesDataKey = 'favoritesDataKey';
 export const visiblePageKey = 'visiblePageKey';
 
