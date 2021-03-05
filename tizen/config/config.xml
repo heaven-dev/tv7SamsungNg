@@ -19,6 +19,7 @@
     <tizen:metadata key="http://samsung.com/tv/metadata/use.voiceguide" value="false"/>
     <tizen:metadata key="http://samsung.com/tv/metadata/prelaunch.support" value="false"/>
     <tizen:metadata key="http://samsung.com/tv/metadata/auto.update" value="true"/>
+    <tizen:metadata key="http://samsung.com/tv/metadata/screen/orientation" value="landscape"/>
     <name><%= configXmlName %></name>
     <name xml:lang="en-gb">Heaven TV7</name>
     <name xml:lang="fi-fi">Taivas TV7</name>

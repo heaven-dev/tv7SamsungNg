@@ -69,6 +69,7 @@ Clone this repository to your computer disk.
     - Save the package to the disk and start the setup.
     - Follow the installation instructions from [here](https://developer.samsung.com/smarttv/develop/getting-started/setting-up-sdk/installing-tv-sdk.html).
     - When you see text __To install the extensions from local images:__ you have done.
+  - Alternatively you can also use [Atom](https://developer.samsung.com/smarttv/develop/extension-libraries/atom-ide-package.html) or [vscode](https://developer.samsung.com/smarttv/develop/extension-libraries/vscode-extension.html).
 
 ### Import projects into the Tizen studio IDE
   - Start Tizen studio.
