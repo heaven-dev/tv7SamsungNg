@@ -73,24 +73,24 @@ export class AppComponent implements OnInit, OnDestroy {
       webapis.network.addNetworkStateChangeListener((value: any) => {
         // @ts-ignore
         if (value == webapis.network.NetworkState.GATEWAY_DISCONNECTED) {
-          this.showNoConnectionElement();
+          this.commonService.showElementById('noNetworkConnection');
         }
         // @ts-ignore
         else if (value == webapis.network.NetworkState.GATEWAY_CONNECTED) {
-          this.hideNoConnectionElement();
+          this.commonService.hideElementById('noNetworkConnection');
         }
       });
     }
     else {
       // App running on browser
-      window.addEventListener('online', this.hideNoConnectionElement);
-      window.addEventListener('offline', this.showNoConnectionElement);
+      window.addEventListener('online', this.hideNoConnectionElement.bind(this));
+      window.addEventListener('offline', this.showNoConnectionElement.bind(this));
     }
   }
 
   removeNetworkStateListener(): void {
-    window.removeEventListener('online', this.hideNoConnectionElement);
-    window.removeEventListener('offline', this.showNoConnectionElement);
+    window.removeEventListener('online', this.hideNoConnectionElement.bind(this));
+    window.removeEventListener('offline', this.showNoConnectionElement.bind(this));
   }
 
   hideNoConnectionElement(): void {
