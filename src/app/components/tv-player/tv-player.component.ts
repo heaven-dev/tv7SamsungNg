@@ -39,6 +39,8 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
   interval: any = null;
 
   keydownListener: Function;
+  visibilityChangeListener: Function = null;
+
   player: videojs.Player;
 
   constructor(
@@ -85,17 +87,12 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
       }
     }
 
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) {
-        const isConnected = this.commonService.isConnectedToGateway();
-        if (!isConnected) {
-          this.commonService.showElementById('noNetworkConnection');
-        }
-      }
-    });
-
     this.keydownListener = this.renderer.listen('document', 'keydown', e => {
       this.keyDownEventListener(e);
+    });
+
+    this.visibilityChangeListener = this.renderer.listen('document', 'visibilitychange', e => {
+      this.visibilityChange(e);
     });
 
     this.programData = this.commonService.getValueFromCache(programScheduleDataKey);
@@ -129,10 +126,15 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
     this.release();
   }
 
-  removeKeydownEventListener(): void {
+  removeEventListeners(): void {
     if (this.keydownListener) {
       this.keydownListener();
       this.keydownListener = null;
+    }
+
+    if (this.visibilityChangeListener) {
+      this.visibilityChangeListener();
+      this.visibilityChangeListener = null;
     }
   }
 
@@ -185,6 +187,12 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
     }
   }
 
+  visibilityChange(e: any): void {
+    if (document.hidden) {
+      this.exitFromPlayer();
+    }
+  }
+
   release(): void {
     this.commonService.screenSaverOn();
     this.stopInterval();
@@ -196,9 +204,9 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
   }
 
   exitFromPlayer(): void {
-    this.commonService.showElementById('tvPlayerBusyLoader');
+    //this.commonService.showElementById('tvPlayerBusyLoader');
     this.release();
-    this.removeKeydownEventListener();
+    this.removeEventListeners();
 
     this.commonService.toPage(tvMainPage, tvMainPage);
   }

@@ -1,8 +1,11 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2, ChangeDetectorRef } from '@angular/core';
 import { AppService } from '../../services/app.service';
 import { CommonService } from '../../services/common.service';
 import { Subscription } from 'rxjs';
-import { runOnBrowser } from 'src/app/helpers/constants';
+import {
+  runOnBrowser,
+  visiblePageKey
+} from 'src/app/helpers/constants';
 
 @Component({
   selector: 'app-root',
@@ -13,8 +16,10 @@ export class AppComponent implements OnInit, OnDestroy {
   subSelectedIcon: Subscription;
 
   selectedIcon: string = '';
+  visibilityChangeListener: Function = null;
 
   constructor(
+    private renderer: Renderer2,
     private cdRef: ChangeDetectorRef,
     private appService: AppService,
     private commonService: CommonService
@@ -27,17 +32,12 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) {
-        const isConnected = this.commonService.isConnectedToGateway();
-        if (!isConnected) {
-          this.commonService.showElementById('noNetworkConnection');
-        }
-      }
-    });
-
     this.commonService.screenSaverOn();
     this.enableNetworkStateListener();
+
+    this.visibilityChangeListener = this.renderer.listen('document', 'visibilitychange', e => {
+      this.visibilityChange(e);
+    });
   }
 
   ngOnDestroy() {
@@ -46,6 +46,24 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     this.subSelectedIcon.unsubscribe();
+
+    if (this.visibilityChangeListener) {
+      this.visibilityChangeListener();
+      this.visibilityChangeListener = null;
+    }
+  }
+
+  visibilityChange(e: any): void {
+    const visiblePage = this.commonService.getValueFromCache(visiblePageKey);
+    if (document.hidden) {
+
+    }
+    else {
+      const isConnected = this.commonService.isConnectedToGateway();
+      if (!isConnected) {
+        this.commonService.showElementById('noNetworkConnection');
+      }
+    }
   }
 
   enableNetworkStateListener(): void {
