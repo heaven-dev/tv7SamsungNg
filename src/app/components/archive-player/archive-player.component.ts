@@ -314,7 +314,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
         this.playPlayer();
       }
       else {
-        this.commonService.showElementById('archivePlayerBusyLoader');
+        //this.commonService.showElementById('archivePlayerBusyLoader');
         this.commonService.screenSaverOn();
         this.release();
 
