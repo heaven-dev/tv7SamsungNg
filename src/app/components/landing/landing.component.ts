@@ -4,7 +4,15 @@ import { LocaleService } from '../../services/locale.service';
 
 import { CommonService } from '../../services/common.service';
 import { ProgramScheduleService } from '../../services/program-schedule.service';
-import { programScheduleDataKey, tvMainPage, platformInfoKey, platformVersionKey, runOnBrowser } from '../../helpers/constants';
+import {
+  programScheduleDataKey,
+  tvMainPage,
+  platformInfoKey,
+  platformVersionKey,
+  runOnBrowser
+} from '../../helpers/constants';
+
+import { systeminfo, tvinputdevice } from 'tizen-common-web';
 
 @Component({
   selector: 'app-landing',
@@ -62,14 +70,12 @@ export class LandingComponent implements OnInit, AfterViewInit {
 
   readPlatformInfo(): void {
     if (!runOnBrowser) {
-      // @ts-ignore
-      const platformVersion = tizen.systeminfo.getCapability('http://tizen.org/feature/platform.version');
-      // @ts-ignore
-      const platformName = tizen.systeminfo.getCapability('http://tizen.org/feature/platform.version.name');
-      // @ts-ignore
-      const platformBuildTime = tizen.systeminfo.getCapability('http://tizen.org/system/build.date');
-      // @ts-ignore
-      const tvModel = tizen.systeminfo.getCapability('http://tizen.org/system/model_name');
+      const { getCapability } = systeminfo;
+
+      const platformVersion = getCapability('http://tizen.org/feature/platform.version');
+      const platformName = getCapability('http://tizen.org/feature/platform.version.name');
+      const platformBuildTime = getCapability('http://tizen.org/system/build.date');
+      const tvModel = getCapability('http://tizen.org/system/model_name');
 
       if (platformVersion) {
         const json = {
@@ -104,9 +110,10 @@ export class LandingComponent implements OnInit, AfterViewInit {
         'Info'
       ];
 
+      const { registerKey } = tvinputdevice;
+
       for (let i = 0; i < keys.length; i++) {
-        // @ts-ignore
-        tizen.tvinputdevice.registerKey(keys[i]);
+        registerKey(keys[i]);
       }
     }
   }

@@ -38,6 +38,7 @@ import {
 } from '../../helpers/constants';
 
 import anime from 'animejs/lib/anime.es.js';
+import { application } from 'tizen-common-web';
 
 @Component({
   selector: 'app-archive-main',
@@ -312,8 +313,9 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
           // yes selected => exit from application
           if (!runOnBrowser) {
             this.removeKeydownEventListener();
-            // @ts-ignore
-            tizen.application.getCurrentApplication().exit();
+
+            const { getCurrentApplication } = application;
+            getCurrentApplication().exit();
           }
         }
         else {

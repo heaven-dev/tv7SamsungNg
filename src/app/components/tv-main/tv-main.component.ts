@@ -37,6 +37,8 @@ import {
   upDownIcon
 } from '../../helpers/constants';
 
+import { application } from 'tizen-common-web';
+
 @Component({
   selector: 'app-tvmain',
   templateUrl: './tv-main.component.html',
@@ -235,8 +237,8 @@ export class TvMainComponent implements OnInit, AfterViewInit {
           this.stopInterval();
 
           if (!runOnBrowser) {
-            // @ts-ignore
-            tizen.application.getCurrentApplication().exit();
+            const { getCurrentApplication } = application;
+            getCurrentApplication().exit();
           }
         }
         else {

@@ -18,6 +18,8 @@ import {
   visiblePageKey
 } from '../helpers/constants';
 
+import { network, appcommon } from 'tizen-tv-webapis';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -259,8 +261,8 @@ export class CommonService {
 
   isConnectedToGateway(): any {
     if (!runOnBrowser) {
-      // @ts-ignore
-      return webapis.network.isConnectedToGateway();
+      const { isConnectedToGateway } = network;
+      return isConnectedToGateway();
     }
     else {
       if (navigator) {
@@ -336,22 +338,16 @@ export class CommonService {
 
   screenSaverOn(): void {
     if (!runOnBrowser) {
-      // @ts-ignore
-      webapis.appcommon.setScreenSaver(webapis.appcommon.AppCommonScreenSaverState.SCREEN_SAVER_ON,
-        (result: any) => { },
-        (error: any) => { }
-      );
+      const { setScreenSaver, AppCommonScreenSaverState } = appcommon;
+      setScreenSaver(AppCommonScreenSaverState.SCREEN_SAVER_ON, () => { });
     }
 
   }
 
   screenSaverOff(): void {
     if (!runOnBrowser) {
-      // @ts-ignore
-      webapis.appcommon.setScreenSaver(webapis.appcommon.AppCommonScreenSaverState.SCREEN_SAVER_OFF,
-        (result: any) => { },
-        (error: any) => { }
-      );
+      const { setScreenSaver, AppCommonScreenSaverState } = appcommon;
+      setScreenSaver(AppCommonScreenSaverState.SCREEN_SAVER_OFF, () => { });
     }
   }
 }
