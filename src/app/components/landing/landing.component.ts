@@ -12,8 +12,6 @@ import {
   runOnBrowser
 } from '../../helpers/constants';
 
-import { systeminfo, tvinputdevice } from 'tizen-common-web';
-
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.component.html',
@@ -70,12 +68,14 @@ export class LandingComponent implements OnInit, AfterViewInit {
 
   readPlatformInfo(): void {
     if (!runOnBrowser) {
-      const { getCapability } = systeminfo;
-
-      const platformVersion = getCapability('http://tizen.org/feature/platform.version');
-      const platformName = getCapability('http://tizen.org/feature/platform.version.name');
-      const platformBuildTime = getCapability('http://tizen.org/system/build.date');
-      const tvModel = getCapability('http://tizen.org/system/model_name');
+      // @ts-ignore
+      const platformVersion = tizen.systeminfo.getCapability('http://tizen.org/feature/platform.version');
+      // @ts-ignore
+      const platformName = tizen.systeminfo.getCapability('http://tizen.org/feature/platform.version.name');
+      // @ts-ignore
+      const platformBuildTime = tizen.systeminfo.getCapability('http://tizen.org/system/build.date');
+      // @ts-ignore
+      const tvModel = tizen.systeminfo.getCapability('http://tizen.org/system/model_name');
 
       if (platformVersion) {
         const json = {
@@ -110,10 +110,9 @@ export class LandingComponent implements OnInit, AfterViewInit {
         'Info'
       ];
 
-      const { registerKey } = tvinputdevice;
-
       for (let i = 0; i < keys.length; i++) {
-        registerKey(keys[i]);
+        // @ts-ignore
+        tizen.tvinputdevice.registerKey(keys[i]);
       }
     }
   }

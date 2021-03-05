@@ -7,8 +7,6 @@ import {
   visiblePageKey
 } from 'src/app/helpers/constants';
 
-import { network } from 'tizen-tv-webapis';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -71,13 +69,14 @@ export class AppComponent implements OnInit, OnDestroy {
   enableNetworkStateListener(): void {
     if (!runOnBrowser) {
       // App running on emulator or TV
-      const { addNetworkStateChangeListener, NetworkState } = network;
-
-      addNetworkStateChangeListener((value: any) => {
-        if (value == NetworkState.GATEWAY_DISCONNECTED) {
+      // @ts-ignore
+      webapis.network.addNetworkStateChangeListener((value: any) => {
+        // @ts-ignore
+        if (value == webapis.network.NetworkState.GATEWAY_DISCONNECTED) {
           this.showNoConnectionElement();
         }
-        else if (value == NetworkState.GATEWAY_CONNECTED) {
+        // @ts-ignore
+        else if (value == webapis.network.NetworkState.GATEWAY_CONNECTED) {
           this.hideNoConnectionElement();
         }
       });
