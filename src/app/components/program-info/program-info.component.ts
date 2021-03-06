@@ -5,6 +5,7 @@ import { LocaleService } from '../../services/locale.service';
 import { AppService } from '../../services/app.service';
 
 import {
+  videoStatusDataKey,
   selectedArchiveProgramKey,
   playIconContainer,
   favoriteIconContainer,
@@ -84,7 +85,7 @@ export class ProgramInfoComponent implements OnInit, AfterViewInit {
 
     this.selectedProgram = this.commonService.stringToJson(this.commonService.getValueFromCache(selectedArchiveProgramKey));
     if (this.selectedProgram) {
-      //console.log('Program data: ', selectedProgram);
+      //console.log('Program data: ', this.selectedProgram);
 
       this.showFavoriteBtn = true;
 
@@ -138,6 +139,31 @@ export class ProgramInfoComponent implements OnInit, AfterViewInit {
 
       if (this.programFavoritesIndex !== -1) {
         this.setFavoriteIcon(this.favoriteSelectedIcon);
+      }
+
+      let videoStatus: any = this.commonService.getSavedValue(videoStatusDataKey);
+      if (videoStatus) {
+        videoStatus = this.commonService.stringToJson(videoStatus);
+        //console.log('Video statuses: ', videoStatus);
+
+        const { id } = this.selectedProgram;
+
+        let videoItem = null;
+        for (let i = 0; i < videoStatus.length; i++) {
+          if (videoStatus[i].id === id) {
+            videoItem = videoStatus[i];
+            break;
+          }
+        }
+
+        if (videoItem) {
+          console.log('Video status: ', videoItem);
+
+          let elem = this.commonService.getElementById('videoStatusBar');
+          if (elem) {
+            elem.style.width = videoItem.p + '%';
+          }
+        }
       }
 
       this.contentHeight = this.commonService.getWindowHeight() - 110;
@@ -273,9 +299,9 @@ export class ProgramInfoComponent implements OnInit, AfterViewInit {
         }
       }
       else {
-        this.commonService.showElementById('programInfoBusyLoader');
+        //this.commonService.showElementById('programInfoBusyLoader');
         this.removeKeydownEventListener();
-        
+
         this.commonService.toPreviousPage(archiveMainPage);
       }
     }
@@ -348,7 +374,7 @@ export class ProgramInfoComponent implements OnInit, AfterViewInit {
 
       this.programFavoritesIndex = this.favoritesData.length - 1;
       this.commonService.saveValue(
-        favoritesDataKey + this.localeService.getArchiveLanguage(), 
+        favoritesDataKey + this.localeService.getArchiveLanguage(),
         this.commonService.jsonToString(this.favoritesData)
       );
       this.setFavoriteIcon(this.favoriteSelectedIcon);
@@ -364,7 +390,7 @@ export class ProgramInfoComponent implements OnInit, AfterViewInit {
 
       this.programFavoritesIndex = -1;
       this.commonService.saveValue(
-        favoritesDataKey + this.localeService.getArchiveLanguage(), 
+        favoritesDataKey + this.localeService.getArchiveLanguage(),
         this.commonService.jsonToString(this.favoritesData)
       );
       this.setFavoriteIcon(this.favoriteNotSelectedIcon);

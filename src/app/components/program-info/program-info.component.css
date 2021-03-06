@@ -162,6 +162,20 @@
 	display: none;
 }
 
+.videoStatusBarContainer {
+	position: absolute;
+	bottom: 4px;
+	height: 16px;
+	width: calc(100% - 10px);
+	line-height: 16px;
+}
+
+.videoStatusBar {
+	height: 100%;
+	width: 0;
+	background-color: #0099CC;
+}
+
 @-webkit-keyframes textFadeOut { 
 	0% {
 		opacity: 1;

@@ -4,6 +4,7 @@ import { CommonService } from '../../services/common.service';
 import { ArchiveService } from '../../services/archive.service';
 import { LocaleService } from '../../services/locale.service';
 import {
+  videoStatusDataKey,
   videoBandwidthBits,
   streamType,
   platformVersionKey,
@@ -51,6 +52,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
   videoDurationLabel: string = null;
   videoCurrenTimeLabel: string = null;
   selectedProgram: any = null;
+  videoStatus: any = null;
   controlsVisible: boolean = false;
   seeking: boolean = false;
   seekingStep: number = 10;
@@ -84,6 +86,8 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     this.commonService.screenSaverOff();
 
     this.selectedProgram = this.commonService.stringToJson(this.commonService.getValueFromCache(selectedArchiveProgramKey));
+
+    this.videoStatus = this.getVideoStatus();
 
     const archiveLanguage = this.localeService.getArchiveLanguage();
     const videoUrl = this.getVideoUrl(archiveLanguage);
@@ -130,8 +134,16 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     this.archiveService.getTranslation(this.selectedProgram.id, langTag, (data: any) => {
       this.createTrackElement(data);
       this.player = videojs(this.target.nativeElement, this.playerOptions, () => {
-        this.player.on('play', function () {
+        this.player.on('play', () => {
           videojs.log('Video play!');
+        });
+
+        this.player.on('loadedmetadata', () => {
+          videojs.log('Video loadedmetadata!');
+
+          if (this.videoStatus && this.videoStatus.p < 100) {
+            this.player.currentTime(this.videoStatus.c);
+          }
         });
 
         this.player.on('timeupdate', () => {
@@ -146,6 +158,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
         this.player.on('ended', () => {
           videojs.log('Video end!');
+          this.saveVideoStatus();
 
           this.release();
           this.commonService.toPreviousPage(programInfoPage);
@@ -315,6 +328,9 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
       }
       else {
         //this.commonService.showElementById('archivePlayerBusyLoader');
+
+        this.saveVideoStatus();
+
         this.commonService.screenSaverOn();
         this.release();
 
@@ -324,13 +340,14 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
   }
 
   visibilityChange(e: any): void {
-    if (document.hidden && !this.player.paused()) {
+    if (document.hidden) {
       this.stopTimeout();
-      this.updateControls(this.videoCurrentTime);
+      this.saveVideoStatus();
 
-      this.showControls();
-      this.addProgramDetails();
-      this.pausePlayer();
+      this.commonService.screenSaverOn();
+      this.release();
+
+      this.commonService.toPreviousPage(programInfoPage);
     }
   }
 
@@ -358,6 +375,65 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
       this.showPlayPauseIcon(true);
     }
+  }
+
+  getVideoStatus(): any {
+    let videoItem = null;
+
+    let vs: any = this.commonService.getSavedValue(videoStatusDataKey);
+    if (vs) {
+      vs = this.commonService.stringToJson(vs);
+
+      const { id } = this.selectedProgram;
+
+      for (let i = 0; i < vs.length; i++) {
+        if (vs[i].id === id) {
+          videoItem = vs[i];
+          break;
+        }
+      }
+    }
+
+    return videoItem;
+  }
+
+  saveVideoStatus(): void {
+    let vs: any = this.commonService.getSavedValue(videoStatusDataKey);
+    if (vs) {
+      vs = this.commonService.stringToJson(vs);
+    }
+    else {
+      vs = [];
+    }
+
+    const { id } = this.selectedProgram;
+
+    for (let i = 0; i < vs.length; i++) {
+      if (vs[i].id === id) {
+        vs.splice(i, 1);
+        break;
+      }
+    }
+
+    let p = 0;
+    const c = this.player.currentTime();
+    const d = this.player.duration();
+
+    if (d - c <= 60) {
+      p = 100;
+    }
+    else {
+      p = Math.round(c / d * 100);
+      if (p < 0) {
+        p = 0;
+      }
+      if (p > 100) {
+        p = 100;
+      }
+    }
+
+    vs.push({ id: id, c: Math.round(c), p: p });
+    this.commonService.saveValue(videoStatusDataKey, this.commonService.jsonToString(vs));
   }
 
   showPlayPauseIcon(isPlayIcon: boolean): void {
