@@ -104,15 +104,6 @@ export class TvMainComponent implements OnInit, AfterViewInit {
 
       this.commonService.focusToElement(playButton);
 
-      document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) {
-          const isConnected = this.commonService.isConnectedToGateway();
-          if (!isConnected) {
-            this.commonService.showElementById('noNetworkConnection');
-          }
-        }
-      });
-
       this.addInterval();
     });
   }

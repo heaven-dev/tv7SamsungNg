@@ -183,8 +183,8 @@ export class PlatformInfoComponent implements OnInit, AfterViewInit {
         this.commonService.focusToElement('platformInfoContentContainer');
       }
       else {
-        this.commonService.showElementById('platformInfoBusyLoader');
-        this.commonService.toPreviousPage(archiveMainPage);
+        //this.commonService.showElementById('platformInfoBusyLoader');
+        this.commonService.toPage(archiveMainPage, null);
       }
     }
   }

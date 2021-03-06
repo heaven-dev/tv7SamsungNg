@@ -106,15 +106,6 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
     this.commonService.removeOriginPage();
 
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) {
-        const isConnected = this.commonService.isConnectedToGateway();
-        if (!isConnected) {
-          this.commonService.showElementById('noNetworkConnection');
-        }
-      }
-    });
-
     this.commonService.hideElementById('searchBusyLoader');
 
     this.setDefaultFocus();
@@ -264,7 +255,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
         this.commonService.focusToElement(defaultRowCol);
       }
       else {
-        this.commonService.showElementById('searchBusyLoader');
+        //this.commonService.showElementById('searchBusyLoader');
         this.removeKeydownEventListener();
 
         this.commonService.toPage(archiveMainPage, null);

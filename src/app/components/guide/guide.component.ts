@@ -95,15 +95,6 @@ export class GuideComponent implements OnInit, AfterViewInit {
     else {
       this.addProgramGuide(this.dates[0].date, 0, true);
     }
-
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) {
-        const isConnected = this.commonService.isConnectedToGateway();
-        if (!isConnected) {
-          this.commonService.showElementById('noNetworkConnection');
-        }
-      }
-    });
   }
 
   removeKeydownEventListener(): void {
@@ -278,10 +269,10 @@ export class GuideComponent implements OnInit, AfterViewInit {
         this.commonService.focusToElement(this.lastContentRowId);
       }
       else {
-        this.commonService.showElementById('guideBusyLoader');
+        //this.commonService.showElementById('guideBusyLoader');
         this.removeKeydownEventListener();
 
-        this.commonService.toPreviousPage(archiveMainPage);
+        this.commonService.toPage(archiveMainPage, null);
       }
     }
   }

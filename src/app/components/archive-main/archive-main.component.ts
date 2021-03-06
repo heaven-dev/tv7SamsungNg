@@ -144,15 +144,6 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
     else {
       this.readParentCategories(this.pageState, true, () => { });
     }
-
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) {
-        const isConnected = this.commonService.isConnectedToGateway();
-        if (!isConnected) {
-          this.commonService.showElementById('noNetworkConnection');
-        }
-      }
-    });
   }
 
   removeKeydownEventListener(): void {

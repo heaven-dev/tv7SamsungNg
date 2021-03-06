@@ -221,7 +221,7 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
         }
       }
       else {
-        this.commonService.showElementById('searchResultBusyLoader');
+        //this.commonService.showElementById('searchResultBusyLoader');
         this.removeKeydownEventListener();
 
         this.commonService.toPage(searchPage, searchResultPage);

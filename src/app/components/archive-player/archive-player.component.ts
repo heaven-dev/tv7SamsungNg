@@ -353,6 +353,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
   pausePlayer(): void {
     if (this.player && !this.player.paused()) {
+      this.commonService.screenSaverOn();
       this.player.pause();
 
       this.commonService.showElementById('pauseIconContainer');
@@ -369,6 +370,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     }
 
     if (this.player && this.player.paused()) {
+      this.commonService.screenSaverOff();
       this.player.play();
 
       this.commonService.showElementById('playIconContainer');

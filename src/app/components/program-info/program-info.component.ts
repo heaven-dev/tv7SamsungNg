@@ -171,15 +171,6 @@ export class ProgramInfoComponent implements OnInit, AfterViewInit {
 
       this.addProgramDetails();
     }
-
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) {
-        const isConnected = this.commonService.isConnectedToGateway();
-        if (!isConnected) {
-          this.commonService.showElementById('noNetworkConnection');
-        }
-      }
-    });
   }
 
   removeKeydownEventListener(): void {

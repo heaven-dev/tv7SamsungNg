@@ -96,15 +96,6 @@ export class FavoritesComponent implements OnInit, AfterViewInit {
       this.preparePage();
 
     }
-
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) {
-        const isConnected = this.commonService.isConnectedToGateway();
-        if (!isConnected) {
-          this.commonService.showElementById('noNetworkConnection');
-        }
-      }
-    });
   }
 
   removeKeydownEventListener(): void {
@@ -233,10 +224,10 @@ export class FavoritesComponent implements OnInit, AfterViewInit {
         }
       }
       else {
-        this.commonService.showElementById('favoritesBusyLoader');
+        //this.commonService.showElementById('favoritesBusyLoader');
         this.removeKeydownEventListener();
 
-        this.commonService.toPage(archiveMainPage, favoritesPage);
+        this.commonService.toPage(archiveMainPage, null);
       }
     }
   }

@@ -107,15 +107,6 @@ export class SeriesProgramsComponent implements OnInit, AfterViewInit {
         this.getSeriesData('0_c', true);
       }
     }
-
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) {
-        const isConnected = this.commonService.isConnectedToGateway();
-        if (!isConnected) {
-          this.commonService.showElementById('noNetworkConnection');
-        }
-      }
-    });
   }
 
   removeKeydownEventListener(): void {
@@ -244,7 +235,7 @@ export class SeriesProgramsComponent implements OnInit, AfterViewInit {
         this.commonService.focusToElement(this.lastContentRowId);
       }
       else {
-        this.commonService.showElementById('seriesBusyLoader');
+        //this.commonService.showElementById('seriesBusyLoader');
         this.removeKeydownEventListener();
 
         this.commonService.toPreviousPage(categoryProgramsPage);
