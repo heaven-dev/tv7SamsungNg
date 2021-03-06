@@ -320,17 +320,22 @@ export class SearchComponent implements OnInit, AfterViewInit {
         else if (key === 'clear') {
           value = '';
         }
-        else if (key === 'search' && value && value.length > 0) {
-          //console.log('Search text: ', value);
+        else if (key === 'search') {
+          if (value && value.length > 0) {
+            //console.log('Search text: ', value);
 
-          this.removeKeydownEventListener();
+            this.removeKeydownEventListener();
 
-          const pageState = {
-            searchText: value
-          };
+            const pageState = {
+              searchText: value
+            };
 
-          this.commonService.cacheValue(searchPageStateKey, this.commonService.jsonToString(pageState));
-          this.commonService.toPage(searchResultPage, searchPage);
+            this.commonService.cacheValue(searchPageStateKey, this.commonService.jsonToString(pageState));
+            this.commonService.toPage(searchResultPage, searchPage);
+          }
+          else {
+            searchTextField.style.backgroundColor = '#fadbd8';
+          }
         }
       }
       else {
@@ -346,6 +351,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
         }
 
         value = searchTextField.value + value;
+        searchTextField.style.backgroundColor = '#fafafa';
       }
 
       searchTextField.value = value;
