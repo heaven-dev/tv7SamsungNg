@@ -54,7 +54,6 @@ export class SearchComponent implements OnInit, AfterViewInit {
   keyWidthAndHeight: number = 0;
   keyFontSize: number = 0;
   iconWidth: number = 0;
-  searchTextFieldWidth: number = 0;
 
   keydownListener: Function = null;
 
@@ -100,16 +99,10 @@ export class SearchComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      const pageState = this.commonService.getValueFromCache(searchPageStateKey);
-      if (pageState) {
-        this.restorePageState(pageState);
-      }
-      else {
-        this.readSearchTextFieldWidth();
-        this.setSearchTextFieldWidth();
-      }
-    });
+    const pageState = this.commonService.getValueFromCache(searchPageStateKey);
+    if (pageState) {
+      this.restorePageState(pageState);
+    }
 
     this.commonService.removeOriginPage();
 
@@ -282,10 +275,12 @@ export class SearchComponent implements OnInit, AfterViewInit {
   restorePageState(pageState: any): void {
     if (pageState) {
       pageState = this.commonService.stringToJson(pageState);
-      this.searchTextFieldWidth = pageState.searchTextFieldWidth;
 
-      this.setSearchTextFieldWidth();
-      this.commonService.addToElement('searchTextField', pageState.searchText);
+      let elem = this.commonService.getElementById('searchTextField');
+      if (elem) {
+        elem.value = pageState.searchText;
+      }
+
       this.commonService.removeValueFromCache(searchPageStateKey);
     }
   }
@@ -298,21 +293,12 @@ export class SearchComponent implements OnInit, AfterViewInit {
       let value = '';
       const key = element.getAttribute('key');
       if (key) {
-        value = searchTextField.innerHTML;
+        value = searchTextField.value;
         if (key === 'space') {
           value += ' ';
         }
         else if (key === 'backSpace') {
-          if (this.stringEndsWith(value, '&amp;')) {
-            value = value.substring(0, value.lastIndexOf('&amp;'));
-          }
-          else if (this.stringEndsWith(value, '&lt;')) {
-            value = value.substring(0, value.lastIndexOf('&lt;'));
-          }
-          else if (this.stringEndsWith(value, '&gt;')) {
-            value = value.substring(0, value.lastIndexOf('&gt;'));
-          }
-          else if (value && value.length > 0) {
+          if (value && value.length > 0) {
             value = value.slice(0, -1);
           }
         }
@@ -338,10 +324,9 @@ export class SearchComponent implements OnInit, AfterViewInit {
           //console.log('Search text: ', value);
 
           this.removeKeydownEventListener();
-          
+
           const pageState = {
-            searchText: value,
-            searchTextFieldWidth: this.searchTextFieldWidth
+            searchText: value
           };
 
           this.commonService.cacheValue(searchPageStateKey, this.commonService.jsonToString(pageState));
@@ -350,10 +335,20 @@ export class SearchComponent implements OnInit, AfterViewInit {
       }
       else {
         value = element.innerHTML;
-        value = searchTextField.innerHTML + value;
+        if (value === '&amp;') {
+          value = '&';
+        }
+        else if (value === '&lt;') {
+          value = '<';
+        }
+        else if (value === '&gt;') {
+          value = '>';
+        }
+
+        value = searchTextField.value + value;
       }
 
-      this.commonService.addToElement('searchTextField', value);
+      searchTextField.value = value;
     }
   }
 
@@ -393,19 +388,5 @@ export class SearchComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.commonService.focusToElement(defaultRowCol);
     });
-  }
-
-  readSearchTextFieldWidth(): void {
-    let elem = this.commonService.getElementById('searchTextField');
-    if (elem) {
-      this.searchTextFieldWidth = elem.offsetWidth - 40;
-    }
-  }
-
-  setSearchTextFieldWidth(): void {
-    let elem = this.commonService.getElementById('searchTextField');
-    if (elem) {
-      elem.style.width = this.searchTextFieldWidth + 'px';
-    }
   }
 }
