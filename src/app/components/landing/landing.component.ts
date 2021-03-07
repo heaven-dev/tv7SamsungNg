@@ -7,6 +7,7 @@ import { ProgramScheduleService } from '../../services/program-schedule.service'
 import {
   programScheduleDataKey,
   tvMainPage,
+  errorPage,
   platformInfoKey,
   platformVersionKey,
   runOnBrowser
@@ -30,16 +31,14 @@ export class LandingComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.loadLogo = this.localeService.getChannelLogo();
+
+    const isConnected = this.commonService.isConnectedToGateway();
+    if (!isConnected) {
+      this.commonService.toPage(errorPage, null);
+    }
   }
 
   ngAfterViewInit(): void {
-    // check network connection
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.showElementById('noNetworkConnection');
-      return;
-    }
-
     // read platform info
     this.readPlatformInfo();
 

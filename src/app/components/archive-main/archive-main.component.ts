@@ -24,6 +24,7 @@ import {
   searchPage,
   favoritesPage,
   platformInfoPage,
+  errorPage,
   categoryRowNumber,
   LEFT,
   RIGHT,
@@ -94,6 +95,11 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
     this.commonService.showElementById('toolbarContainer');
     this.commonService.showElementById('sidebar');
 
+    const isConnected = this.commonService.isConnectedToGateway();
+    if (!isConnected) {
+      this.commonService.toPage(errorPage, null);
+    }
+
     this.appService.selectSidebarIcon(archiveIconContainer);
 
     this.localeService.setLocaleText('recommendedProgramsText');
@@ -102,12 +108,6 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
     this.localeService.setLocaleText('categoriesText');
 
     this.categoryImage = this.localeService.getCategoryLogo();
-
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.showElementById('noNetworkConnection');
-      return;
-    }
 
     this.keydownListener = this.renderer.listen('document', 'keydown', e => {
       this.keyDownEventListener(e);

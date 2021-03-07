@@ -1,0 +1,53 @@
+.errorContentContainer {
+	position: absolute;
+    top: 50%;
+    left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+.errorIconContainer {
+    text-align: center;
+}
+
+.errorIcon {
+    width: 400px;
+    height: 400px;
+}
+
+.somethingWentWrongText {
+    color: #444444;
+    font-size: 80px;
+}
+
+.buttonContainer {
+	display: -webkit-flex;
+	display: flex;
+	justify-content: center;
+	margin-top: 40px;
+}
+
+.closeButton {
+	margin-right: 20px;
+}
+
+.closeButton  {
+	width: 250px;
+	height: 80px;
+	border: 5px solid #777777;
+	border-radius: 60px;
+	background-color: #777777;
+	color: #ffffff;
+	text-align: center;
+	vertical-align: middle;
+	line-height: 80px;
+	font-size: 50px;
+	outline: none;
+	cursor: pointer;
+}
+
+.closeButton:focus {
+	background-color: #0099CC;
+	color: #ffffff;
+	border: 5px solid #0099CC;
+}

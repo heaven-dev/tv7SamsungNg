@@ -14,6 +14,7 @@ import {
   favoritesPage,
   platformInfoPage,
   searchPage,
+  errorPage,
   toolbarHeight,
   tvIconContainer,
   archiveIconContainer,
@@ -68,15 +69,14 @@ export class TvMainComponent implements OnInit, AfterViewInit {
     this.commonService.showElementById('toolbarContainer');
     this.commonService.showElementById('sidebar');
 
+    const isConnected = this.commonService.isConnectedToGateway();
+    if (!isConnected) {
+      this.commonService.toPage(errorPage, null);
+    }
+
     this.appService.selectSidebarIcon(tvIconContainer);
 
     this.mainViewHeight = (this.commonService.getWindowHeight() - toolbarHeight - 40) + 'px';
-
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.showElementById('noNetworkConnection');
-      return;
-    }
 
     this.commonService.removeOriginPage();
 

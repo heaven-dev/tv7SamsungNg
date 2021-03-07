@@ -15,6 +15,7 @@ import {
   seriesProgramsPage,
   categoryProgramsPage,
   programInfoPage,
+  errorPage,
   tvIconContainer,
   archiveIconContainer,
   guideIconContainer,
@@ -72,13 +73,12 @@ export class SeriesProgramsComponent implements OnInit, AfterViewInit {
     this.commonService.showElementById('toolbarContainer');
     this.commonService.showElementById('sidebar');
 
-    this.appService.selectSidebarIcon(archiveIconContainer);
-
     const isConnected = this.commonService.isConnectedToGateway();
     if (!isConnected) {
-      this.commonService.showElementById('noNetworkConnection');
-      return;
+      this.commonService.toPage(errorPage, null);
     }
+
+    this.appService.selectSidebarIcon(archiveIconContainer);
 
     this.keydownListener = this.renderer.listen('document', 'keydown', e => {
       this.keyDownEventListener(e);

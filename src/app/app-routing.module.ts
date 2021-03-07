@@ -14,6 +14,7 @@ import { PlatformInfoComponent } from './components/platform-info/platform-info.
 import { SearchComponent } from './components/search/search.component';
 import { FavoritesComponent } from './components/favorites/favorites.component';
 import { SearchResultComponent } from './components/search-result/search-result.component';
+import { ErrorComponent } from './components/error/error.component';
 
 import {
   landingPage,
@@ -28,7 +29,8 @@ import {
   platformInfoPage,
   searchPage,
   favoritesPage,
-  searchResultPage
+  searchResultPage,
+  errorPage
 } from './helpers/constants';
 
 const routes: Routes = [
@@ -45,7 +47,8 @@ const routes: Routes = [
   { path: platformInfoPage, component: PlatformInfoComponent },
   { path: searchPage, component: SearchComponent },
   { path: favoritesPage, component: FavoritesComponent },
-  { path: searchResultPage, component: SearchResultComponent }
+  { path: searchResultPage, component: SearchResultComponent },
+  { path: errorPage, component: ErrorComponent }
 ];
 
 @NgModule({

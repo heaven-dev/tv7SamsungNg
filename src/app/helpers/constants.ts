@@ -23,6 +23,7 @@ export const searchPage = 'search';
 export const favoritesPage = 'favorites';
 export const searchResultPage = 'searchresult';
 export const platformInfoPage = 'platforminfo';
+export const errorPage = 'error';
 
 export const get_ = 'get_';
 
@@ -128,11 +129,15 @@ export const videoStatusDataKey = 'videoStatusDataKey';
 export const visiblePageKey = 'visiblePageKey';
 
 export const channelUrlKey = 'channelUrlKey';
+export const networkKey = 'networkKey';
+export const yesKey = 'yesKey';
+export const noKey = 'noKey';
 
 export const archiveCacheExpTimeMs = 1800000;
 
 export const mainPageUpdateInterval = 10000;
 export const tvPlayerControlsUpdateInterval = 10000;
+export const streamErrorInterval = 5000;
 export const archivePlayerControlsVisibleTimeout = 6000;
 
 export const programListMinSize = 22;

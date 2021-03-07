@@ -11,8 +11,10 @@ import {
   videoNotOverrideNative,
   selectedArchiveProgramKey,
   programInfoPage,
+  errorPage,
   subtitlesUrlPart,
   archivePlayerControlsVisibleTimeout,
+  streamErrorInterval,
   videoUrlPart,
   _LINK_PATH_,
   pnidParam,
@@ -57,6 +59,9 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
   seeking: boolean = false;
   seekingStep: number = 10;
   timeout: any = null;
+  errorInterval: any = null;
+  streamPosition: number = 0;
+  streamStopCounter: number = 0;
   iconAnimationDuration: number = 1400;
 
   playerOptions: any = null;
@@ -79,8 +84,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
     const isConnected = this.commonService.isConnectedToGateway();
     if (!isConnected) {
-      this.commonService.showElementById('noNetworkConnection');
-      return;
+      this.commonService.toPage(errorPage, null);
     }
 
     this.commonService.screenSaverOff();
@@ -129,6 +133,16 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
       this.visibilityChange(e);
     });
 
+    this.createPlayer(langTag);
+
+    this.addErrorInterval();
+  }
+
+  ngOnDestroy(): void {
+    this.release();
+  }
+
+  createPlayer(langTag: string): void {
     console.log('video.js options: ', this.playerOptions);
 
     this.archiveService.getTranslation(this.selectedProgram.id, langTag, (data: any) => {
@@ -169,14 +183,20 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
         });
 
         this.player.on('error', () => {
-          videojs.log('Error loading video!');
+          if (this.player) {
+            const code = this.player.error().code;
+            videojs.log('Video error: code: ', code);
+
+            var time = this.player.currentTime();
+            videojs.log('Video current time: ', time);
+
+            this.saveVideoStatus();
+            this.release();
+            this.commonService.toPage(errorPage, null);
+          }
         });
       });
     });
-  }
-
-  ngOnDestroy(): void {
-    this.release();
   }
 
   removeEventListeners(): void {
@@ -365,8 +385,8 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
   playPlayer(): void {
     const isConnected = this.commonService.isConnectedToGateway();
     if (!isConnected) {
-      this.commonService.showElementById('noNetworkConnection');
-      return;
+      this.saveVideoStatus();
+      this.commonService.toPage(errorPage, null);
     }
 
     if (this.player && this.player.paused()) {
@@ -400,6 +420,10 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
   }
 
   saveVideoStatus(): void {
+    if (!this.selectedProgram || !this.player) {
+      return;
+    }
+
     let vs: any = this.commonService.getSavedValue(videoStatusDataKey);
     if (vs) {
       vs = this.commonService.stringToJson(vs);
@@ -500,6 +524,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
       this.player = null;
     }
 
+    this.stopErrorInterval();
     this.removeEventListeners();
   }
 
@@ -565,6 +590,35 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     if (this.timeout) {
       clearTimeout(this.timeout);
       this.timeout = null;
+    }
+  }
+
+  addErrorInterval(): void {
+    this.errorInterval = setInterval(() => {
+      if (this.player) {
+        let currentTime = Math.round(this.player.currentTime());
+        //console.log('Stream currentTime: ', currentTime);
+
+        if (currentTime <= this.streamPosition) {
+          // stream stopped
+          if (this.streamStopCounter === 3) {
+            this.saveVideoStatus();
+            this.release();
+            this.commonService.toPage(errorPage, null);
+          }
+
+          this.streamStopCounter++;
+        }
+
+        this.streamPosition = currentTime;
+      }
+    }, streamErrorInterval);
+  }
+
+  stopErrorInterval(): void {
+    if (this.errorInterval) {
+      clearInterval(this.errorInterval);
+      this.errorInterval = null;
     }
   }
 

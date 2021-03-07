@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { LandingComponent } from './components/landing/landing.component';
-import { NoNetworkComponent } from './components/no-network/no-network.component';
 import { CommonService } from './services/common.service';
 import { LocaleService } from './services/locale.service';
 import { TvMainComponent } from './components/tv-main/tv-main.component';
@@ -22,12 +21,11 @@ import { PlatformInfoComponent } from './components/platform-info/platform-info.
 import { SearchComponent } from './components/search/search.component';
 import { FavoritesComponent } from './components/favorites/favorites.component';
 import { SearchResultComponent } from './components/search-result/search-result.component';
+import { ErrorComponent } from './components/error/error.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LandingComponent,
-    NoNetworkComponent,
     TvMainComponent,
     ToolbarComponent,
     SidebarComponent,
@@ -42,7 +40,8 @@ import { SearchResultComponent } from './components/search-result/search-result.
     PlatformInfoComponent,
     SearchComponent,
     FavoritesComponent,
-    SearchResultComponent
+    SearchResultComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,

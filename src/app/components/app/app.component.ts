@@ -4,7 +4,10 @@ import { CommonService } from '../../services/common.service';
 import { Subscription } from 'rxjs';
 import {
   runOnBrowser,
-  visiblePageKey
+  networkKey,
+  yesKey,
+  noKey,
+  errorPage
 } from 'src/app/helpers/constants';
 
 @Component({
@@ -32,6 +35,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.commonService.cacheValue(networkKey, this.commonService.isConnectedToGateway() ? yesKey : noKey);
+
     this.commonService.screenSaverOn();
     this.enableNetworkStateListener();
 
@@ -54,14 +59,10 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   visibilityChange(e: any): void {
-    const visiblePage = this.commonService.getValueFromCache(visiblePageKey);
-    if (document.hidden) {
-
-    }
-    else {
+    if (!document.hidden) {
       const isConnected = this.commonService.isConnectedToGateway();
       if (!isConnected) {
-        this.commonService.showElementById('noNetworkConnection');
+        this.commonService.toPage(errorPage, null);
       }
     }
   }
@@ -73,11 +74,11 @@ export class AppComponent implements OnInit, OnDestroy {
       webapis.network.addNetworkStateChangeListener((value: any) => {
         // @ts-ignore
         if (value == webapis.network.NetworkState.GATEWAY_DISCONNECTED) {
-          this.commonService.showElementById('noNetworkConnection');
+          this.commonService.cacheValue(networkKey, noKey);
         }
         // @ts-ignore
         else if (value == webapis.network.NetworkState.GATEWAY_CONNECTED) {
-          this.commonService.hideElementById('noNetworkConnection');
+          this.commonService.cacheValue(networkKey, yesKey);
         }
       });
     }
@@ -94,10 +95,10 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   hideNoConnectionElement(): void {
-    this.commonService.hideElementById('noNetworkConnection');
+    this.commonService.cacheValue(networkKey, yesKey);
   }
 
   showNoConnectionElement(): void {
-    this.commonService.showElementById('noNetworkConnection');
+    this.commonService.cacheValue(networkKey, noKey);
   }
 }

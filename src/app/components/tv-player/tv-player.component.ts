@@ -10,7 +10,9 @@ import {
   streamType,
   programScheduleDataKey,
   tvPlayerControlsUpdateInterval,
+  streamErrorInterval,
   tvMainPage,
+  errorPage,
   LEFT,
   RIGHT,
   UP,
@@ -36,7 +38,10 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
   programIndex: number = 0;
   programData: any = null;
   ongoingProgramIndex: number = 0;
-  interval: any = null;
+  controlsInterval: any = null;
+  errorInterval: any = null;
+  streamPosition: number = 0;
+  streamStopCounter: number = 0;
 
   keydownListener: Function;
   visibilityChangeListener: Function = null;
@@ -53,8 +58,7 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const isConnected = this.commonService.isConnectedToGateway();
     if (!isConnected) {
-      this.commonService.showElementById('noNetworkConnection');
-      return;
+      this.commonService.toPage(errorPage, null);
     }
 
     this.commonService.screenSaverOff();
@@ -101,6 +105,16 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
       //console.log('Program count: ', programData.length);
     }
 
+    this.createPlayer();
+
+    this.addErrorInterval();
+  }
+
+  ngOnDestroy(): void {
+    this.release();
+  }
+
+  createPlayer(): void {
     console.log('video.js options: ', this.playerOptions);
 
     this.player = videojs(this.target.nativeElement, this.playerOptions, () => {
@@ -117,13 +131,28 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
       });
 
       this.player.on('error', () => {
-        videojs.log('Error loading video!');
+        if (this.player) {
+          const code = this.player.error().code;
+          videojs.log('Video error: code: ', code);
+
+          var time = this.player.currentTime();
+          videojs.log('Video current time: ', time);
+
+          this.release();
+          this.commonService.toPage(errorPage, null);
+
+          /*
+          if (time && code === 2) {
+            this.player.error(null);
+            this.player.pause();
+            this.player.load();
+            this.player.currentTime(time);
+            this.player.play();
+          }
+          */
+        }
       });
     });
-  }
-
-  ngOnDestroy(): void {
-    this.release();
   }
 
   removeEventListeners(): void {
@@ -195,7 +224,8 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
 
   release(): void {
     this.commonService.screenSaverOn();
-    this.stopInterval();
+    this.stopControlsInterval();
+    this.stopErrorInterval();
 
     if (this.player) {
       this.player.dispose();
@@ -211,21 +241,49 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
     this.commonService.toPage(tvMainPage, tvMainPage);
   }
 
-  addInterval(): void {
+  addControlsInterval(): void {
     this.ongoingProgramIndex = this.programScheduleService.getOngoingProgramIndex(this.programData);
 
     // Update controls (status bar, date time)
-    this.interval = setInterval(() => {
+    this.controlsInterval = setInterval(() => {
       if (this.controlsVisible) {
         this.updateProgramDetails(true);
       }
     }, tvPlayerControlsUpdateInterval);
   }
 
-  stopInterval(): void {
-    if (this.interval) {
-      clearInterval(this.interval);
-      this.interval = null;
+  stopControlsInterval(): void {
+    if (this.controlsInterval) {
+      clearInterval(this.controlsInterval);
+      this.controlsInterval = null;
+    }
+  }
+
+  addErrorInterval(): void {
+    this.errorInterval = setInterval(() => {
+      if (this.player) {
+        let currentTime = Math.round(this.player.currentTime());
+        //console.log('Stream currentTime: ', currentTime);
+
+        if (currentTime <= this.streamPosition) {
+          // stream stopped
+          if (this.streamStopCounter === 3) {
+            this.release();
+            this.commonService.toPage(errorPage, null);
+          }
+
+          this.streamStopCounter++;
+        }
+
+        this.streamPosition = currentTime;
+      }
+    }, streamErrorInterval);
+  }
+
+  stopErrorInterval(): void {
+    if (this.errorInterval) {
+      clearInterval(this.errorInterval);
+      this.errorInterval = null;
     }
   }
 
@@ -286,13 +344,13 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
 
     this.controlsVisible = true;
 
-    this.addInterval();
+    this.addControlsInterval();
   }
 
   hideControls(): void {
     this.commonService.hideElementById('programDetails');
 
-    this.stopInterval();
+    this.stopControlsInterval();
 
     this.programIndex = 0;
     this.controlsVisible = false;

@@ -9,6 +9,7 @@ import {
   guidePage,
   searchPage,
   favoritesPage,
+  errorPage,
   tvIconContainer,
   archiveIconContainer,
   guideIconContainer,
@@ -45,13 +46,12 @@ export class PlatformInfoComponent implements OnInit, AfterViewInit {
     this.commonService.showElementById('toolbarContainer');
     this.commonService.showElementById('sidebar');
 
-    this.appService.selectSidebarIcon(platformInfoIconContainer);
-
     const isConnected = this.commonService.isConnectedToGateway();
     if (!isConnected) {
-      this.commonService.showElementById('noNetworkConnection');
-      return;
+      this.commonService.toPage(errorPage, null);
     }
+
+    this.appService.selectSidebarIcon(platformInfoIconContainer);
 
     this.keydownListener = this.renderer.listen('document', 'keydown', e => {
       this.keyDownEventListener(e);

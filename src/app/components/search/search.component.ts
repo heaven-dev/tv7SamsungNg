@@ -14,6 +14,7 @@ import {
   keyboardSpecial,
   favoritesPage,
   platformInfoPage,
+  errorPage,
   tvIconContainer,
   archiveIconContainer,
   guideIconContainer,
@@ -69,15 +70,14 @@ export class SearchComponent implements OnInit, AfterViewInit {
     this.commonService.showElementById('toolbarContainer');
     this.commonService.showElementById('sidebar');
 
+    const isConnected = this.commonService.isConnectedToGateway();
+    if (!isConnected) {
+      this.commonService.toPage(errorPage, null);
+    }
+
     this.commonService.showElementById('searchBusyLoader');
 
     this.appService.selectSidebarIcon(searchIconContainer);
-
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.showElementById('noNetworkConnection');
-      return;
-    }
 
     this.keydownListener = this.renderer.listen('document', 'keydown', e => {
       this.keyDownEventListener(e);
