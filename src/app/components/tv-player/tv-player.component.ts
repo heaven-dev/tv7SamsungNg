@@ -56,11 +56,6 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.toPage(errorPage, null);
-    }
-
     this.commonService.screenSaverOff();
 
     this.playerOptions = {

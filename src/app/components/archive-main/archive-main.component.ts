@@ -95,11 +95,6 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
     this.commonService.showElementById('toolbarContainer');
     this.commonService.showElementById('sidebar');
 
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.toPage(errorPage, null);
-    }
-
     this.appService.selectSidebarIcon(archiveIconContainer);
 
     this.localeService.setLocaleText('recommendedProgramsText');
@@ -691,134 +686,188 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
       this.savePageState(row, col);
 
       this.commonService.showElementById('commonBusyLoader');
-      this.archiveService.getProgramInfo(data.id, (program: any) => {
-        this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
+      this.removeKeydownEventListener();
 
+      const isConnected = this.commonService.isConnectedToGateway();
+      if (!isConnected) {
         this.commonService.hideElementById('commonBusyLoader');
-        this.removeKeydownEventListener();
-        this.commonService.toPage(programInfoPage, archiveMainPage);
-      });
+
+        this.commonService.toPage(errorPage, null);
+      }
+      else {
+        this.archiveService.getProgramInfo(data.id, (program: any) => {
+          this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
+
+          this.commonService.hideElementById('commonBusyLoader');
+          this.commonService.toPage(programInfoPage, archiveMainPage);
+        });
+      }
     }
   }
 
   readRecommendedPrograms(date: string, limit: number, offset: number, pageState: any): void {
-    this.archiveService.getRecommendedPrograms(date, limit, offset, (data: any) => {
-      this.recommended = data;
-
-      const itemWidth = this.calculateItemWidth() + 20;
-      this.recommendedRowWidth = this.recommended.length * itemWidth;
-      this.cdRef.detectChanges();
-
-      //console.log('readRecommendedPrograms(): response: ', this.recommended);
-
-      this.restoreRightMargin(pageState, 'recommendedPrograms', 0);
-
+    const isConnected = this.commonService.isConnectedToGateway();
+    if (!isConnected) {
       this.commonService.hideElementById('recommendedBusyLoader');
-      this.changeRowBackgroundColor('recommendedProgramsContainer', '#ffffff');
+      this.removeKeydownEventListener();
 
-      setTimeout(() => {
-        if (!pageState) {
-          this.commonService.focusToElement(defaultRowCol);
-        }
+      this.commonService.toPage(errorPage, null);
+    }
+    else {
+      this.archiveService.getRecommendedPrograms(date, limit, offset, (data: any) => {
+        this.recommended = data;
+
+        const itemWidth = this.calculateItemWidth() + 20;
+        this.recommendedRowWidth = this.recommended.length * itemWidth;
+        this.cdRef.detectChanges();
+
+        //console.log('readRecommendedPrograms(): response: ', this.recommended);
+
+        this.restoreRightMargin(pageState, 'recommendedPrograms', 0);
+
+        this.commonService.hideElementById('recommendedBusyLoader');
+        this.changeRowBackgroundColor('recommendedProgramsContainer', '#ffffff');
+
+        setTimeout(() => {
+          if (!pageState) {
+            this.commonService.focusToElement(defaultRowCol);
+          }
+        });
       });
-    });
+    }
   }
 
   readMostViewedPrograms(archiveLanguage: string, pageState: any): void {
-    this.archiveService.getMostViewedPrograms(archiveLanguage, (data: any) => {
-      this.mostViewed = data;
-
-      const itemWidth = this.calculateItemWidth() + 20;
-      this.mostViewedRowWidth = this.mostViewed.length * itemWidth;
-      this.cdRef.detectChanges();
-
-      //console.log('readMostViewedPrograms(): response: ', this.mostViewed);
-
-      this.restoreRightMargin(pageState, 'mostViewedPrograms', 1);
-
+    const isConnected = this.commonService.isConnectedToGateway();
+    if (!isConnected) {
       this.commonService.hideElementById('mostViewedBusyLoader');
-      this.changeRowBackgroundColor('mostViewedProgramsContainer', '#ffffff');
-    });
+      this.removeKeydownEventListener();
+
+      this.commonService.toPage(errorPage, null);
+    }
+    else {
+      this.archiveService.getMostViewedPrograms(archiveLanguage, (data: any) => {
+        this.mostViewed = data;
+
+        const itemWidth = this.calculateItemWidth() + 20;
+        this.mostViewedRowWidth = this.mostViewed.length * itemWidth;
+        this.cdRef.detectChanges();
+
+        //console.log('readMostViewedPrograms(): response: ', this.mostViewed);
+
+        this.restoreRightMargin(pageState, 'mostViewedPrograms', 1);
+
+        this.commonService.hideElementById('mostViewedBusyLoader');
+        this.changeRowBackgroundColor('mostViewedProgramsContainer', '#ffffff');
+      });
+    }
   }
 
   readNewestPrograms(date: string, limit: number, offset: number, category: string, pageState: any): void {
-    this.archiveService.getNewestPrograms(date, limit, offset, category, (data: any) => {
-      this.newest = data;
-
-      const itemWidth = this.calculateItemWidth() + 20;
-      this.newestRowWidth = this.newest.length * itemWidth;
-      this.cdRef.detectChanges();
-
-      //console.log('readNewestPrograms(): response: ', this.newest);
-
-      this.restoreRightMargin(pageState, 'newestPrograms', 2);
-
+    const isConnected = this.commonService.isConnectedToGateway();
+    if (!isConnected) {
       this.commonService.hideElementById('newestBusyLoader');
-      this.changeRowBackgroundColor('newestProgramsContainer', '#ffffff');
-    });
+      this.removeKeydownEventListener();
+
+      this.commonService.toPage(errorPage, null);
+    }
+    else {
+      this.archiveService.getNewestPrograms(date, limit, offset, category, (data: any) => {
+        this.newest = data;
+
+        const itemWidth = this.calculateItemWidth() + 20;
+        this.newestRowWidth = this.newest.length * itemWidth;
+        this.cdRef.detectChanges();
+
+        //console.log('readNewestPrograms(): response: ', this.newest);
+
+        this.restoreRightMargin(pageState, 'newestPrograms', 2);
+
+        this.commonService.hideElementById('newestBusyLoader');
+        this.changeRowBackgroundColor('newestProgramsContainer', '#ffffff');
+      });
+    }
   }
 
   readParentCategories(pageState: any, pageLoad: boolean, cb: Function): void {
-    this.archiveService.getParentCategories((data: any) => {
-      this.categories = data;
-      this.cdRef.detectChanges();
+    const isConnected = this.commonService.isConnectedToGateway();
+    if (!isConnected) {
+      this.commonService.hideElementById('categoriesBusyLoader');
+      this.removeKeydownEventListener();
 
-      const itemWidth = this.calculateItemWidth() + 20;
-      this.categoriesRowWidth = this.categories.length * itemWidth;
-      this.cdRef.detectChanges();
+      this.commonService.toPage(errorPage, null);
+    }
+    else {
+      this.archiveService.getParentCategories((data: any) => {
+        this.categories = data;
+        this.cdRef.detectChanges();
 
-      //console.log('readParentCategories(): response: ', this.categories);
+        const itemWidth = this.calculateItemWidth() + 20;
+        this.categoriesRowWidth = this.categories.length * itemWidth;
+        this.cdRef.detectChanges();
 
-      if (pageLoad) {
-        this.restoreRightMargin(pageState, 'categories', 3);
+        //console.log('readParentCategories(): response: ', this.categories);
 
-        this.commonService.hideElementById('categoriesBusyLoader');
-        this.changeRowBackgroundColor('categoriesContainer', '#ffffff');
-      }
-      else {
-        this.commonService.focusToElement(categoryDefaultRowCol);
-      }
+        if (pageLoad) {
+          this.restoreRightMargin(pageState, 'categories', 3);
 
-      this.subCategoriesVisible = false;
+          this.commonService.hideElementById('categoriesBusyLoader');
+          this.changeRowBackgroundColor('categoriesContainer', '#ffffff');
+        }
+        else {
+          this.commonService.focusToElement(categoryDefaultRowCol);
+        }
 
-      if (cb) {
-        cb(this.categories);
-      }
-    });
-  }
+        this.subCategoriesVisible = false;
 
-  readSubCategories(pageState: any, pageLoad: boolean, cb: Function): void {
-    this.archiveService.getSubCategories((data: any) => {
-      if (!this.lastParentCategoryId && pageState) {
-        this.lastParentCategoryId = pageState.lastParentCategoryId;
-      }
-
-      this.lastParentCategoryId = !this.lastParentCategoryId ? pageState.lastParentCategoryId : this.lastParentCategoryId;
-
-      this.categories = this.archiveService.filterSubCategories(data, this.lastParentCategoryId);
-      this.cdRef.detectChanges();
-
-      //console.log('readSubCategories(): filtered response: ', this.categories);
-
-      if (pageLoad) {
-        this.restoreRightMargin(pageState, 'categories', 3);
-
-        this.commonService.hideElementById('categoriesBusyLoader');
-        this.changeRowBackgroundColor('categoriesContainer', '#ffffff');
-      }
-      else {
         if (cb) {
           cb(this.categories);
         }
-      }
-
-      this.subCategoriesVisible = true;
-
-      setTimeout(() => {
-        this.changeCategoriesTitleText(this.categories[0].parent_name);
-        this.localeService.setLocaleText('categoryBackText');
       });
-    });
+    }
+  }
+
+  readSubCategories(pageState: any, pageLoad: boolean, cb: Function): void {
+    const isConnected = this.commonService.isConnectedToGateway();
+    if (!isConnected) {
+      this.commonService.hideElementById('categoriesBusyLoader');
+      this.removeKeydownEventListener();
+
+      this.commonService.toPage(errorPage, null);
+    }
+    else {
+      this.archiveService.getSubCategories((data: any) => {
+        if (!this.lastParentCategoryId && pageState) {
+          this.lastParentCategoryId = pageState.lastParentCategoryId;
+        }
+
+        this.lastParentCategoryId = !this.lastParentCategoryId ? pageState.lastParentCategoryId : this.lastParentCategoryId;
+
+        this.categories = this.archiveService.filterSubCategories(data, this.lastParentCategoryId);
+        this.cdRef.detectChanges();
+
+        //console.log('readSubCategories(): filtered response: ', this.categories);
+
+        if (pageLoad) {
+          this.restoreRightMargin(pageState, 'categories', 3);
+
+          this.commonService.hideElementById('categoriesBusyLoader');
+          this.changeRowBackgroundColor('categoriesContainer', '#ffffff');
+        }
+        else {
+          if (cb) {
+            cb(this.categories);
+          }
+        }
+
+        this.subCategoriesVisible = true;
+
+        setTimeout(() => {
+          this.changeCategoriesTitleText(this.categories[0].parent_name);
+          this.localeService.setLocaleText('categoryBackText');
+        });
+      });
+    }
   }
 
   getCategoriesCount(): number {

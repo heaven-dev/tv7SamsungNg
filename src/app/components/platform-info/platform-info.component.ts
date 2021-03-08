@@ -9,7 +9,6 @@ import {
   guidePage,
   searchPage,
   favoritesPage,
-  errorPage,
   tvIconContainer,
   archiveIconContainer,
   guideIconContainer,
@@ -45,11 +44,6 @@ export class PlatformInfoComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.commonService.showElementById('toolbarContainer');
     this.commonService.showElementById('sidebar');
-
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.toPage(errorPage, null);
-    }
 
     this.appService.selectSidebarIcon(platformInfoIconContainer);
 

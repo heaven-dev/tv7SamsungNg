@@ -69,11 +69,6 @@ export class TvMainComponent implements OnInit, AfterViewInit {
     this.commonService.showElementById('toolbarContainer');
     this.commonService.showElementById('sidebar');
 
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.toPage(errorPage, null);
-    }
-
     this.appService.selectSidebarIcon(tvIconContainer);
 
     this.mainViewHeight = (this.commonService.getWindowHeight() - toolbarHeight - 40) + 'px';
@@ -284,18 +279,28 @@ export class TvMainComponent implements OnInit, AfterViewInit {
 
     const count = this.guideData.length - this.programScheduleService.getOngoingProgramIndex(this.guideData);
     if (count <= programListMinSize) {
-      // get today and tomorrow guide and update the page
-      this.programScheduleService.getGuideByDate(this.commonService.getTodayDate(), (gToday) => {
-        gToday = gToday.data;
 
-        this.programScheduleService.getGuideByDate(this.commonService.getTomorrowDate(), (gTomorrow) => {
-          this.guideData = gToday.concat(gTomorrow.data);
+      const isConnected = this.commonService.isConnectedToGateway();
+      if (!isConnected) {
+        this.removeKeydownEventListener();
+        this.stopInterval();
 
-          this.commonService.cacheValue(programScheduleDataKey, this.commonService.jsonToString(this.guideData));
+        this.commonService.toPage(errorPage, null);
+      }
+      else {
+        // get today and tomorrow guide and update the page
+        this.programScheduleService.getGuideByDate(this.commonService.getTodayDate(), (gToday) => {
+          gToday = gToday.data;
 
-          this.updatePage(true);
+          this.programScheduleService.getGuideByDate(this.commonService.getTomorrowDate(), (gTomorrow) => {
+            this.guideData = gToday.concat(gTomorrow.data);
+
+            this.commonService.cacheValue(programScheduleDataKey, this.commonService.jsonToString(this.guideData));
+
+            this.updatePage(true);
+          });
         });
-      });
+      }
     }
   }
 

@@ -82,11 +82,6 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.windowHeight = this.commonService.getWindowHeight();
 
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.toPage(errorPage, null);
-    }
-
     this.commonService.screenSaverOff();
 
     this.selectedProgram = this.commonService.stringToJson(this.commonService.getValueFromCache(selectedArchiveProgramKey));
@@ -143,60 +138,68 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
   }
 
   createPlayer(langTag: string): void {
-    console.log('video.js options: ', this.playerOptions);
+    const isConnected = this.commonService.isConnectedToGateway();
+    if (!isConnected) {
+      this.removeEventListeners();
 
-    this.archiveService.getTranslation(this.selectedProgram.id, langTag, (data: any) => {
-      this.createTrackElement(data);
-      this.player = videojs(this.target.nativeElement, this.playerOptions, () => {
-        this.player.on('play', () => {
-          videojs.log('Video play!');
-        });
+      this.commonService.toPage(errorPage, null);
+    }
+    else {
+      console.log('video.js options: ', this.playerOptions);
 
-        this.player.on('loadedmetadata', () => {
-          videojs.log('Video loadedmetadata!');
+      this.archiveService.getTranslation(this.selectedProgram.id, langTag, (data: any) => {
+        this.createTrackElement(data);
+        this.player = videojs(this.target.nativeElement, this.playerOptions, () => {
+          this.player.on('play', () => {
+            videojs.log('Video play!');
+          });
 
-          if (this.videoStatus && this.videoStatus.p < 100) {
-            this.player.currentTime(this.videoStatus.c);
-          }
-        });
+          this.player.on('loadedmetadata', () => {
+            videojs.log('Video loadedmetadata!');
 
-        this.player.on('timeupdate', () => {
-          if (this.controlsVisible && this.player) {
-            if (!this.videoDuration) {
-              this.videoDuration = this.player.duration();
+            if (this.videoStatus && this.videoStatus.p < 100) {
+              this.player.currentTime(this.videoStatus.c);
             }
+          });
 
-            this.updateControls(this.player.currentTime());
-          }
-        });
+          this.player.on('timeupdate', () => {
+            if (this.controlsVisible && this.player) {
+              if (!this.videoDuration) {
+                this.videoDuration = this.player.duration();
+              }
 
-        this.player.on('ended', () => {
-          videojs.log('Video end!');
-          this.saveVideoStatus();
+              this.updateControls(this.player.currentTime());
+            }
+          });
 
-          this.release();
-          this.commonService.toPreviousPage(programInfoPage);
-        });
-
-        this.player.on('pause', () => {
-          videojs.log('Video paused!');
-        });
-
-        this.player.on('error', () => {
-          if (this.player) {
-            const code = this.player.error().code;
-            videojs.log('Video error: code: ', code);
-
-            var time = this.player.currentTime();
-            videojs.log('Video current time: ', time);
-
+          this.player.on('ended', () => {
+            videojs.log('Video end!');
             this.saveVideoStatus();
+
             this.release();
-            this.commonService.toPage(errorPage, null);
-          }
+            this.commonService.toPreviousPage(programInfoPage);
+          });
+
+          this.player.on('pause', () => {
+            videojs.log('Video paused!');
+          });
+
+          this.player.on('error', () => {
+            if (this.player) {
+              const code = this.player.error().code;
+              videojs.log('Video error: code: ', code);
+
+              var time = this.player.currentTime();
+              videojs.log('Video current time: ', time);
+
+              this.saveVideoStatus();
+              this.release();
+              this.commonService.toPage(errorPage, null);
+            }
+          });
         });
       });
-    });
+    }
   }
 
   removeEventListeners(): void {

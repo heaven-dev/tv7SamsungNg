@@ -69,11 +69,6 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
     this.commonService.showElementById('toolbarContainer');
     this.commonService.showElementById('sidebar');
 
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.toPage(errorPage, null);
-    }
-
     this.appService.selectSidebarIcon(searchIconContainer);
 
     this.keydownListener = this.renderer.listen('document', 'keydown', e => {
@@ -232,35 +227,44 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
   searchByString(queryString: string): void {
     this.commonService.showElementById('searchResultBusyLoader');
 
-    this.archiveService.searchPrograms(queryString, (data: any) => {
-      if (data) {
-        //console.log('Search result: ', data);
+    const isConnected = this.commonService.isConnectedToGateway();
+    if (!isConnected) {
+      this.commonService.hideElementById('searchResultBusyLoader');
+      this.removeKeydownEventListener();
 
-        this.hitCount = 0;
+      this.commonService.toPage(errorPage, null);
+    }
+    else {
+      this.archiveService.searchPrograms(queryString, (data: any) => {
+        if (data) {
+          //console.log('Search result: ', data);
 
-        this.searchData = data['results'];
-        this.cdRef.detectChanges();
+          this.hitCount = 0;
 
-        if (this.searchData) {
-          this.hitCount = this.searchData.length;
-        }
+          this.searchData = data['results'];
+          this.cdRef.detectChanges();
 
-        this.commonService.hideElementById('searchResultBusyLoader');
-
-        setTimeout(() => {
-          if (this.hitCount > 0) {
-            this.commonService.focusToElement('0_c');
+          if (this.searchData) {
+            this.hitCount = this.searchData.length;
           }
-          else {
-            this.commonService.focusToElement('searchResultText');
-          }
-        });
 
-        if (!this.hitCount || this.hitCount === 0) {
-          this.showNoHitsText();
+          this.commonService.hideElementById('searchResultBusyLoader');
+
+          setTimeout(() => {
+            if (this.hitCount > 0) {
+              this.commonService.focusToElement('0_c');
+            }
+            else {
+              this.commonService.focusToElement('searchResultText');
+            }
+          });
+
+          if (!this.hitCount || this.hitCount === 0) {
+            this.showNoHitsText();
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   toItemPage(row: number): void {
@@ -270,23 +274,30 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
       //console.log('Selected item: ', data);
 
       this.savePageState(row);
+      this.removeKeydownEventListener();
 
       if (data.series_id && data.series_id !== '' && data.series_id !== nullValue && data.type === 'series') {
         this.archiveService.cacheData(selectedArchiveProgramKey, this.commonService.jsonToString(data));
-        this.removeKeydownEventListener();
 
         this.commonService.toPage(seriesProgramsPage, searchResultPage);
       }
       else {
         this.commonService.showElementById('searchResultBusyLoader');
-        this.archiveService.getProgramInfo(data.id, (program: any) => {
-          this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
 
+        const isConnected = this.commonService.isConnectedToGateway();
+        if (!isConnected) {
           this.commonService.hideElementById('searchResultBusyLoader');
-          this.removeKeydownEventListener();
+          this.commonService.toPage(errorPage, null);
+        }
+        else {
+          this.archiveService.getProgramInfo(data.id, (program: any) => {
+            this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
 
-          this.commonService.toPage(programInfoPage, searchResultPage);
-        });
+            this.commonService.hideElementById('searchResultBusyLoader');
+
+            this.commonService.toPage(programInfoPage, searchResultPage);
+          });
+        }
       }
     }
   }

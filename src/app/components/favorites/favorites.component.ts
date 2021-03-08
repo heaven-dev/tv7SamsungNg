@@ -65,11 +65,6 @@ export class FavoritesComponent implements OnInit, AfterViewInit {
     this.commonService.showElementById('toolbarContainer');
     this.commonService.showElementById('sidebar');
 
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.toPage(errorPage, null);
-    }
-
     this.appService.selectSidebarIcon(favoritesIconContainer);
 
     this.keydownListener = this.renderer.listen('document', 'keydown', e => {
@@ -239,14 +234,23 @@ export class FavoritesComponent implements OnInit, AfterViewInit {
       const id = this.favoritesData[row].id;
 
       this.commonService.showElementById('favoritesBusyLoader');
-      this.archiveService.getProgramInfo(id, (program: any) => {
-        this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
+      this.removeKeydownEventListener();
 
+      const isConnected = this.commonService.isConnectedToGateway();
+      if (!isConnected) {
         this.commonService.hideElementById('favoritesBusyLoader');
-        this.removeKeydownEventListener();
+        this.commonService.toPage(errorPage, null);
+      }
+      else {
+        this.archiveService.getProgramInfo(id, (program: any) => {
+          this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
 
-        this.commonService.toPage(programInfoPage, favoritesPage);
-      });
+          this.commonService.hideElementById('favoritesBusyLoader');
+
+
+          this.commonService.toPage(programInfoPage, favoritesPage);
+        });
+      }
     }
   }
 

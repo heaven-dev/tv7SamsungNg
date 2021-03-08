@@ -16,7 +16,11 @@ import {
   searchPageStateKey,
   favoritesPageStateKey,
   originPageKey,
-  visiblePageKey
+  visiblePageKey,
+  networkKey,
+  yesKey,
+  noKey,
+  errorPage
 } from '../helpers/constants';
 
 @Injectable({
@@ -261,7 +265,10 @@ export class CommonService {
   isConnectedToGateway(): any {
     if (!runOnBrowser) {
       // @ts-ignore
-      return webapis.network.isConnectedToGateway();
+      let isConnected = webapis.network.isConnectedToGateway();
+      
+      this.cacheValue(networkKey, isConnected ? yesKey : noKey);
+      return isConnected;
     }
     else {
       if (navigator) {
@@ -306,6 +313,11 @@ export class CommonService {
   toPage(toPage: string, fromPage: string): void {
     if (fromPage) {
       this.setOriginPage(fromPage);
+    }
+
+    const isConnected = this.isConnectedToGateway();
+    if (!isConnected) {
+      toPage = errorPage;
     }
 
     this.cacheValue(visiblePageKey, toPage);

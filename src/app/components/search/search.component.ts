@@ -14,7 +14,6 @@ import {
   keyboardSpecial,
   favoritesPage,
   platformInfoPage,
-  errorPage,
   tvIconContainer,
   archiveIconContainer,
   guideIconContainer,
@@ -69,11 +68,6 @@ export class SearchComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.commonService.showElementById('toolbarContainer');
     this.commonService.showElementById('sidebar');
-
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.toPage(errorPage, null);
-    }
 
     this.commonService.showElementById('searchBusyLoader');
 

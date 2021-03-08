@@ -69,11 +69,6 @@ export class GuideComponent implements OnInit, AfterViewInit {
     this.commonService.showElementById('toolbarContainer');
     this.commonService.showElementById('sidebar');
 
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.toPage(errorPage, null);
-    }
-
     this.appService.selectSidebarIcon(guideIconContainer);
 
     this.keydownListener = this.renderer.listen('document', 'keydown', e => {
@@ -248,17 +243,24 @@ export class GuideComponent implements OnInit, AfterViewInit {
         }
         else if (contentId.indexOf('_c') !== -1) {
           this.commonService.showElementById('guideBusyLoader');
+          this.removeKeydownEventListener();
 
-          this.archiveService.getProgramInfo(this.guideDateData[row].id, (program: any) => {
-            this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
-
-            this.savePageState(row);
-
+          const isConnected = this.commonService.isConnectedToGateway();
+          if (!isConnected) {
             this.commonService.hideElementById('guideBusyLoader');
-            this.removeKeydownEventListener();
+            this.commonService.toPage(errorPage, null);
+          }
+          else {
+            this.archiveService.getProgramInfo(this.guideDateData[row].id, (program: any) => {
+              this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
 
-            this.commonService.toPage(programInfoPage, guidePage);
-          });
+              this.savePageState(row);
+
+              this.commonService.hideElementById('guideBusyLoader');
+
+              this.commonService.toPage(programInfoPage, guidePage);
+            });
+          }
         }
       }
     }
@@ -321,31 +323,38 @@ export class GuideComponent implements OnInit, AfterViewInit {
 
     this.commonService.showElementById('guideBusyLoader');
 
-    this.programScheduleService.getGuideByDate(date, (guideData: any) => {
-      //console.log('Guide by date data: ', guideData);
-
-      this.guideDateData = guideData.data;
-      this.cdRef.detectChanges();
-
-      this.selectDate(col);
-      this.selectedDateIndex = col;
-
-      const element = this.commonService.getElementById('guideContainer');
-      if (element && this.isDateToday(date)) {
-        this.ongoingProgramIndex = guideData.ongoingProgramIndex;
-        this.setTodayPosition(element, this.ongoingProgramIndex);
-        this.commonService.showElementById('ongoingProgram_' + this.ongoingProgramIndex);
-      }
-      else {
-        element.style.bottom = '0px';
-      }
-
-      if (element && !firstLoad) {
-        this.animateRows(element);
-      }
-
+    const isConnected = this.commonService.isConnectedToGateway();
+    if (!isConnected) {
       this.commonService.hideElementById('guideBusyLoader');
-    });
+      this.commonService.toPage(errorPage, null);
+    }
+    else {
+      this.programScheduleService.getGuideByDate(date, (guideData: any) => {
+        //console.log('Guide by date data: ', guideData);
+
+        this.guideDateData = guideData.data;
+        this.cdRef.detectChanges();
+
+        this.selectDate(col);
+        this.selectedDateIndex = col;
+
+        const element = this.commonService.getElementById('guideContainer');
+        if (element && this.isDateToday(date)) {
+          this.ongoingProgramIndex = guideData.ongoingProgramIndex;
+          this.setTodayPosition(element, this.ongoingProgramIndex);
+          this.commonService.showElementById('ongoingProgram_' + this.ongoingProgramIndex);
+        }
+        else {
+          element.style.bottom = '0px';
+        }
+
+        if (element && !firstLoad) {
+          this.animateRows(element);
+        }
+
+        this.commonService.hideElementById('guideBusyLoader');
+      });
+    }
   }
 
   getPageState(): any {

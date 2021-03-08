@@ -1,3 +1,15 @@
+# 08.03.2021 12:45
+
+### Bug Fixes
+
+* none
+
+### Features
+
+* Error handling.
+* Version 2.0.4.
+
+
 # 03.03.2021 15:55
 
 ### Bug Fixes

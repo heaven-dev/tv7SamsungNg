@@ -45,20 +45,26 @@ export class LandingComponent implements OnInit, AfterViewInit {
     // register remote control keys
     this.registerRemoteControlKeys();
 
-    // get today and tomorrow guide
-    this.programScheduleService.getGuideByDate(this.commonService.getTodayDate(), (gd) => {
-      let guide = gd.data;
+    const isConnected = this.commonService.isConnectedToGateway();
+    if (!isConnected) {
+      this.commonService.toPage(errorPage, null);
+    }
+    else {
+      // get today and tomorrow guide
+      this.programScheduleService.getGuideByDate(this.commonService.getTodayDate(), (gd) => {
+        let guide = gd.data;
 
-      this.programScheduleService.getGuideByDate(this.commonService.getTomorrowDate(), (gd) => {
-        guide = guide.concat(gd.data);
+        this.programScheduleService.getGuideByDate(this.commonService.getTomorrowDate(), (gd) => {
+          guide = guide.concat(gd.data);
 
-        //console.log('Guide data: ', guide);
+          //console.log('Guide data: ', guide);
 
-        this.commonService.cacheValue(programScheduleDataKey, this.commonService.jsonToString(guide));
+          this.commonService.cacheValue(programScheduleDataKey, this.commonService.jsonToString(guide));
 
-        this.openTvMainPage();
+          this.openTvMainPage();
+        });
       });
-    });
+    }
   }
 
   openTvMainPage() {

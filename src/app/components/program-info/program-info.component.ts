@@ -17,7 +17,6 @@ import {
   platformInfoPage,
   archivePlayerPage,
   programInfoPage,
-  errorPage,
   tvIconContainer,
   archiveIconContainer,
   guideIconContainer,
@@ -66,11 +65,6 @@ export class ProgramInfoComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.commonService.showElementById('toolbarContainer');
     this.commonService.showElementById('sidebar');
-
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.toPage(errorPage, null);
-    }
 
     this.appService.selectSidebarIcon(archiveIconContainer);
 
@@ -157,7 +151,7 @@ export class ProgramInfoComponent implements OnInit, AfterViewInit {
         }
 
         if (videoItem) {
-          console.log('Video status: ', videoItem);
+          //console.log('Video status: ', videoItem);
 
           let elem = this.commonService.getElementById('videoStatusBar');
           if (elem) {

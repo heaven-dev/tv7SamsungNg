@@ -73,11 +73,6 @@ export class SeriesProgramsComponent implements OnInit, AfterViewInit {
     this.commonService.showElementById('toolbarContainer');
     this.commonService.showElementById('sidebar');
 
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.toPage(errorPage, null);
-    }
-
     this.appService.selectSidebarIcon(archiveIconContainer);
 
     this.keydownListener = this.renderer.listen('document', 'keydown', e => {
@@ -214,17 +209,24 @@ export class SeriesProgramsComponent implements OnInit, AfterViewInit {
       else {
         if (this.seriesData && this.seriesData[row]) {
           this.commonService.showElementById('seriesBusyLoader');
+          this.removeKeydownEventListener();
 
-          this.archiveService.getProgramInfo(this.seriesData[row].id, (program: any) => {
-            this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
-
-            this.savePageState(row);
-
+          const isConnected = this.commonService.isConnectedToGateway();
+          if (!isConnected) {
             this.commonService.hideElementById('seriesBusyLoader');
-            this.removeKeydownEventListener();
+            this.commonService.toPage(errorPage, null);
+          }
+          else {
+            this.archiveService.getProgramInfo(this.seriesData[row].id, (program: any) => {
+              this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
 
-            this.commonService.toPage(programInfoPage, seriesProgramsPage);
-          });
+              this.savePageState(row);
+
+              this.commonService.hideElementById('seriesBusyLoader');
+
+              this.commonService.toPage(programInfoPage, seriesProgramsPage);
+            });
+          }
         }
       }
     }
@@ -287,32 +289,41 @@ export class SeriesProgramsComponent implements OnInit, AfterViewInit {
     this.loadingData = true;
     this.commonService.showElementById('seriesBusyLoader');
 
-    this.archiveService.getSeriesPrograms(this.seriesId, this.limit, this.offset, (data: any) => {
-      this.seriesData = this.seriesData.concat(data);
-      this.cdRef.detectChanges();
+    const isConnected = this.commonService.isConnectedToGateway();
+    if (!isConnected) {
+      this.commonService.hideElementById('seriesBusyLoader');
+      this.removeKeydownEventListener();
 
-      //console.log('Series data: ', seriesData);
+      this.commonService.toPage(errorPage, null);
+    }
+    else {
+      this.archiveService.getSeriesPrograms(this.seriesId, this.limit, this.offset, (data: any) => {
+        this.seriesData = this.seriesData.concat(data);
+        this.cdRef.detectChanges();
 
-      if (data) {
-        if (data.length < this.limit) {
-          this.limit = -1;
-          this.offset = -1;
+        //console.log('Series data: ', seriesData);
+
+        if (data) {
+          if (data.length < this.limit) {
+            this.limit = -1;
+            this.offset = -1;
+          }
+          else {
+            this.offset = this.offset + data.length;
+          }
+
+          if (firstLoad) {
+            this.setTitleText();
+          }
         }
-        else {
-          this.offset = this.offset + data.length;
-        }
 
-        if (firstLoad) {
-          this.setTitleText();
-        }
-      }
-
-      setTimeout(() => {
-        this.commonService.hideElementById('seriesBusyLoader');
-        this.commonService.focusToElement(focusElement);
-        this.loadingData = false;
-      })
-    });
+        setTimeout(() => {
+          this.commonService.hideElementById('seriesBusyLoader');
+          this.commonService.focusToElement(focusElement);
+          this.loadingData = false;
+        })
+      });
+    }
   }
 
   getPageState(): any {

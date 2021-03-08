@@ -14,7 +14,6 @@ import {
   seriesProgramsPage,
   categoryProgramsPage,
   programInfoPage,
-  errorPage,
   tvIconContainer,
   archiveIconContainer,
   guideIconContainer,
@@ -25,6 +24,7 @@ import {
   categoriesPageStateKey,
   selectedArchiveProgramKey,
   nullValue,
+  errorPage,
   LEFT,
   RIGHT,
   UP,
@@ -71,11 +71,6 @@ export class CategoryProgramsComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.commonService.showElementById('toolbarContainer');
     this.commonService.showElementById('sidebar');
-
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.toPage(errorPage, null);
-    }
 
     this.appService.selectSidebarIcon(archiveIconContainer);
 
@@ -224,13 +219,20 @@ export class CategoryProgramsComponent implements OnInit, AfterViewInit {
             this.commonService.showElementById('categoryProgramsBusyLoader');
             this.removeKeydownEventListener();
 
-            this.archiveService.getProgramInfo(this.categoryProgramData[row].id, (program: any) => {
-              this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
-
+            const isConnected = this.commonService.isConnectedToGateway();
+            if (!isConnected) {
               this.commonService.hideElementById('categoryProgramsBusyLoader');
+              this.commonService.toPage(errorPage, null);
+            }
+            else {
+              this.archiveService.getProgramInfo(this.categoryProgramData[row].id, (program: any) => {
+                this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
 
-              this.commonService.toPage(programInfoPage, categoryProgramsPage);
-            });
+                this.commonService.hideElementById('categoryProgramsBusyLoader');
+
+                this.commonService.toPage(programInfoPage, categoryProgramsPage);
+              });
+            }
           }
         }
       }
@@ -298,28 +300,37 @@ export class CategoryProgramsComponent implements OnInit, AfterViewInit {
     this.loadingData = true;
     this.commonService.showElementById('categoryProgramsBusyLoader');
 
-    this.archiveService.getCategoryPrograms(this.selectedCategory.id, this.limit, this.offset, (data: any) => {
-      this.categoryProgramData = this.categoryProgramData.concat(data);
-      this.cdRef.detectChanges();
+    const isConnected = this.commonService.isConnectedToGateway();
+    if (!isConnected) {
+      this.commonService.hideElementById('categoryProgramsBusyLoader');
+      this.removeKeydownEventListener();
 
-      //console.log('Category programs data: ', categoryProgramData);
+      this.commonService.toPage(errorPage, null);
+    }
+    else {
+      this.archiveService.getCategoryPrograms(this.selectedCategory.id, this.limit, this.offset, (data: any) => {
+        this.categoryProgramData = this.categoryProgramData.concat(data);
+        this.cdRef.detectChanges();
 
-      if (data) {
-        if (data.length < this.limit) {
-          this.limit = -1;
-          this.offset = -1;
+        //console.log('Category programs data: ', categoryProgramData);
+
+        if (data) {
+          if (data.length < this.limit) {
+            this.limit = -1;
+            this.offset = -1;
+          }
+          else {
+            this.offset = this.offset + data.length;
+          }
         }
-        else {
-          this.offset = this.offset + data.length;
-        }
-      }
 
-      setTimeout(() => {
-        this.commonService.hideElementById('categoryProgramsBusyLoader');
-        this.commonService.focusToElement(focusElement);
-        this.loadingData = false;
+        setTimeout(() => {
+          this.commonService.hideElementById('categoryProgramsBusyLoader');
+          this.commonService.focusToElement(focusElement);
+          this.loadingData = false;
+        });
       });
-    });
+    }
   }
 
   getPageState(): any {
