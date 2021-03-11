@@ -269,6 +269,9 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
 
           this.streamStopCounter++;
         }
+        else {
+          this.streamStopCounter = 0;
+        }
 
         this.streamPosition = currentTime;
       }
