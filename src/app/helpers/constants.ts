@@ -134,6 +134,7 @@ export const errorTextKey = 'errorTextKey';
 export const somethingWentWrongText = 'Something went wrong :-(';
 export const noNetworkConnectionText = 'No network connection :-(';
 export const networkRequestFailedText = 'Network request failed :-(';
+export const networkRequestTimeoutText = 'Network request timeout :-(';
 
 export const archiveCacheExpTimeMs = 1800000;
 

@@ -35,7 +35,8 @@ import {
   translationMethod,
   searchMethod,
   errorTextKey,
-  networkRequestFailedText
+  networkRequestFailedText,
+  networkRequestTimeoutText
 } from '../helpers/constants';
 
 @Injectable({
@@ -427,7 +428,7 @@ export class ArchiveService {
       //console.log('Network request timeout: ', e);
       xhttp.abort();
 
-      this.commonService.cacheValue(errorTextKey, networkRequestFailedText);
+      this.commonService.cacheValue(errorTextKey, networkRequestTimeoutText);
       cb(null);
     }
 

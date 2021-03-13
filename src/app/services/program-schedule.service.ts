@@ -6,7 +6,8 @@ import {
     dateParam,
     get_,
     errorTextKey,
-    networkRequestFailedText
+    networkRequestFailedText,
+    networkRequestTimeoutText
 } from '../helpers/constants';
 
 @Injectable({
@@ -110,7 +111,7 @@ export class ProgramScheduleService {
             //console.log('Network request timeout: ', e);
             xhttp.abort();
 
-            this.commonService.cacheValue(errorTextKey, networkRequestFailedText);
+            this.commonService.cacheValue(errorTextKey, networkRequestTimeoutText);
             cb(null);
         }
 
