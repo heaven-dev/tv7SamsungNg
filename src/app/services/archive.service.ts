@@ -33,7 +33,10 @@ import {
   seriesInfoMethod,
   seriesProgramsMethod,
   translationMethod,
-  searchMethod
+  searchMethod,
+  networkKey,
+  yesKey,
+  noKey
 } from '../helpers/constants';
 
 @Injectable({
@@ -61,25 +64,30 @@ export class ArchiveService {
       console.log('Recommended URL: ', url);
 
       this.runQuery(url, (data: any) => {
-        data = this.commonService.stringToJson(data);
+        if (data) {
+          data = this.commonService.stringToJson(data);
 
-        const rootProp = recommendedProgramsMethod.replace(get_, '');
+          const rootProp = recommendedProgramsMethod.replace(get_, '');
 
-        data = data[rootProp];
+          data = data[rootProp];
 
-        if (!data || data.length <= 4) {
-          this.getBroadcastRecommendationsPrograms(date, limit, offset, function (data) {
+          if (!data || data.length <= 4) {
+            this.getBroadcastRecommendationsPrograms(date, limit, offset, function (data) {
+              cb(data);
+            });
+          }
+          else {
+            data = this.filterResponse(data, recommendedProgramsMethod);
+
+            if (data && data.length) {
+              this.cacheData(recommendedProgramsKey, this.commonService.jsonToString(data));
+            }
+
             cb(data);
-          });
+          }
         }
         else {
-          data = this.filterResponse(data, recommendedProgramsMethod);
-
-          if (data && data.length) {
-            this.cacheData(recommendedProgramsKey, this.commonService.jsonToString(data));
-          }
-
-          cb(data);
+          cb(null);
         }
       });
     }
@@ -100,18 +108,23 @@ export class ArchiveService {
       console.log('Broadcast recommendations URL: ', url);
 
       this.runQuery(url, (data: any) => {
-        data = this.commonService.stringToJson(data);
+        if (data) {
+          data = this.commonService.stringToJson(data);
 
-        const rootProp = broadcastRecommendationsProgramsMethod.replace(get_, '');
+          const rootProp = broadcastRecommendationsProgramsMethod.replace(get_, '');
 
-        data = data[rootProp];
-        data = this.filterResponse(data, broadcastRecommendationsProgramsMethod);
+          data = data[rootProp];
+          data = this.filterResponse(data, broadcastRecommendationsProgramsMethod);
 
-        if (data && data.length) {
-          this.cacheData(broadcastRecommendationsProgramsKey, this.commonService.jsonToString(data));
+          if (data && data.length) {
+            this.cacheData(broadcastRecommendationsProgramsKey, this.commonService.jsonToString(data));
+          }
+
+          cb(data);
         }
-
-        cb(data);
+        else {
+          cb(null);
+        }
       });
     }
   }
@@ -135,18 +148,23 @@ export class ArchiveService {
       console.log('Newest URL: ', url);
 
       this.runQuery(url, (data: any) => {
-        data = this.commonService.stringToJson(data);
+        if (data) {
+          data = this.commonService.stringToJson(data);
 
-        const rootProp = newestProgramsMethod.replace(get_, '');
+          const rootProp = newestProgramsMethod.replace(get_, '');
 
-        data = data[rootProp];
-        data = this.filterResponse(data, newestProgramsMethod);
+          data = data[rootProp];
+          data = this.filterResponse(data, newestProgramsMethod);
 
-        if (data && data.length) {
-          this.cacheData(newestProgramsKey, this.commonService.jsonToString(data));
+          if (data && data.length) {
+            this.cacheData(newestProgramsKey, this.commonService.jsonToString(data));
+          }
+
+          cb(data);
         }
-
-        cb(data);
+        else {
+          cb(null);
+        }
       });
     }
   }
@@ -165,16 +183,21 @@ export class ArchiveService {
       console.log('Most viewed URL: ', url);
 
       this.runQuery(url, (data: any) => {
-        data = this.commonService.stringToJson(data);
+        if (data) {
+          data = this.commonService.stringToJson(data);
 
-        data = data[mostViewedProgramsMethod];
-        data = this.filterResponse(data, mostViewedProgramsMethod);
+          data = data[mostViewedProgramsMethod];
+          data = this.filterResponse(data, mostViewedProgramsMethod);
 
-        if (data && data.length) {
-          this.cacheData(mostViewedProgramsKey, this.commonService.jsonToString(data));
+          if (data && data.length) {
+            this.cacheData(mostViewedProgramsKey, this.commonService.jsonToString(data));
+          }
+
+          cb(data);
         }
-
-        cb(data);
+        else {
+          cb(null);
+        }
       });
     }
   }
@@ -191,17 +214,22 @@ export class ArchiveService {
       console.log('Parent categories URL: ', url);
 
       this.runQuery(url, (data) => {
-        data = this.commonService.stringToJson(data);
+        if (data) {
+          data = this.commonService.stringToJson(data);
 
-        const rootProp = parentCategoriesMethod.replace(get_, '');
+          const rootProp = parentCategoriesMethod.replace(get_, '');
 
-        data = data[rootProp];
+          data = data[rootProp];
 
-        if (data && data.length) {
-          this.cacheData(parentCategoriesKey, this.commonService.jsonToString(data));
+          if (data && data.length) {
+            this.cacheData(parentCategoriesKey, this.commonService.jsonToString(data));
+          }
+
+          cb(data);
         }
-
-        cb(data);
+        else {
+          cb(null);
+        }
       });
     }
   }
@@ -218,17 +246,22 @@ export class ArchiveService {
       console.log('Sub categories URL: ', url);
 
       this.runQuery(url, (data: any) => {
-        data = this.commonService.stringToJson(data);
+        if (data) {
+          data = this.commonService.stringToJson(data);
 
-        const rootProp = subCategoriesMethod.replace(get_, '');
+          const rootProp = subCategoriesMethod.replace(get_, '');
 
-        data = data[rootProp];
+          data = data[rootProp];
 
-        if (data && data.length) {
-          this.cacheData(subCategoriesKey, this.commonService.jsonToString(data));
+          if (data && data.length) {
+            this.cacheData(subCategoriesKey, this.commonService.jsonToString(data));
+          }
+
+          cb(data);
         }
-
-        cb(data);
+        else {
+          cb(null);
+        }
       });
     }
   }
@@ -240,15 +273,20 @@ export class ArchiveService {
     console.log('Category programs URL: ', url);
 
     this.runQuery(url, (data: any) => {
-      data = this.commonService.stringToJson(data);
+      if (data) {
+        data = this.commonService.stringToJson(data);
 
-      const rootProp = categoryProgramsMethod.replace(get_, '');
+        const rootProp = categoryProgramsMethod.replace(get_, '');
 
-      data = data[rootProp];
+        data = data[rootProp];
 
-      data = this.filterResponse(data, categoryProgramsMethod);
+        data = this.filterResponse(data, categoryProgramsMethod);
 
-      cb(data);
+        cb(data);
+      }
+      else {
+        cb(null);
+      }
     });
   }
 
@@ -258,15 +296,20 @@ export class ArchiveService {
     console.log('Program info URL: ', url);
 
     this.runQuery(url, (data: any) => {
-      data = this.commonService.stringToJson(data);
+      if (data) {
+        data = this.commonService.stringToJson(data);
 
-      const rootProp = programInfoMethod.replace(get_, '');
+        const rootProp = programInfoMethod.replace(get_, '');
 
-      data = data[rootProp];
+        data = data[rootProp];
 
-      data = this.filterResponse(data, programInfoMethod);
+        data = this.filterResponse(data, programInfoMethod);
 
-      cb(data);
+        cb(data);
+      }
+      else {
+        cb(null);
+      }
     });
   }
 
@@ -276,13 +319,18 @@ export class ArchiveService {
     console.log('Series info URL: ', url);
 
     this.runQuery(url, (data: any) => {
-      data = this.commonService.stringToJson(data);
+      if (data) {
+        data = this.commonService.stringToJson(data);
 
-      const rootProp = seriesInfoMethod.replace(get_, '');
+        const rootProp = seriesInfoMethod.replace(get_, '');
 
-      data = data[rootProp];
+        data = data[rootProp];
 
-      cb(data);
+        cb(data);
+      }
+      else {
+        cb(null);
+      }
     });
   }
 
@@ -293,15 +341,20 @@ export class ArchiveService {
     console.log('Series programs URL: ', url);
 
     this.runQuery(url, (data: any) => {
-      data = this.commonService.stringToJson(data);
+      if (data) {
+        data = this.commonService.stringToJson(data);
 
-      const rootProp = seriesProgramsMethod.replace(get_, '');
+        const rootProp = seriesProgramsMethod.replace(get_, '');
 
-      data = data[rootProp];
+        data = data[rootProp];
 
-      data = this.filterResponse(data, seriesProgramsMethod);
+        data = this.filterResponse(data, seriesProgramsMethod);
 
-      cb(data);
+        cb(data);
+      }
+      else {
+        cb(null);
+      }
     });
   }
 
@@ -311,21 +364,26 @@ export class ArchiveService {
     console.log('Translations URL: ', url);
 
     this.runQuery(url, (data) => {
-      data = this.commonService.stringToJson(data);
+      if (data) {
+        data = this.commonService.stringToJson(data);
 
-      const rootProp = translationMethod.replace(get_, '');
+        const rootProp = translationMethod.replace(get_, '');
 
-      data = data[rootProp];
+        data = data[rootProp];
 
-      let tLang = null;
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].lang_id && data[i].lang_id === lang) {
-          tLang = data[i];
-          break;
+        let tLang = null;
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].lang_id && data[i].lang_id === lang) {
+            tLang = data[i];
+            break;
+          }
         }
-      }
 
-      cb(tLang);
+        cb({ lang: tLang });
+      }
+      else {
+        cb(null);
+      }
     });
   }
 
@@ -345,16 +403,28 @@ export class ArchiveService {
 
         cb({ hit_count: hitCount, results: data });
       }
+      else {
+        cb(null);
+      }
     });
   }
 
   runQuery(url: string, cb: Function): void {
     let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-      if (this.readyState === 4 && this.status === 200) {
-        cb(xhttp.responseText);
-      }
+    xhttp.onload = (e) => {
+      //console.log('Response: ', xhttp.responseText);
+      this.commonService.cacheValue(networkKey, yesKey);
+
+      cb(xhttp.responseText);
     };
+
+    xhttp.onerror = (e) => {
+      //console.log('Network request failed: ', e);
+      this.commonService.cacheValue(networkKey, noKey);
+
+      cb(null);
+    };
+
     xhttp.open('GET', url, true);
     xhttp.send();
   }

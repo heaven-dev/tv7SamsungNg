@@ -688,33 +688,25 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
       this.commonService.showElementById('commonBusyLoader');
       this.removeKeydownEventListener();
 
-      const isConnected = this.commonService.isConnectedToGateway();
-      if (!isConnected) {
-        this.commonService.hideElementById('commonBusyLoader');
-
-        this.commonService.toPage(errorPage, null);
-      }
-      else {
-        this.archiveService.getProgramInfo(data.id, (program: any) => {
+      this.archiveService.getProgramInfo(data.id, (program: any) => {
+        if (program != null) {
           this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
 
           this.commonService.hideElementById('commonBusyLoader');
           this.commonService.toPage(programInfoPage, archiveMainPage);
-        });
-      }
+        }
+        else {
+          this.commonService.hideElementById('commonBusyLoader');
+
+          this.commonService.toPage(errorPage, null);
+        }
+      });
     }
   }
 
   readRecommendedPrograms(date: string, limit: number, offset: number, pageState: any): void {
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.hideElementById('recommendedBusyLoader');
-      this.removeKeydownEventListener();
-
-      this.commonService.toPage(errorPage, null);
-    }
-    else {
-      this.archiveService.getRecommendedPrograms(date, limit, offset, (data: any) => {
+    this.archiveService.getRecommendedPrograms(date, limit, offset, (data: any) => {
+      if (data != null) {
         this.recommended = data;
 
         const itemWidth = this.calculateItemWidth() + 20;
@@ -733,20 +725,19 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
             this.commonService.focusToElement(defaultRowCol);
           }
         });
-      });
-    }
+      }
+      else {
+        this.commonService.hideElementById('recommendedBusyLoader');
+        this.removeKeydownEventListener();
+
+        this.commonService.toPage(errorPage, null);
+      }
+    });
   }
 
   readMostViewedPrograms(archiveLanguage: string, pageState: any): void {
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.hideElementById('mostViewedBusyLoader');
-      this.removeKeydownEventListener();
-
-      this.commonService.toPage(errorPage, null);
-    }
-    else {
-      this.archiveService.getMostViewedPrograms(archiveLanguage, (data: any) => {
+    this.archiveService.getMostViewedPrograms(archiveLanguage, (data: any) => {
+      if (data !== null) {
         this.mostViewed = data;
 
         const itemWidth = this.calculateItemWidth() + 20;
@@ -759,20 +750,19 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
 
         this.commonService.hideElementById('mostViewedBusyLoader');
         this.changeRowBackgroundColor('mostViewedProgramsContainer', '#ffffff');
-      });
-    }
+      }
+      else {
+        this.commonService.hideElementById('mostViewedBusyLoader');
+        this.removeKeydownEventListener();
+
+        this.commonService.toPage(errorPage, null);
+      }
+    });
   }
 
   readNewestPrograms(date: string, limit: number, offset: number, category: string, pageState: any): void {
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.hideElementById('newestBusyLoader');
-      this.removeKeydownEventListener();
-
-      this.commonService.toPage(errorPage, null);
-    }
-    else {
-      this.archiveService.getNewestPrograms(date, limit, offset, category, (data: any) => {
+    this.archiveService.getNewestPrograms(date, limit, offset, category, (data: any) => {
+      if (data !== null) {
         this.newest = data;
 
         const itemWidth = this.calculateItemWidth() + 20;
@@ -785,20 +775,19 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
 
         this.commonService.hideElementById('newestBusyLoader');
         this.changeRowBackgroundColor('newestProgramsContainer', '#ffffff');
-      });
-    }
+      }
+      else {
+        this.commonService.hideElementById('newestBusyLoader');
+        this.removeKeydownEventListener();
+
+        this.commonService.toPage(errorPage, null);
+      }
+    });
   }
 
   readParentCategories(pageState: any, pageLoad: boolean, cb: Function): void {
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.hideElementById('categoriesBusyLoader');
-      this.removeKeydownEventListener();
-
-      this.commonService.toPage(errorPage, null);
-    }
-    else {
-      this.archiveService.getParentCategories((data: any) => {
+    this.archiveService.getParentCategories((data: any) => {
+      if (data !== null) {
         this.categories = data;
         this.cdRef.detectChanges();
 
@@ -823,20 +812,20 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
         if (cb) {
           cb(this.categories);
         }
-      });
-    }
+      }
+      else {
+        this.commonService.hideElementById('categoriesBusyLoader');
+        this.removeKeydownEventListener();
+
+        this.commonService.toPage(errorPage, null);
+      }
+    });
   }
 
   readSubCategories(pageState: any, pageLoad: boolean, cb: Function): void {
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.hideElementById('categoriesBusyLoader');
-      this.removeKeydownEventListener();
 
-      this.commonService.toPage(errorPage, null);
-    }
-    else {
-      this.archiveService.getSubCategories((data: any) => {
+    this.archiveService.getSubCategories((data: any) => {
+      if (data !== null) {
         if (!this.lastParentCategoryId && pageState) {
           this.lastParentCategoryId = pageState.lastParentCategoryId;
         }
@@ -866,8 +855,14 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
           this.changeCategoriesTitleText(this.categories[0].parent_name);
           this.localeService.setLocaleText('categoryBackText');
         });
-      });
-    }
+      }
+      else {
+        this.commonService.hideElementById('categoriesBusyLoader');
+        this.removeKeydownEventListener();
+
+        this.commonService.toPage(errorPage, null);
+      }
+    });
   }
 
   getCategoriesCount(): number {

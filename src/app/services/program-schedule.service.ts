@@ -1,7 +1,14 @@
 import { Injectable } from '@angular/core';
 import { CommonService } from './common.service';
 import { LocaleService } from './locale.service';
-import { guideMethod, dateParam, get_ } from '../helpers/constants';
+import {
+    guideMethod,
+    dateParam,
+    get_,
+    networkKey,
+    yesKey,
+    noKey
+} from '../helpers/constants';
 
 @Injectable({
     providedIn: 'root'
@@ -19,74 +26,88 @@ export class ProgramScheduleService {
         console.log('Guide by date URL: ', url);
 
         this.runGuideByDateQuery(url, (data) => {
-            data = this.commonService.stringToJson(data);
+            if (data) {
+                data = this.commonService.stringToJson(data);
 
-            const rootProp = guideMethod.replace(get_, '');
+                const rootProp = guideMethod.replace(get_, '');
 
-            data = data[rootProp];
+                data = data[rootProp];
 
-            const currentTime = Date.now();
+                const currentTime = Date.now();
 
-            let ongoingProgramIndex = 0;
-            for (let i = 0; i < data.length; i++) {
-                let item = data[i];
+                let ongoingProgramIndex = 0;
+                for (let i = 0; i < data.length; i++) {
+                    let item = data[i];
 
-                const time = Number(item.time);
-                const endTime = Number(item.end_time);
+                    const time = Number(item.time);
+                    const endTime = Number(item.end_time);
 
-                item.time = time;
-                item.endTime = endTime;
-                item.duration = endTime - time;
+                    item.time = time;
+                    item.endTime = endTime;
+                    item.duration = endTime - time;
 
-                item.localStartTime = this.getLocalTimeByUtcTime(time);
-                item.localEndTime = this.getLocalTimeByUtcTime(endTime);
+                    item.localStartTime = this.getLocalTimeByUtcTime(time);
+                    item.localEndTime = this.getLocalTimeByUtcTime(endTime);
 
-                item.startEndLocal = item.localStartTime + ' - ' + item.localEndTime;
+                    item.startEndLocal = item.localStartTime + ' - ' + item.localEndTime;
 
-                item.localStartDate = this.getLocalDateByUtcTime(time);
-                item.localEndDate = this.getLocalDateByUtcTime(endTime);
+                    item.localStartDate = this.getLocalDateByUtcTime(time);
+                    item.localEndDate = this.getLocalDateByUtcTime(endTime);
 
-                item.duration_time = this.commonService.getTimeStampByDuration(item.duration);
-                item.broadcast_date_time = this.commonService.getDateTimeByTimeInMs(time);
+                    item.duration_time = this.commonService.getTimeStampByDuration(item.duration);
+                    item.broadcast_date_time = this.commonService.getDateTimeByTimeInMs(time);
 
-                let nameDesc = item.series;
-                let name = item.name;
-                if (nameDesc && nameDesc.length && name && name.length) {
-                    nameDesc += (' | ' + name);
+                    let nameDesc = item.series;
+                    let name = item.name;
+                    if (nameDesc && nameDesc.length && name && name.length) {
+                        nameDesc += (' | ' + name);
+                    }
+
+                    if (!nameDesc || nameDesc.length === 0) {
+                        nameDesc = name;
+                    }
+
+                    item.name_desc = nameDesc;
+
+                    if (item.is_visible_on_vod && item.visible_on_vod_since) {
+                        item.is_visible_on_vod = this.commonService.isPastTime(parseInt(item.visible_on_vod_since)) ? '2' : '0';
+                    }
+                    else {
+                        item.is_visible_on_vod = '-1';
+                    }
+
+                    const s = new Date(time).getTime();
+                    const e = new Date(endTime).getTime();
+
+                    if ((currentTime >= s && currentTime <= e) || e < currentTime) {
+                        ongoingProgramIndex = i;
+                    }
                 }
 
-                if (!nameDesc || nameDesc.length === 0) {
-                    nameDesc = name;
-                }
-
-                item.name_desc = nameDesc;
-
-                if (item.is_visible_on_vod && item.visible_on_vod_since) {
-                    item.is_visible_on_vod = this.commonService.isPastTime(parseInt(item.visible_on_vod_since)) ? '2' : '0';
-                }
-                else {
-                    item.is_visible_on_vod = '-1';
-                }
-
-                const s = new Date(time).getTime();
-                const e = new Date(endTime).getTime();
-
-                if ((currentTime >= s && currentTime <= e) || e < currentTime) {
-                    ongoingProgramIndex = i;
-                }
+                cb({ ongoingProgramIndex: ongoingProgramIndex, data: data });
             }
-
-            cb({ ongoingProgramIndex: ongoingProgramIndex, data: data });
+            else {
+                cb(null);
+            }
         });
     }
 
     runGuideByDateQuery(url: string, cb: Function): any {
         let xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                cb(xhttp.responseText);
-            }
+        xhttp.onload = (e) => {
+            //console.log('Response: ', xhttp.responseText);
+            this.commonService.cacheValue(networkKey, yesKey);
+
+            cb(xhttp.responseText);
         };
+
+        xhttp.onerror = (e) => {
+            //console.log('Network request failed: ', e);
+            this.commonService.cacheValue(networkKey, noKey);
+
+            cb(null);
+        };
+
         xhttp.open('GET', url, true);
         xhttp.send();
     }

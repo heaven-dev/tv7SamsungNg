@@ -138,17 +138,15 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
   }
 
   createPlayer(langTag: string): void {
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.removeEventListeners();
 
-      this.commonService.toPage(errorPage, null);
-    }
-    else {
-      console.log('video.js options: ', this.playerOptions);
+    console.log('video.js options: ', this.playerOptions);
 
-      this.archiveService.getTranslation(this.selectedProgram.id, langTag, (data: any) => {
-        this.createTrackElement(data);
+    this.archiveService.getTranslation(this.selectedProgram.id, langTag, (data: any) => {
+      if (data !== null) {
+        if (data.lang) {
+          this.createTrackElement(data.lang);
+        }
+
         this.player = videojs(this.target.nativeElement, this.playerOptions, () => {
           this.player.on('play', () => {
             videojs.log('Video play!');
@@ -198,8 +196,13 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
             }
           });
         });
-      });
-    }
+      }
+      else {
+        this.removeEventListeners();
+
+        this.commonService.toPage(errorPage, null);
+      }
+    });
   }
 
   removeEventListeners(): void {
@@ -386,12 +389,6 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
   }
 
   playPlayer(): void {
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.saveVideoStatus();
-      this.commonService.toPage(errorPage, null);
-    }
-
     if (this.player && this.player.paused()) {
       this.commonService.screenSaverOff();
       this.player.play();
@@ -604,7 +601,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
         if (currentTime <= this.streamPosition) {
           // stream stopped
-          if (this.streamStopCounter === 3) {
+          if (this.streamStopCounter === 5) {
             this.saveVideoStatus();
             this.release();
             this.commonService.toPage(errorPage, null);

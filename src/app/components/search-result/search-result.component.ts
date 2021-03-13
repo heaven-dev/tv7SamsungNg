@@ -227,44 +227,41 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
   searchByString(queryString: string): void {
     this.commonService.showElementById('searchResultBusyLoader');
 
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.hideElementById('searchResultBusyLoader');
-      this.removeKeydownEventListener();
+    this.archiveService.searchPrograms(queryString, (data: any) => {
+      if (data !== null) {
+        //console.log('Search result: ', data);
 
-      this.commonService.toPage(errorPage, null);
-    }
-    else {
-      this.archiveService.searchPrograms(queryString, (data: any) => {
-        if (data) {
-          //console.log('Search result: ', data);
+        this.hitCount = 0;
 
-          this.hitCount = 0;
+        this.searchData = data['results'];
+        this.cdRef.detectChanges();
 
-          this.searchData = data['results'];
-          this.cdRef.detectChanges();
-
-          if (this.searchData) {
-            this.hitCount = this.searchData.length;
-          }
-
-          this.commonService.hideElementById('searchResultBusyLoader');
-
-          setTimeout(() => {
-            if (this.hitCount > 0) {
-              this.commonService.focusToElement('0_c');
-            }
-            else {
-              this.commonService.focusToElement('searchResultText');
-            }
-          });
-
-          if (!this.hitCount || this.hitCount === 0) {
-            this.showNoHitsText();
-          }
+        if (this.searchData) {
+          this.hitCount = this.searchData.length;
         }
-      });
-    }
+
+        this.commonService.hideElementById('searchResultBusyLoader');
+
+        setTimeout(() => {
+          if (this.hitCount > 0) {
+            this.commonService.focusToElement('0_c');
+          }
+          else {
+            this.commonService.focusToElement('searchResultText');
+          }
+        });
+
+        if (!this.hitCount || this.hitCount === 0) {
+          this.showNoHitsText();
+        }
+      }
+      else {
+        this.commonService.hideElementById('searchResultBusyLoader');
+        this.removeKeydownEventListener();
+
+        this.commonService.toPage(errorPage, null);
+      }
+    });
   }
 
   toItemPage(row: number): void {
@@ -277,27 +274,26 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
       this.removeKeydownEventListener();
 
       if (data.series_id && data.series_id !== '' && data.series_id !== nullValue && data.type === 'series') {
-        this.archiveService.cacheData(selectedArchiveProgramKey, this.commonService.jsonToString(data));
+        this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(data));
 
         this.commonService.toPage(seriesProgramsPage, searchResultPage);
       }
       else {
         this.commonService.showElementById('searchResultBusyLoader');
 
-        const isConnected = this.commonService.isConnectedToGateway();
-        if (!isConnected) {
-          this.commonService.hideElementById('searchResultBusyLoader');
-          this.commonService.toPage(errorPage, null);
-        }
-        else {
-          this.archiveService.getProgramInfo(data.id, (program: any) => {
+        this.archiveService.getProgramInfo(data.id, (program: any) => {
+          if (program !== null) {
             this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
 
             this.commonService.hideElementById('searchResultBusyLoader');
 
             this.commonService.toPage(programInfoPage, searchResultPage);
-          });
-        }
+          }
+          else {
+            this.commonService.hideElementById('searchResultBusyLoader');
+            this.commonService.toPage(errorPage, null);
+          }
+        });
       }
     }
   }

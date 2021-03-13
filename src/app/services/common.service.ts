@@ -315,11 +315,6 @@ export class CommonService {
       this.setOriginPage(fromPage);
     }
 
-    const isConnected = this.isConnectedToGateway();
-    if (!isConnected) {
-      toPage = errorPage;
-    }
-
     this.cacheValue(visiblePageKey, toPage);
     this.router.navigate([toPage]);
   }

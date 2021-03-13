@@ -38,7 +38,7 @@ export class ErrorComponent implements OnInit, AfterViewInit {
       if (networkError) {
         let elem = this.commonService.getElementById('somethingWentWrongText');
         if (elem) {
-          elem.innerHTML = 'No network connection :-(';
+          elem.innerHTML = 'Network request failed :-(';
         }
       }
     }

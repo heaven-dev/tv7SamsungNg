@@ -1,7 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 
 import { LocaleService } from '../../services/locale.service';
-
 import { CommonService } from '../../services/common.service';
 import { ProgramScheduleService } from '../../services/program-schedule.service';
 import {
@@ -31,11 +30,6 @@ export class LandingComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.loadLogo = this.localeService.getChannelLogo();
-
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.toPage(errorPage, null);
-    }
   }
 
   ngAfterViewInit(): void {
@@ -45,26 +39,30 @@ export class LandingComponent implements OnInit, AfterViewInit {
     // register remote control keys
     this.registerRemoteControlKeys();
 
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.toPage(errorPage, null);
-    }
-    else {
-      // get today and tomorrow guide
-      this.programScheduleService.getGuideByDate(this.commonService.getTodayDate(), (gd) => {
+    // get today and tomorrow guide
+    this.programScheduleService.getGuideByDate(this.commonService.getTodayDate(), (gd) => {
+      if (gd !== null) {
         let guide = gd.data;
 
         this.programScheduleService.getGuideByDate(this.commonService.getTomorrowDate(), (gd) => {
-          guide = guide.concat(gd.data);
+          if (gd !== null) {
+            guide = guide.concat(gd.data);
 
-          //console.log('Guide data: ', guide);
+            //console.log('Guide data: ', guide);
 
-          this.commonService.cacheValue(programScheduleDataKey, this.commonService.jsonToString(guide));
+            this.commonService.cacheValue(programScheduleDataKey, this.commonService.jsonToString(guide));
 
-          this.openTvMainPage();
+            this.openTvMainPage();
+          }
+          else {
+            this.commonService.toPage(errorPage, null);
+          }
         });
-      });
-    }
+      }
+      else {
+        this.commonService.toPage(errorPage, null);
+      }
+    });
   }
 
   openTvMainPage() {

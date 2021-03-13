@@ -280,27 +280,34 @@ export class TvMainComponent implements OnInit, AfterViewInit {
     const count = this.guideData.length - this.programScheduleService.getOngoingProgramIndex(this.guideData);
     if (count <= programListMinSize) {
 
-      const isConnected = this.commonService.isConnectedToGateway();
-      if (!isConnected) {
-        this.removeKeydownEventListener();
-        this.stopInterval();
-
-        this.commonService.toPage(errorPage, null);
-      }
-      else {
-        // get today and tomorrow guide and update the page
-        this.programScheduleService.getGuideByDate(this.commonService.getTodayDate(), (gToday) => {
+      // get today and tomorrow guide and update the page
+      this.programScheduleService.getGuideByDate(this.commonService.getTodayDate(), (gToday) => {
+        if (gToday !== null) {
           gToday = gToday.data;
 
           this.programScheduleService.getGuideByDate(this.commonService.getTomorrowDate(), (gTomorrow) => {
-            this.guideData = gToday.concat(gTomorrow.data);
+            if (gTomorrow !== null) {
+              this.guideData = gToday.concat(gTomorrow.data);
 
-            this.commonService.cacheValue(programScheduleDataKey, this.commonService.jsonToString(this.guideData));
+              this.commonService.cacheValue(programScheduleDataKey, this.commonService.jsonToString(this.guideData));
 
-            this.updatePage(true);
+              this.updatePage(true);
+            }
+            else {
+              this.removeKeydownEventListener();
+              this.stopInterval();
+
+              this.commonService.toPage(errorPage, null);
+            }
           });
-        });
-      }
+        }
+        else {
+          this.removeKeydownEventListener();
+          this.stopInterval();
+
+          this.commonService.toPage(errorPage, null);
+        }
+      });
     }
   }
 

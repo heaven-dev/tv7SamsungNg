@@ -35,8 +35,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.commonService.cacheValue(networkKey, this.commonService.isConnectedToGateway() ? yesKey : noKey);
-
     this.commonService.screenSaverOn();
     this.enableNetworkStateListener();
 

@@ -211,13 +211,8 @@ export class SeriesProgramsComponent implements OnInit, AfterViewInit {
           this.commonService.showElementById('seriesBusyLoader');
           this.removeKeydownEventListener();
 
-          const isConnected = this.commonService.isConnectedToGateway();
-          if (!isConnected) {
-            this.commonService.hideElementById('seriesBusyLoader');
-            this.commonService.toPage(errorPage, null);
-          }
-          else {
-            this.archiveService.getProgramInfo(this.seriesData[row].id, (program: any) => {
+          this.archiveService.getProgramInfo(this.seriesData[row].id, (program: any) => {
+            if (program !== null) {
               this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
 
               this.savePageState(row);
@@ -225,8 +220,12 @@ export class SeriesProgramsComponent implements OnInit, AfterViewInit {
               this.commonService.hideElementById('seriesBusyLoader');
 
               this.commonService.toPage(programInfoPage, seriesProgramsPage);
-            });
-          }
+            }
+            else {
+              this.commonService.hideElementById('seriesBusyLoader');
+              this.commonService.toPage(errorPage, null);
+            }
+          });
         }
       }
     }
@@ -289,32 +288,23 @@ export class SeriesProgramsComponent implements OnInit, AfterViewInit {
     this.loadingData = true;
     this.commonService.showElementById('seriesBusyLoader');
 
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.hideElementById('seriesBusyLoader');
-      this.removeKeydownEventListener();
-
-      this.commonService.toPage(errorPage, null);
-    }
-    else {
-      this.archiveService.getSeriesPrograms(this.seriesId, this.limit, this.offset, (data: any) => {
+    this.archiveService.getSeriesPrograms(this.seriesId, this.limit, this.offset, (data: any) => {
+      if (data !== null) {
         this.seriesData = this.seriesData.concat(data);
         this.cdRef.detectChanges();
 
         //console.log('Series data: ', seriesData);
 
-        if (data) {
-          if (data.length < this.limit) {
-            this.limit = -1;
-            this.offset = -1;
-          }
-          else {
-            this.offset = this.offset + data.length;
-          }
+        if (data.length < this.limit) {
+          this.limit = -1;
+          this.offset = -1;
+        }
+        else {
+          this.offset = this.offset + data.length;
+        }
 
-          if (firstLoad) {
-            this.setTitleText();
-          }
+        if (firstLoad) {
+          this.setTitleText();
         }
 
         setTimeout(() => {
@@ -322,8 +312,14 @@ export class SeriesProgramsComponent implements OnInit, AfterViewInit {
           this.commonService.focusToElement(focusElement);
           this.loadingData = false;
         })
-      });
-    }
+      }
+      else {
+        this.commonService.hideElementById('seriesBusyLoader');
+        this.removeKeydownEventListener();
+
+        this.commonService.toPage(errorPage, null);
+      }
+    });
   }
 
   getPageState(): any {

@@ -262,7 +262,7 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
 
         if (currentTime <= this.streamPosition) {
           // stream stopped
-          if (this.streamStopCounter === 3) {
+          if (this.streamStopCounter === 5) {
             this.release();
             this.commonService.toPage(errorPage, null);
           }

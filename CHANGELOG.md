@@ -1,3 +1,14 @@
+# 13.03.2021 11:25
+
+### Bug Fixes
+
+* Fix to net request error handling.
+
+### Features
+
+* New version number.
+
+
 # 11.03.2021 07:46
 
 ### Bug Fixes

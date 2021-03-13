@@ -245,13 +245,8 @@ export class GuideComponent implements OnInit, AfterViewInit {
           this.commonService.showElementById('guideBusyLoader');
           this.removeKeydownEventListener();
 
-          const isConnected = this.commonService.isConnectedToGateway();
-          if (!isConnected) {
-            this.commonService.hideElementById('guideBusyLoader');
-            this.commonService.toPage(errorPage, null);
-          }
-          else {
-            this.archiveService.getProgramInfo(this.guideDateData[row].id, (program: any) => {
+          this.archiveService.getProgramInfo(this.guideDateData[row].id, (program: any) => {
+            if (program !== null) {
               this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
 
               this.savePageState(row);
@@ -259,8 +254,12 @@ export class GuideComponent implements OnInit, AfterViewInit {
               this.commonService.hideElementById('guideBusyLoader');
 
               this.commonService.toPage(programInfoPage, guidePage);
-            });
-          }
+            }
+            else {
+              this.commonService.hideElementById('guideBusyLoader');
+              this.commonService.toPage(errorPage, null);
+            }
+          });
         }
       }
     }
@@ -323,13 +322,8 @@ export class GuideComponent implements OnInit, AfterViewInit {
 
     this.commonService.showElementById('guideBusyLoader');
 
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.hideElementById('guideBusyLoader');
-      this.commonService.toPage(errorPage, null);
-    }
-    else {
-      this.programScheduleService.getGuideByDate(date, (guideData: any) => {
+    this.programScheduleService.getGuideByDate(date, (guideData: any) => {
+      if (guideData !== null) {
         //console.log('Guide by date data: ', guideData);
 
         this.guideDateData = guideData.data;
@@ -353,8 +347,14 @@ export class GuideComponent implements OnInit, AfterViewInit {
         }
 
         this.commonService.hideElementById('guideBusyLoader');
-      });
-    }
+      }
+      else {
+        this.commonService.hideElementById('guideBusyLoader');
+        this.removeKeydownEventListener();
+
+        this.commonService.toPage(errorPage, null);
+      }
+    });
   }
 
   getPageState(): any {

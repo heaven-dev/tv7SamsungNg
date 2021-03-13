@@ -236,21 +236,20 @@ export class FavoritesComponent implements OnInit, AfterViewInit {
       this.commonService.showElementById('favoritesBusyLoader');
       this.removeKeydownEventListener();
 
-      const isConnected = this.commonService.isConnectedToGateway();
-      if (!isConnected) {
-        this.commonService.hideElementById('favoritesBusyLoader');
-        this.commonService.toPage(errorPage, null);
-      }
-      else {
-        this.archiveService.getProgramInfo(id, (program: any) => {
+      this.archiveService.getProgramInfo(id, (program: any) => {
+        if (program !== null) {
           this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
 
           this.commonService.hideElementById('favoritesBusyLoader');
 
 
           this.commonService.toPage(programInfoPage, favoritesPage);
-        });
-      }
+        }
+        else {
+          this.commonService.hideElementById('favoritesBusyLoader');
+          this.commonService.toPage(errorPage, null);
+        }
+      });
     }
   }
 

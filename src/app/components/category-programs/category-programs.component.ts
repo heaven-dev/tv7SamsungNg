@@ -219,20 +219,19 @@ export class CategoryProgramsComponent implements OnInit, AfterViewInit {
             this.commonService.showElementById('categoryProgramsBusyLoader');
             this.removeKeydownEventListener();
 
-            const isConnected = this.commonService.isConnectedToGateway();
-            if (!isConnected) {
-              this.commonService.hideElementById('categoryProgramsBusyLoader');
-              this.commonService.toPage(errorPage, null);
-            }
-            else {
-              this.archiveService.getProgramInfo(this.categoryProgramData[row].id, (program: any) => {
+            this.archiveService.getProgramInfo(this.categoryProgramData[row].id, (program: any) => {
+              if (program !== null) {
                 this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
 
                 this.commonService.hideElementById('categoryProgramsBusyLoader');
 
                 this.commonService.toPage(programInfoPage, categoryProgramsPage);
-              });
-            }
+              }
+              else {
+                this.commonService.hideElementById('categoryProgramsBusyLoader');
+                this.commonService.toPage(errorPage, null);
+              }
+            });
           }
         }
       }
@@ -300,15 +299,8 @@ export class CategoryProgramsComponent implements OnInit, AfterViewInit {
     this.loadingData = true;
     this.commonService.showElementById('categoryProgramsBusyLoader');
 
-    const isConnected = this.commonService.isConnectedToGateway();
-    if (!isConnected) {
-      this.commonService.hideElementById('categoryProgramsBusyLoader');
-      this.removeKeydownEventListener();
-
-      this.commonService.toPage(errorPage, null);
-    }
-    else {
-      this.archiveService.getCategoryPrograms(this.selectedCategory.id, this.limit, this.offset, (data: any) => {
+    this.archiveService.getCategoryPrograms(this.selectedCategory.id, this.limit, this.offset, (data: any) => {
+      if (data !== null) {
         this.categoryProgramData = this.categoryProgramData.concat(data);
         this.cdRef.detectChanges();
 
@@ -329,8 +321,14 @@ export class CategoryProgramsComponent implements OnInit, AfterViewInit {
           this.commonService.focusToElement(focusElement);
           this.loadingData = false;
         });
-      });
-    }
+      }
+      else {
+        this.commonService.hideElementById('categoryProgramsBusyLoader');
+        this.removeKeydownEventListener();
+
+        this.commonService.toPage(errorPage, null);
+      }
+    });
   }
 
   getPageState(): any {
