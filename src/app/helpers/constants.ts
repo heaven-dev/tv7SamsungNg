@@ -129,9 +129,11 @@ export const videoStatusDataKey = 'videoStatusDataKey';
 export const visiblePageKey = 'visiblePageKey';
 
 export const channelUrlKey = 'channelUrlKey';
-export const networkKey = 'networkKey';
-export const yesKey = 'yesKey';
-export const noKey = 'noKey';
+
+export const errorTextKey = 'errorTextKey';
+export const somethingWentWrongText = 'Something went wrong :-(';
+export const noNetworkConnectionText = 'No network connection :-(';
+export const networkRequestFailedText = 'Network request failed :-(';
 
 export const archiveCacheExpTimeMs = 1800000;
 

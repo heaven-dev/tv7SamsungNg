@@ -5,9 +5,8 @@ import {
     guideMethod,
     dateParam,
     get_,
-    networkKey,
-    yesKey,
-    noKey
+    errorTextKey,
+    networkRequestFailedText
 } from '../helpers/constants';
 
 @Injectable({
@@ -96,18 +95,26 @@ export class ProgramScheduleService {
         let xhttp = new XMLHttpRequest();
         xhttp.onload = (e) => {
             //console.log('Response: ', xhttp.responseText);
-            this.commonService.cacheValue(networkKey, yesKey);
 
             cb(xhttp.responseText);
         };
 
         xhttp.onerror = (e) => {
             //console.log('Network request failed: ', e);
-            this.commonService.cacheValue(networkKey, noKey);
+            this.commonService.cacheValue(errorTextKey, networkRequestFailedText);
 
             cb(null);
         };
 
+        xhttp.ontimeout = (e) => {
+            //console.log('Network request timeout: ', e);
+            xhttp.abort();
+
+            this.commonService.cacheValue(errorTextKey, networkRequestFailedText);
+            cb(null);
+        }
+
+        xhttp.timeout = 30000;
         xhttp.open('GET', url, true);
         xhttp.send();
     }

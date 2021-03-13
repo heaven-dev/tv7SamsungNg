@@ -4,9 +4,8 @@ import { CommonService } from '../../services/common.service';
 import { Subscription } from 'rxjs';
 import {
   runOnBrowser,
-  networkKey,
-  yesKey,
-  noKey,
+  errorTextKey,
+  noNetworkConnectionText,
   errorPage
 } from 'src/app/helpers/constants';
 
@@ -60,6 +59,7 @@ export class AppComponent implements OnInit, OnDestroy {
     if (!document.hidden) {
       const isConnected = this.commonService.isConnectedToGateway();
       if (!isConnected) {
+        this.commonService.cacheValue(errorTextKey, noNetworkConnectionText);
         this.commonService.toPage(errorPage, null);
       }
     }
@@ -72,31 +72,31 @@ export class AppComponent implements OnInit, OnDestroy {
       webapis.network.addNetworkStateChangeListener((value: any) => {
         // @ts-ignore
         if (value == webapis.network.NetworkState.GATEWAY_DISCONNECTED) {
-          this.commonService.cacheValue(networkKey, noKey);
+          this.commonService.cacheValue(errorTextKey, noNetworkConnectionText);
         }
         // @ts-ignore
         else if (value == webapis.network.NetworkState.GATEWAY_CONNECTED) {
-          this.commonService.cacheValue(networkKey, yesKey);
+          this.commonService.removeValueFromCache(errorTextKey);
         }
       });
     }
     else {
       // App running on browser
-      window.addEventListener('online', this.hideNoConnectionElement.bind(this));
-      window.addEventListener('offline', this.showNoConnectionElement.bind(this));
+      window.addEventListener('online', this.netOnline.bind(this));
+      window.addEventListener('offline', this.netOffline.bind(this));
     }
   }
 
   removeNetworkStateListener(): void {
-    window.removeEventListener('online', this.hideNoConnectionElement.bind(this));
-    window.removeEventListener('offline', this.showNoConnectionElement.bind(this));
+    window.removeEventListener('online', this.netOnline.bind(this));
+    window.removeEventListener('offline', this.netOffline.bind(this));
   }
 
-  hideNoConnectionElement(): void {
-    this.commonService.cacheValue(networkKey, yesKey);
+  netOnline(): void {
+    this.commonService.removeValueFromCache(errorTextKey);
   }
 
-  showNoConnectionElement(): void {
-    this.commonService.cacheValue(networkKey, noKey);
+  netOffline(): void {
+    this.commonService.cacheValue(errorTextKey, noNetworkConnectionText);
   }
 }

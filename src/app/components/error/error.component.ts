@@ -1,8 +1,8 @@
 import { Component, Renderer2, OnInit, AfterViewInit } from '@angular/core';
 import { CommonService } from '../../services/common.service';
 import {
-  networkKey,
-  noKey,
+  errorTextKey,
+  somethingWentWrongText,
   runOnBrowser,
   OK
 } from '../../helpers/constants';
@@ -31,21 +31,20 @@ export class ErrorComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    const network = this.commonService.getValueFromCache(networkKey);
-    if (network) {
-      const networkError = network === noKey;
-
-      if (networkError) {
-        let elem = this.commonService.getElementById('somethingWentWrongText');
-        if (elem) {
-          elem.innerHTML = 'Network request failed :-(';
-        }
+    let elem = this.commonService.getElementById('errorText');
+    if (elem) {
+      const errorText = this.commonService.getValueFromCache(errorTextKey);
+      if (errorText) {
+        elem.innerHTML = errorText;
       }
-    }
+      else {
+        elem.innerHTML = somethingWentWrongText;
+      }
 
-    let closeButton = this.commonService.getElementById('closeButton');
-    if (closeButton) {
-      closeButton.focus();
+      let closeButton = this.commonService.getElementById('closeButton');
+      if (closeButton) {
+        closeButton.focus();
+      }
     }
   }
 

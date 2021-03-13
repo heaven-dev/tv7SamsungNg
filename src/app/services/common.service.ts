@@ -17,10 +17,8 @@ import {
   favoritesPageStateKey,
   originPageKey,
   visiblePageKey,
-  networkKey,
-  yesKey,
-  noKey,
-  errorPage
+  errorTextKey,
+  noNetworkConnectionText
 } from '../helpers/constants';
 
 @Injectable({
@@ -266,8 +264,10 @@ export class CommonService {
     if (!runOnBrowser) {
       // @ts-ignore
       let isConnected = webapis.network.isConnectedToGateway();
-      
-      this.cacheValue(networkKey, isConnected ? yesKey : noKey);
+      if (!isConnected) {
+        this.cacheValue(errorTextKey, noNetworkConnectionText);
+      }
+
       return isConnected;
     }
     else {
