@@ -1,3 +1,15 @@
+# 14.03.2021 15:34
+
+### Bug Fixes
+
+* none
+
+### Features
+
+* Using unshift() instead of push() to save video item on archive main page.
+* New version number.
+
+
 # 13.03.2021 17:45
 
 ### Bug Fixes

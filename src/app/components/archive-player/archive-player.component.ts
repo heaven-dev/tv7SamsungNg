@@ -458,7 +458,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
       }
     }
 
-    vs.push({ id: id, c: Math.round(c), p: p });
+    vs.unshift({ id: id, c: Math.round(c), p: p });
     this.commonService.saveValue(videoStatusDataKey, this.commonService.jsonToString(vs));
   }
 
@@ -601,7 +601,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
         if (currentTime <= this.streamPosition) {
           // stream stopped
-          if (this.streamStopCounter === 5) {
+          if (this.streamStopCounter === 9) {
             this.saveVideoStatus();
             this.release();
             this.commonService.toPage(errorPage, null);
