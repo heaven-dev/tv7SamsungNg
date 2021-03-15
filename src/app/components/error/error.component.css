@@ -18,6 +18,7 @@
 .somethingWentWrongText {
     color: #444444;
     font-size: 80px;
+	white-space: nowrap;
 }
 
 .buttonContainer {
