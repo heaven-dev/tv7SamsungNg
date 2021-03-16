@@ -21,7 +21,7 @@
         <div id="contentRows" class="contentRows">
             <div id="favoritesContainer" class="favoritesContainer">
                 <div id="{{i}}_c" *ngFor="let f of favoritesData; let i = index" class="favoritesItem" style="height: {{rowItemHeight}}px" tabindex="0">
-                    <img class="favoritesImage" style="height: {{rowItemHeight}}px; width: {{rowImageWidth}}px" src="{{f.image_path}}" alt=""/>
+                    <img class="favoritesImage" style="height: {{rowItemHeight}}px; width: {{rowImageWidth}}px" src="{{f.image_path}}" onerror="if (this.src != 'assets/tv7logo.png') this.src='assets/tv7logo.png';" alt=""/>
                     <div class="favoritesInfoArea" style="left: {{rowImageWidth}}px">
                         <div class="favoritesTitleContainer">
                             <img class="favoritesTypeIcon" src="assets/episode.svg" alt=""/>

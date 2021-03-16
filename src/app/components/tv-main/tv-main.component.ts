@@ -338,7 +338,12 @@ export class TvMainComponent implements OnInit, AfterViewInit {
 
         let elem = this.commonService.getElementById('contentImage');
         if (elem) {
-          elem.src = program.image_path;
+          if (program.image_path && program.image_path.length > 0) {
+            elem.src = program.image_path;
+          }
+          else {
+            elem.src = 'assets/tv7logo.png';
+          }
           this.commonService.showElement(elem);
         }
 
@@ -378,7 +383,12 @@ export class TvMainComponent implements OnInit, AfterViewInit {
 
           elem = this.commonService.getElementById(elemIdImg);
           if (elem) {
-            elem.src = programs[i].image_path;
+            if (programs[i].image_path && programs[i].image_path.length > 0) {
+              elem.src = programs[i].image_path;
+            }
+            else {
+              elem.src = 'assets/tv7logo.png';
+            }
           }
 
           if (programs[i].series) {

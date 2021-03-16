@@ -20,7 +20,7 @@
         <div id="contentRows" class="contentRows">
             <div id="categoryProgramsContainer" class="categoryProgramsContainer">
                 <div id="{{i}}_c" *ngFor="let c of categoryProgramData; let i = index" class="categoryProgramItem" [ngStyle]="{'height': rowItemHeight + 'px'}" tabindex="0">
-                    <img class="categoryProgramImage" [ngStyle]="{'height': rowItemHeight + 'px', 'width': rowImageWidth + 'px'}" src="{{c.image_path}}" alt=""/>
+                    <img class="categoryProgramImage" [ngStyle]="{'height': rowItemHeight + 'px', 'width': rowImageWidth + 'px'}" src="{{c.image_path}}" onerror="if (this.src != 'assets/tv7logo.png') this.src='assets/tv7logo.png';" alt=""/>
                     <div class="infoArea" [ngStyle]="{'left': rowImageWidth + 'px'}">	
                         <div class="titleContainer">
                             <img class="typeIcon" src="{{isSeries(c.sid) ? 'assets/series.svg' : 'assets/episode.svg'}}" alt=""/>

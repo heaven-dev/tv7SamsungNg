@@ -24,7 +24,7 @@
         <div id="contentRows" class="contentRows">
             <div id="guideContainer" class="guideContainer">
                 <div id="{{j}}_c" *ngFor="let g of guideDateData; let j = index" class="guideItem" [ngStyle]="{'height': rowItemHeight + 'px'}" tabindex="0">
-                    <img class="guideImage" [ngStyle]="{'height': rowItemHeight + 'px', 'width': rowImageWidth + 'px'}" src="{{g.image_path}}" alt=""/>
+                    <img class="guideImage" [ngStyle]="{'height': rowItemHeight + 'px', 'width': rowImageWidth + 'px'}" src="{{g.image_path}}" onerror="if (this.src != 'assets/tv7logo.png') this.src='assets/tv7logo.png';" alt=""/>
                     <div class="guideInfoArea" [ngStyle]="{'left': rowImageWidth + 'px'}">	
                         <div class="guideTitleContainer">
                             <div id="ongoingProgram_{{j}}" class="guideOngoingProgram ongoingBlink"></div>

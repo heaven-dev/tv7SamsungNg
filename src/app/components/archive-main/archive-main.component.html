@@ -38,7 +38,7 @@
                     <div id="0_{{i}}" *ngFor="let r of recommended; let i = index" class="programItem recommendedItem" [ngStyle]="{'min-width': programRowItemWidth + 'px'}" tabindex="0">
                         <div class="programDate">{{r.broadcast_date_time}}</div>
                         <div class="programTime">{{r.duration_time}}</div>
-                        <img class="programImg" [ngStyle]="{'width': programRowItemWidth + 'px', 'height': programRowItemHeight + 'px'}" src="{{r.image_path}}" alt="" />
+                        <img class="programImg" [ngStyle]="{'width': programRowItemWidth + 'px', 'height': programRowItemHeight + 'px'}" src="{{r.image_path}}" onerror="if (this.src != 'assets/tv7logo.png') this.src='assets/tv7logo.png';" alt="" />
                         <div class="programDesc">{{r.name_desc}}</div>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                     <div id="1_{{i}}" *ngFor="let m of mostViewed; let i = index" class="programItem mostViewedItem" [ngStyle]="{'min-width': programRowItemWidth + 'px'}" tabindex="0">
                         <div class="programDate">{{m.broadcast_date_time}}</div>
                         <div class="programTime">{{m.duration_time}}</div>
-                        <img class="programImg" [ngStyle]="{'width': programRowItemWidth + 'px', 'height': programRowItemHeight + 'px'}" src="{{m.image_path}}" alt="" />
+                        <img class="programImg" [ngStyle]="{'width': programRowItemWidth + 'px', 'height': programRowItemHeight + 'px'}" src="{{m.image_path}}" onerror="if (this.src != 'assets/tv7logo.png') this.src='assets/tv7logo.png';" alt="" />
                         <div class="programDesc">{{m.name_desc}}</div>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
                     <div id="2_{{i}}" *ngFor="let n of newest; let i = index" class="programItem newestItem" [ngStyle]="{'min-width': programRowItemWidth + 'px'}" tabindex="0">
                         <div class="programDate">{{n.broadcast_date_time}}</div>
                         <div class="programTime">{{n.duration_time}}</div>
-                        <img class="programImg" [ngStyle]="{'width': programRowItemWidth + 'px', 'height': programRowItemHeight + 'px'}" src="{{n.image_path}}" alt="" />
+                        <img class="programImg" [ngStyle]="{'width': programRowItemWidth + 'px', 'height': programRowItemHeight + 'px'}" src="{{n.image_path}}" onerror="if (this.src != 'assets/tv7logo.png') this.src='assets/tv7logo.png';" alt="" />
                         <div class="programDesc">{{n.name_desc}}</div>
                     </div>
                 </div>

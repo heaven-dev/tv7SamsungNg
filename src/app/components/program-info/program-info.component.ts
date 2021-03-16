@@ -294,8 +294,11 @@ export class ProgramInfoComponent implements OnInit, AfterViewInit {
 
   addProgramDetails(): void {
     if (this.selectedProgram) {
-      if (this.selectedProgram.image_path) {
+      if (this.selectedProgram.image_path && this.selectedProgram.image_path.length > 0) {
         this.commonService.addValueToAttribute('backgroundImage', 'src', this.selectedProgram.image_path);
+      }
+      else {
+        this.commonService.addValueToAttribute('backgroundImage', 'src', 'assets/tv7logo.png');
       }
 
       if (this.selectedProgram.name_desc) {
