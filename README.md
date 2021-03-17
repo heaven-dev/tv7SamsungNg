@@ -126,3 +126,4 @@ Clone this repository to your computer disk.
 
 ### License
  - [MIT](https://github.com/heaven-dev/tv7SamsungNg/blob/master/LICENSE.md)
+ - __Unauthorized publication of programs or subtitles is prohibited.__
