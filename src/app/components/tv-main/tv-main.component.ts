@@ -12,6 +12,7 @@ import {
   archiveMainPage,
   guidePage,
   favoritesPage,
+  channelInfoPage,
   platformInfoPage,
   searchPage,
   errorPage,
@@ -21,6 +22,7 @@ import {
   guideIconContainer,
   searchIconContainer,
   favoritesIconContainer,
+  channelInfoIconContainer,
   platformInfoIconContainer,
   programScheduleDataKey,
   playButton,
@@ -176,7 +178,7 @@ export class TvMainComponent implements OnInit, AfterViewInit {
       // OK button
       if (!this.modalVisible) {
         if (contentId === archiveIconContainer || contentId === guideIconContainer || contentId === searchIconContainer
-          || contentId === favoritesIconContainer || contentId === platformInfoIconContainer) {
+          || contentId === favoritesIconContainer || contentId === channelInfoIconContainer || contentId === platformInfoIconContainer) {
           this.commonService.showElementById('tvMainBusyLoader');
           this.commonService.focusOutFromMenuEvent();
 
@@ -210,6 +212,9 @@ export class TvMainComponent implements OnInit, AfterViewInit {
         }
         else if (contentId === favoritesIconContainer) {
           this.commonService.sideMenuSelection(favoritesPage);
+        }
+        else if (contentId === channelInfoIconContainer) {
+          this.commonService.sideMenuSelection(channelInfoPage);
         }
         else if (contentId === platformInfoIconContainer) {
           this.commonService.sideMenuSelection(platformInfoPage);

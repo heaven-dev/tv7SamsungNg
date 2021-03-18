@@ -23,6 +23,7 @@ export const searchPage = 'search';
 export const favoritesPage = 'favorites';
 export const searchResultPage = 'searchresult';
 export const platformInfoPage = 'platforminfo';
+export const channelInfoPage = 'channelinfo';
 export const errorPage = 'error';
 
 export const get_ = 'get_';
@@ -78,6 +79,7 @@ export const mainActiveElementId = 'mainActiveElementId';
 export const backIconContainer = 'backIconContainer';
 export const playIconContainer = 'playIconContainer';
 export const favoriteIconContainer = 'favoriteIconContainer';
+export const channelInfoIconContainer = 'channelInfoIconContainer';
 export const seriesIconContainer = 'seriesIconContainer';
 export const contentContainer = 'contentContainer';
 export const backgroundImage = 'backgroundImage';
@@ -149,4 +151,12 @@ export const toolbarHeight = 90;
 
 export const videoBandwidthBits = 50000000;
 
-export const sidebarIconIds = [tvIconContainer, archiveIconContainer, guideIconContainer, searchIconContainer, favoritesIconContainer, platformInfoIconContainer];
+export const sidebarIconIds = [
+    tvIconContainer, 
+    archiveIconContainer, 
+    guideIconContainer, 
+    searchIconContainer, 
+    favoritesIconContainer, 
+    channelInfoIconContainer,
+    platformInfoIconContainer
+];

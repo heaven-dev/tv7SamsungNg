@@ -20,6 +20,7 @@ import { GuideComponent } from './components/guide/guide.component';
 import { PlatformInfoComponent } from './components/platform-info/platform-info.component';
 import { SearchComponent } from './components/search/search.component';
 import { FavoritesComponent } from './components/favorites/favorites.component';
+import { ChannelInfoComponent } from './components/channel-info/channel-info.component';
 import { SearchResultComponent } from './components/search-result/search-result.component';
 import { ErrorComponent } from './components/error/error.component';
 
@@ -40,6 +41,7 @@ import { ErrorComponent } from './components/error/error.component';
     PlatformInfoComponent,
     SearchComponent,
     FavoritesComponent,
+    ChannelInfoComponent,
     SearchResultComponent,
     ErrorComponent
   ],

@@ -1,0 +1,77 @@
+.mainView {
+    height: calc(100% - 90px);
+}
+
+.channelInfoContentContainer {
+    height: 100%;
+	outline: none;
+    overflow: hidden;
+}
+
+.channelInfoTextContainer {
+    height: 100%;
+	margin: 20px 20px 20px 10px;
+	position: absolute;
+	z-index: -1;
+}
+
+.channelInfoBusyLoader {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	z-index: 100;
+	display: none;
+}
+
+.title {
+	color: #0099CC;
+	background-color: #eeeeee;
+	font-size: 44px;
+	padding: 6px 20px;
+	border-radius: 8px;
+	margin-bottom: 20px;
+}
+
+.title:not(:first-child) {
+	margin-top: 40px;
+}
+
+.subtitle {
+	color: #0099CC;
+	background-color: #eeeeee;
+	font-size: 36px;
+	padding: 4px 20px;
+	border-radius: 8px;
+	margin-bottom: 20px;
+}
+
+.chapter {
+	color: #444444;
+	font-size: 34px;
+	margin-left: 16px;
+	margin-right: 16px;
+	margin-bottom: 20px;
+}
+
+.bulletitem {
+	margin-top: 10px;
+	margin-bottom: 0px;
+}
+
+.bulletlist .bulletitem:first-child {
+	margin-top: -10px;
+}
+
+.localeText {
+	display: none;
+}
+
+.endImageContainer {
+	text-align: center;
+}
+
+.endImage {
+	width: 80px;
+}

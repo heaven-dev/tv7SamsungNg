@@ -15,6 +15,7 @@ import {
   guidePage,
   searchPage,
   favoritesPage,
+  channelInfoPage,
   platformInfoPage,
   programInfoPage,
   errorPage,
@@ -23,6 +24,7 @@ import {
   guideIconContainer,
   searchIconContainer,
   favoritesIconContainer,
+  channelInfoIconContainer,
   platformInfoIconContainer,
   selectedArchiveProgramKey,
   LEFT,
@@ -175,7 +177,8 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
     else if (keyCode === OK) {
       // OK button
       if (contentId === tvIconContainer || contentId === archiveIconContainer || contentId === guideIconContainer
-        || contentId === searchIconContainer || contentId === favoritesIconContainer || contentId === platformInfoIconContainer) {
+        || contentId === searchIconContainer || contentId === favoritesIconContainer || contentId === channelInfoIconContainer
+        || contentId === platformInfoIconContainer) {
         this.commonService.showElementById('searchResultBusyLoader');
 
         this.commonService.focusOutFromMenuEvent();
@@ -196,6 +199,9 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
       }
       else if (contentId === favoritesIconContainer) {
         this.commonService.sideMenuSelection(favoritesPage);
+      }
+      else if (contentId === channelInfoIconContainer) {
+        this.commonService.sideMenuSelection(channelInfoPage);
       }
       else if (contentId === platformInfoIconContainer) {
         this.commonService.sideMenuSelection(platformInfoPage);

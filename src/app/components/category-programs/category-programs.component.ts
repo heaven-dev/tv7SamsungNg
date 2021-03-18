@@ -10,6 +10,7 @@ import {
   guidePage,
   searchPage,
   favoritesPage,
+  channelInfoPage,
   platformInfoPage,
   seriesProgramsPage,
   categoryProgramsPage,
@@ -19,6 +20,7 @@ import {
   guideIconContainer,
   searchIconContainer,
   favoritesIconContainer,
+  channelInfoIconContainer,
   platformInfoIconContainer,
   selectedCategoryKey,
   categoriesPageStateKey,
@@ -180,7 +182,8 @@ export class CategoryProgramsComponent implements OnInit, AfterViewInit {
     else if (keyCode === OK) {
       // OK button
       if (contentId === tvIconContainer || contentId === archiveIconContainer || contentId === guideIconContainer
-        || contentId === searchIconContainer || contentId === favoritesIconContainer || contentId === platformInfoIconContainer) {
+        || contentId === searchIconContainer || contentId === favoritesIconContainer || contentId === channelInfoIconContainer
+        || contentId === platformInfoIconContainer) {
         this.commonService.showElementById('categoryProgramsBusyLoader');
 
         this.commonService.focusOutFromMenuEvent();
@@ -201,6 +204,9 @@ export class CategoryProgramsComponent implements OnInit, AfterViewInit {
       }
       else if (contentId === favoritesIconContainer) {
         this.commonService.sideMenuSelection(favoritesPage);
+      }
+      else if (contentId === channelInfoIconContainer) {
+        this.commonService.sideMenuSelection(channelInfoPage);
       }
       else if (contentId === platformInfoIconContainer) {
         this.commonService.sideMenuSelection(platformInfoPage);

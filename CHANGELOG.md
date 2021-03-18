@@ -1,3 +1,15 @@
+# 18.03.2021 14:54
+
+### Bug Fixes
+
+* none
+
+### Features
+
+* Added channel info page.
+* New version number.
+
+
 # 16.03.2021 18:56
 
 ### Bug Fixes

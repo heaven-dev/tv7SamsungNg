@@ -34,6 +34,13 @@
         <div id="favoritesIconText" class="favoritesIconText"></div>
     </div>
 
+    <div id="channelInfoIconContainer" class="channelInfoIconContainer" (focus)="focusInToMenuEvent(this)" (focusout)="focusOutFromMenuEvent(this)" tabindex="0">	
+        <div>
+            <img id="channelInfoIcon" class="channelInfoIcon" src="assets/info.svg" alt=""/>
+        </div>
+        <div id="channelInfoIconText" class="channelInfoIconText"></div>
+    </div>
+
     <div id="platformInfoIconContainer" class="platformInfoIconContainer" (focus)="focusInToMenuEvent(this)" (focusout)="focusOutFromMenuEvent(this)" tabindex="0">	
         <div>
             <img id="platformInfoIcon" class="platformInfoIcon" src="assets/settings.svg" alt=""/>

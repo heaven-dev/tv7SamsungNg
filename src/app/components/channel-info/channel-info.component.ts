@@ -2,14 +2,21 @@ import { Component, OnInit, AfterViewInit, Renderer2 } from '@angular/core';
 
 import { CommonService } from '../../services/common.service';
 import { AppService } from '../../services/app.service';
-import { LocaleService } from '../../services/locale.service';
+import {
+  LocaleService,
+  localeFi,
+  localeEt,
+  localeRu,
+  localeSv
+} from '../../services/locale.service';
+
 import {
   tvMainPage,
   archiveMainPage,
   guidePage,
   searchPage,
   favoritesPage,
-  channelInfoPage,
+  platformInfoPage,
   tvIconContainer,
   archiveIconContainer,
   guideIconContainer,
@@ -17,7 +24,6 @@ import {
   favoritesIconContainer,
   channelInfoIconContainer,
   platformInfoIconContainer,
-  platformInfoKey,
   LEFT,
   RIGHT,
   UP,
@@ -28,78 +34,53 @@ import {
 } from '../../helpers/constants';
 
 @Component({
-  selector: 'app-platform-info',
-  templateUrl: './platform-info.component.html',
-  styleUrls: ['./platform-info.component.css']
+  selector: 'app-channel-info',
+  templateUrl: './channel-info.component.html',
+  styleUrls: ['./channel-info.component.css']
 })
-export class PlatformInfoComponent implements OnInit, AfterViewInit {
+export class ChannelInfoComponent implements OnInit, AfterViewInit {
+
+  bottomMargin: number = 0;
 
   keydownListener: Function = null;
 
   constructor(
     private renderer: Renderer2,
     private commonService: CommonService,
-    private appService: AppService,
-    private localeService: LocaleService
+    private localeService: LocaleService,
+    private appService: AppService
   ) { }
 
   ngOnInit(): void {
     this.commonService.showElementById('toolbarContainer');
     this.commonService.showElementById('sidebar');
 
-    this.appService.selectSidebarIcon(platformInfoIconContainer);
+    this.appService.selectSidebarIcon(channelInfoIconContainer);
 
     this.keydownListener = this.renderer.listen('document', 'keydown', e => {
       this.keyDownEventListener(e);
     });
+
+    this.bottomMargin = 0;
   }
 
   ngAfterViewInit(): void {
-    let platformInfo: any = this.commonService.getValueFromCache(platformInfoKey);
-    if (platformInfo) {
-      platformInfo = this.commonService.stringToJson(platformInfo);
-
-      let elem = this.commonService.getElementById('appName');
-      if (elem) {
-        const appName = this.localeService.getAppName();
-        if (appName && appName.length > 0) {
-          elem.innerHTML = appName;
-        }
-      }
-
-      elem = this.commonService.getElementById('appVersion');
-      if (elem) {
-        const appVersion = this.localeService.getAppVersion();
-        if (appVersion && appVersion.length > 0) {
-          elem.innerHTML = appVersion;
-        }
-      }
-
-      elem = this.commonService.getElementById('platformName');
-      if (elem) {
-        elem.innerHTML = platformInfo.platformName;
-      }
-
-      elem = this.commonService.getElementById('platformVersion');
-      if (elem) {
-        elem.innerHTML = platformInfo.platformVersion;
-      }
-
-      elem = this.commonService.getElementById('platformBuildTime');
-      if (elem) {
-        elem.innerHTML = platformInfo.platformBuildTime;
-      }
-
-      elem = this.commonService.getElementById('tvModel');
-      if (elem) {
-        elem.innerHTML = platformInfo.tvModel;
-      }
+    const selectedLocale = this.localeService.getSelectedLocale();
+    if (selectedLocale === localeFi) {
+      this.commonService.showElementById('localeFi');
+    }
+    else if (selectedLocale === localeEt) {
+      this.commonService.showElementById('localeEt');
+    }
+    else if (selectedLocale === localeRu) {
+      this.commonService.showElementById('localeRu');
+    }
+    else if (selectedLocale === localeSv) {
+      this.commonService.showElementById('localeSv');
     }
 
-    this.localeService.setLocaleText('copyrightText');
-
     setTimeout(() => {
-      this.commonService.focusToElement('platformInfoContentContainer');
+      this.commonService.focusToElement('channelInfoContentContainer');
     });
   }
 
@@ -120,14 +101,14 @@ export class PlatformInfoComponent implements OnInit, AfterViewInit {
 
     if (keyCode === LEFT) {
       // LEFT arrow
-      if (contentId === 'platformInfoContentContainer') {
-        this.commonService.focusToElement(platformInfoIconContainer);
+      if (contentId === 'channelInfoContentContainer') {
+        this.commonService.focusToElement(channelInfoIconContainer);
       }
     }
     else if (keyCode === RIGHT) {
       // RIGHT arrow			
       if (this.commonService.isSideBarMenuActive(contentId)) {
-        this.commonService.focusToElement('platformInfoContentContainer');
+        this.commonService.focusToElement('channelInfoContentContainer');
       }
     }
     else if (keyCode === UP) {
@@ -135,27 +116,33 @@ export class PlatformInfoComponent implements OnInit, AfterViewInit {
       if (this.commonService.isSideBarMenuActive(contentId)) {
         this.commonService.menuFocusUp(contentId);
       }
+      else {
+        this.moveUpDown(false);
+      }
     }
     else if (keyCode === DOWN) {
       // DOWN arrow
       if (this.commonService.isSideBarMenuActive(contentId)) {
         this.commonService.menuFocusDown(contentId);
       }
+      else {
+        this.moveUpDown(true);
+      }
     }
     else if (keyCode === OK) {
       // OK button
       if (contentId === tvIconContainer || contentId === archiveIconContainer || contentId === guideIconContainer
-        || contentId === searchIconContainer || contentId === favoritesIconContainer || contentId === channelInfoIconContainer) {
-        this.commonService.showElementById('platformInfoBusyLoader');
+        || contentId === searchIconContainer || contentId === favoritesIconContainer || contentId === platformInfoIconContainer) {
+        this.commonService.showElementById('channelInfoBusyLoader');
 
         this.commonService.focusOutFromMenuEvent();
         this.removeKeydownEventListener();
       }
 
       if (this.commonService.isSideBarMenuActive(contentId)) {
-        if (contentId === platformInfoIconContainer) {
+        if (contentId === channelInfoIconContainer) {
           this.commonService.focusOutFromMenuEvent();
-          this.commonService.focusToElement('platformInfoContentContainer');
+          this.commonService.focusToElement('channelInfoContentContainer');
         }
         else if (contentId === tvIconContainer) {
           this.commonService.sideMenuSelection(tvMainPage);
@@ -172,8 +159,8 @@ export class PlatformInfoComponent implements OnInit, AfterViewInit {
         else if (contentId === favoritesIconContainer) {
           this.commonService.sideMenuSelection(favoritesPage);
         }
-        else if (contentId === channelInfoIconContainer) {
-          this.commonService.sideMenuSelection(channelInfoPage);
+        else if (contentId === platformInfoIconContainer) {
+          this.commonService.sideMenuSelection(platformInfoPage);
         }
       }
     }
@@ -181,12 +168,30 @@ export class PlatformInfoComponent implements OnInit, AfterViewInit {
       // RETURN button
       if (this.commonService.isSideBarMenuActive(contentId)) {
         this.commonService.focusOutFromMenuEvent();
-        this.commonService.focusToElement('platformInfoContentContainer');
+        this.commonService.focusToElement('channelInfoContentContainer');
       }
       else {
-        //this.commonService.showElementById('platformInfoBusyLoader');
+        //this.commonService.showElementById('channelInfoBusyLoader');
+        this.removeKeydownEventListener();
         this.commonService.toPage(archiveMainPage, null);
       }
+    }
+  }
+
+  moveUpDown(down: boolean): void {
+    let element = this.commonService.getElementById('channelInfoTextContainer');
+    if (element) {
+      if (down) {
+        this.bottomMargin += 50;
+      }
+      else {
+        this.bottomMargin -= 50;
+        if (this.bottomMargin < 0) {
+          this.bottomMargin = 0;
+        }
+      }
+
+      element.style.bottom = this.bottomMargin === 0 ? null : this.bottomMargin + 'px';
     }
   }
 }

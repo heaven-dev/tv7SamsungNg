@@ -34,3 +34,14 @@
 	font-size: 34px;
 	padding: 6px 14px;
 }
+
+.copyrightText {
+	position: absolute;
+	bottom: 20px;
+	color: #444444;
+	font-size: 30px;
+	left: 50%;
+	-webkit-transform: translate(-50%);
+	transform: translate(-50%);
+	white-space: nowrap;
+}

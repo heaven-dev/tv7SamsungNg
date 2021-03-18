@@ -14,6 +14,7 @@ import { PlatformInfoComponent } from './components/platform-info/platform-info.
 import { SearchComponent } from './components/search/search.component';
 import { FavoritesComponent } from './components/favorites/favorites.component';
 import { SearchResultComponent } from './components/search-result/search-result.component';
+import { ChannelInfoComponent } from './components/channel-info/channel-info.component';
 import { ErrorComponent } from './components/error/error.component';
 
 import {
@@ -29,6 +30,7 @@ import {
   platformInfoPage,
   searchPage,
   favoritesPage,
+  channelInfoPage,
   searchResultPage,
   errorPage
 } from './helpers/constants';
@@ -47,6 +49,7 @@ const routes: Routes = [
   { path: platformInfoPage, component: PlatformInfoComponent },
   { path: searchPage, component: SearchComponent },
   { path: favoritesPage, component: FavoritesComponent },
+  { path: channelInfoPage, component: ChannelInfoComponent },
   { path: searchResultPage, component: SearchResultComponent },
   { path: errorPage, component: ErrorComponent }
 ];

@@ -6,6 +6,7 @@ import {
   guideIconContainer,
   searchIconContainer,
   favoritesIconContainer,
+  channelInfoIconContainer,
   platformInfoIconContainer,
   runOnBrowser,
   archivePageStateKey,
@@ -166,6 +167,11 @@ export class CommonService {
       this.hideElement(favoritesIconText);
     }
 
+    const channelInfoIconText = this.getElementById('channelInfoIconText');
+    if (channelInfoIconText) {
+      this.hideElement(channelInfoIconText);
+    }
+
     const platformInfoIconText = this.getElementById('platformInfoIconText');
     if (platformInfoIconText) {
       this.hideElement(platformInfoIconText);
@@ -174,6 +180,9 @@ export class CommonService {
 
   menuFocusUp(contentId: string): void {
     if (contentId === platformInfoIconContainer) {
+      this.focusToElement(channelInfoIconContainer);
+    }
+    else if (contentId === channelInfoIconContainer) {
       this.focusToElement(favoritesIconContainer);
     }
     else if (contentId === favoritesIconContainer) {
@@ -204,6 +213,9 @@ export class CommonService {
       this.focusToElement(favoritesIconContainer);
     }
     else if (contentId === favoritesIconContainer) {
+      this.focusToElement(channelInfoIconContainer);
+    }
+    else if (contentId === channelInfoIconContainer) {
       this.focusToElement(platformInfoIconContainer);
     }
   }
@@ -243,7 +255,8 @@ export class CommonService {
 
   isSideBarMenuActive(contentId: string): boolean {
     return contentId === tvIconContainer || contentId === archiveIconContainer || contentId === guideIconContainer
-      || contentId === searchIconContainer || contentId === favoritesIconContainer || contentId === platformInfoIconContainer;
+      || contentId === searchIconContainer || contentId === favoritesIconContainer || contentId === channelInfoIconContainer
+      || contentId === platformInfoIconContainer;
   }
 
   addToElement(elementId: string, value: any): void {
@@ -330,6 +343,7 @@ export class CommonService {
 
   sideMenuSelection(page: string): void {
     this.deletePageStates();
+    this.removeOriginPage();
     this.toPage(page, null);
   }
 

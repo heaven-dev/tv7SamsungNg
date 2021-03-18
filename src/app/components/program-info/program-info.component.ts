@@ -13,6 +13,7 @@ import {
   archiveMainPage,
   guidePage,
   favoritesPage,
+  channelInfoPage,
   searchPage,
   platformInfoPage,
   archivePlayerPage,
@@ -21,6 +22,7 @@ import {
   archiveIconContainer,
   guideIconContainer,
   favoritesIconContainer,
+  channelInfoIconContainer,
   searchIconContainer,
   platformInfoIconContainer,
   backgroundImage,
@@ -227,7 +229,8 @@ export class ProgramInfoComponent implements OnInit, AfterViewInit {
     else if (keyCode === OK) {
       // OK button
       if (contentId === tvIconContainer || contentId === archiveIconContainer || contentId === guideIconContainer
-        || contentId === searchIconContainer || contentId === favoritesIconContainer || contentId === platformInfoIconContainer) {
+        || contentId === searchIconContainer || contentId === favoritesIconContainer || contentId === channelInfoIconContainer
+        || contentId === platformInfoIconContainer) {
         this.commonService.showElementById('programInfoBusyLoader');
 
         this.commonService.focusOutFromMenuEvent();
@@ -249,8 +252,10 @@ export class ProgramInfoComponent implements OnInit, AfterViewInit {
       else if (contentId === favoritesIconContainer) {
         this.commonService.sideMenuSelection(favoritesPage);
       }
+      else if (contentId === channelInfoIconContainer) {
+        this.commonService.sideMenuSelection(channelInfoPage);
+      }
       else if (contentId === platformInfoIconContainer) {
-        ;
         this.commonService.sideMenuSelection(platformInfoPage);
       }
       else if (contentId === favoriteIconContainer) {

@@ -56,6 +56,12 @@ export class SidebarComponent implements OnInit, OnChanges {
       this.localeService.setLocaleText('favoritesIconText');
     }
 
+    const channelInfoIconText = this.commonService.getElementById('channelInfoIconText');
+    if (channelInfoIconText) {
+      this.commonService.showElement(channelInfoIconText);
+      this.localeService.setLocaleText('channelInfoIconText');
+    }
+
     const platformInfoIconText = this.commonService.getElementById('platformInfoIconText');
     if (platformInfoIconText) {
 
@@ -67,6 +73,7 @@ export class SidebarComponent implements OnInit, OnChanges {
           'guideIconText',
           'searchIconText',
           'favoritesIconText',
+          'channelInfoIconText',
           'platformInfoIconText'
         ];
 

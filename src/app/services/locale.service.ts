@@ -14,12 +14,12 @@ const appName: string = 'Taivas TV7';
 /**
  * Updated by gulp script during a build of the app.
  */
-const appVersion: string = '2.0.10';
+const appVersion: string = '2.1.0';
 
-const localeFi: string = 'fi';
-const localeEt: string = 'et';
-const localeRu: string = 'ru';
-const localeSv: string = 'sv';
+export const localeFi: string = 'fi';
+export const localeEt: string = 'et';
+export const localeRu: string = 'ru';
+export const localeSv: string = 'sv';
 
 const logoTaivas: string = 'assets/logo_taivas.png';
 const logoTaevas: string = 'assets/logo_taevas.png';
@@ -302,6 +302,7 @@ export class LocaleService {
     { id: 'searchIconText', text: 'Haku' },
     { id: 'guideIconText', text: 'TV-opas' },
     { id: 'favoritesIconText', text: 'Suosikit' },
+    { id: 'channelInfoIconText', text: 'Taivas TV7' },
     { id: 'platformInfoIconText', text: 'Tietoja' },
     { id: 'searchText', text: 'Hae' },
     { id: 'searchResultText', text: 'Haku tulokset' },
@@ -321,7 +322,8 @@ export class LocaleService {
     { id: 'noHitsText', text: 'Ei hakuosumia' },
     { id: 'addedToFavoritesText', text: 'Lisätty suosikkeihin' },
     { id: 'removedFromFavoritesText', text: 'Poistettu suosikeista' },
-    { id: 'aspectRatioText', text: 'Kuvasuhde' }
+    { id: 'aspectRatioText', text: 'Kuvasuhde' },
+    { id: 'copyrightText', text: 'Copyright Taivas TV7. Unauthorized publication of programs or subtitles is prohibited.' }
   ];
 
   localeTextEt: Array<any> = [
@@ -337,6 +339,7 @@ export class LocaleService {
     { id: 'searchIconText', text: 'Otsing' },
     { id: 'guideIconText', text: 'Saatekava' },
     { id: 'favoritesIconText', text: 'Lemmikud' },
+    { id: 'channelInfoIconText', text: 'Taevas TV7' },
     { id: 'platformInfoIconText', text: 'Infot' },
     { id: 'searchText', text: 'Otsi' },
     { id: 'searchResultText', text: 'Otsingu tulemused' },
@@ -356,7 +359,8 @@ export class LocaleService {
     { id: 'noHitsText', text: 'Otsingutulemusi pole' },
     { id: 'addedToFavoritesText', text: 'Lisatud lemmikutesse' },
     { id: 'removedFromFavoritesText', text: 'Lemmikutest eemaldatud' },
-    { id: 'aspectRatioText', text: 'Kuvasuhe' }
+    { id: 'aspectRatioText', text: 'Kuvasuhe' },
+    { id: 'copyrightText', text: 'Copyright Taevas TV7. Unauthorized publication of programs or subtitles is prohibited.' }
   ];
 
   localeTextRu: Array<any> = [
@@ -372,6 +376,7 @@ export class LocaleService {
     { id: 'searchIconText', text: 'Поиск' },
     { id: 'guideIconText', text: 'Телепрограмму' },
     { id: 'favoritesIconText', text: 'Избранные' },
+    { id: 'channelInfoIconText', text: 'Небеса ТВ7' },
     { id: 'platformInfoIconText', text: 'Информация' },
     { id: 'searchText', text: 'Найти' },
     { id: 'searchResultText', text: 'Результаты поиска' },
@@ -391,7 +396,8 @@ export class LocaleService {
     { id: 'noHitsText', text: 'Ничего не найдено' },
     { id: 'addedToFavoritesText', text: 'Добавлено в Избранные' },
     { id: 'removedFromFavoritesText', text: 'Удалено из Избранных' },
-    { id: 'aspectRatioText', text: 'Соотношение сторон' }
+    { id: 'aspectRatioText', text: 'Соотношение сторон' },
+    { id: 'copyrightText', text: 'Copyright Небеса ТВ7. Unauthorized publication of programs or subtitles is prohibited.' }
   ];
 
   localeTextSv: Array<any> = [
@@ -407,6 +413,7 @@ export class LocaleService {
     { id: 'searchIconText', text: 'Sök' },
     { id: 'guideIconText', text: 'Tablå' },
     { id: 'favoritesIconText', text: 'Favoriter' },
+    { id: 'channelInfoIconText', text: 'Himlen TV7' },
     { id: 'platformInfoIconText', text: 'Information' },
     { id: 'searchText', text: 'Sök' },
     { id: 'searchResultText', text: 'Sökresultat' },
@@ -426,7 +433,8 @@ export class LocaleService {
     { id: 'noHitsText', text: 'Inga sökträffar' },
     { id: 'addedToFavoritesText', text: 'Tillagd bland favoriter' },
     { id: 'removedFromFavoritesText', text: 'Borttagen från favoriter' },
-    { id: 'aspectRatioText', text: 'Bildförhållande' }
+    { id: 'aspectRatioText', text: 'Bildförhållande' },
+    { id: 'copyrightText', text: 'Copyright Himlen TV7. Unauthorized publication of programs or subtitles is prohibited.' }
   ];
 
   constructor(private commonService: CommonService) { }
@@ -466,6 +474,10 @@ export class LocaleService {
     }
 
     elem.innerHTML = localeText;
+  }
+
+  getSelectedLocale(): string {
+    return selectedLocale;
   }
 
   getArchiveLanguage(): string {

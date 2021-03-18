@@ -11,6 +11,7 @@ import {
   guidePage,
   searchPage,
   favoritesPage,
+  channelInfoPage,
   platformInfoPage,
   programInfoPage,
   errorPage,
@@ -19,6 +20,7 @@ import {
   guideIconContainer,
   searchIconContainer,
   favoritesIconContainer,
+  channelInfoIconContainer,
   platformInfoIconContainer,
   guidePageStateKey,
   selectedArchiveProgramKey,
@@ -208,7 +210,7 @@ export class GuideComponent implements OnInit, AfterViewInit {
     else if (keyCode === OK) {
       // OK button
       if (contentId === tvIconContainer || contentId === archiveIconContainer || contentId === searchIconContainer
-        || contentId === favoritesIconContainer || contentId === platformInfoIconContainer) {
+        || contentId === favoritesIconContainer || contentId === channelInfoIconContainer || contentId === platformInfoIconContainer) {
         this.commonService.showElementById('guideBusyLoader');
 
         this.commonService.focusOutFromMenuEvent();
@@ -231,6 +233,9 @@ export class GuideComponent implements OnInit, AfterViewInit {
         }
         else if (contentId === favoritesIconContainer) {
           this.commonService.sideMenuSelection(favoritesPage);
+        }
+        else if (contentId === channelInfoIconContainer) {
+          this.commonService.sideMenuSelection(channelInfoPage);
         }
         else if (contentId === platformInfoIconContainer) {
           this.commonService.sideMenuSelection(platformInfoPage);
