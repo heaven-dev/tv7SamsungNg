@@ -1,4 +1,4 @@
-# 18.03.2021 14:54
+# 19.03.2021 10:54
 
 ### Bug Fixes
 
@@ -7,6 +7,7 @@
 ### Features
 
 * Added channel info page.
+* Error handling to img tag on TV main and program info pages.
 * New version number.
 
 
