@@ -294,6 +294,7 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
 
           if (this.streamRecoverCounter === 5) {
             // to error page
+            this.reconnecting = false;
             this.release();
             this.commonService.toPage(errorPage, null);
           }
@@ -308,7 +309,6 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
 
             this.player.dispose();
             this.createPlayer(options);
-
             this.reconnecting = true;
           }
 

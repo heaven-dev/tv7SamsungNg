@@ -634,6 +634,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
           if (this.streamRecoverCounter === 5) {
             // to error page
+            this.reconnecting = false;
             this.release();
             this.commonService.toPage(errorPage, null);
           }
