@@ -309,6 +309,7 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
 
             this.player.dispose();
             this.createPlayer(options);
+            
             this.reconnecting = true;
           }
 

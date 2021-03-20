@@ -62,6 +62,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
   streamPosition: number = 0;
   streamRetryCounter: number = 0;
   streamRecoverCounter: number = 0;
+  paused: boolean = false;
 
   reconnecting: boolean = false;
   iconAnimationDuration: number = 1400;
@@ -409,6 +410,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     if (this.player && !this.player.paused()) {
       this.commonService.screenSaverOn();
       this.player.pause();
+      this.paused = true;
 
       this.commonService.showElementById('pauseIconContainer');
 
@@ -420,6 +422,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     if (this.player && this.player.paused()) {
       this.commonService.screenSaverOff();
       this.player.play();
+      this.paused = false;
 
       this.commonService.showElementById('playIconContainer');
 
@@ -625,7 +628,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
   addErrorInterval(options: any): void {
     this.errorInterval = setInterval(() => {
-      if (this.player) {
+      if (this.player && !this.paused) {
         let currentTime = Math.round(this.player.currentTime());
         console.log('***Stream currentTime: ', currentTime, '***');
 
