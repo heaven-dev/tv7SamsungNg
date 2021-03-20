@@ -1,4 +1,6 @@
 <div id="tvPlayerContainer" class="tvPlayerContainer">
+    <app-reconnecting *ngIf="reconnecting"></app-reconnecting>
+    
     <div id="tvPlayerBusyLoader" class="busyLoader tvPlayerBusyLoader">
         <div></div>
         <div></div>
@@ -38,7 +40,5 @@
         </div>
     </div>
 
-    <div class="tpVideoPlayerContainer">
-        <video id="videoPlayer" class="video-js" #target playsinline></video>
-    </div>
+    <div id="videoPlayerContainer" class="tpVideoPlayerContainer"></div>
 </div>

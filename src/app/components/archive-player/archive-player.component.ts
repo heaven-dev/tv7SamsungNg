@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Renderer2, ViewChild, ElementRef, ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2, ViewEncapsulation } from '@angular/core';
 
 import { CommonService } from '../../services/common.service';
 import { ArchiveService } from '../../services/archive.service';
@@ -46,8 +46,6 @@ import videojs from 'video.js';
   encapsulation: ViewEncapsulation.None
 })
 export class ArchivePlayerComponent implements OnInit, OnDestroy {
-  @ViewChild('target', { static: true }) target: ElementRef;
-
   windowHeight: number = 0;
   videoDuration: number = null;
   videoCurrentTime: number = null;
@@ -55,16 +53,18 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
   videoCurrenTimeLabel: string = null;
   selectedProgram: any = null;
   videoStatus: any = null;
+  translation: any = null;
   controlsVisible: boolean = false;
   seeking: boolean = false;
   seekingStep: number = 10;
   timeout: any = null;
   errorInterval: any = null;
   streamPosition: number = 0;
-  streamStopCounter: number = 0;
-  iconAnimationDuration: number = 1400;
+  streamRetryCounter: number = 0;
+  streamRecoverCounter: number = 0;
 
-  playerOptions: any = null;
+  reconnecting: boolean = false;
+  iconAnimationDuration: number = 1400;
 
   keydownListener: Function;
   visibilityChangeListener: Function = null;
@@ -73,7 +73,6 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
   constructor(
     private renderer: Renderer2,
-    private cdRef: ChangeDetectorRef,
     private commonService: CommonService,
     private archiveService: ArchiveService,
     private localeService: LocaleService
@@ -86,17 +85,17 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
     this.selectedProgram = this.commonService.stringToJson(this.commonService.getValueFromCache(selectedArchiveProgramKey));
 
-    this.videoStatus = this.getVideoStatus();
-
     const archiveLanguage = this.localeService.getArchiveLanguage();
     const videoUrl = this.getVideoUrl(archiveLanguage);
     const langTag = this.getLanguageTag(archiveLanguage);
 
-    this.playerOptions = {
+    let playerOptions = {
       preload: 'auto',
       autoplay: true,
       muted: false,
       fluid: true,
+      playsinline: true,
+      //poster: 'assets/tv7logo.png',
       html5: {
         vhs: {
           overrideNative: true
@@ -114,9 +113,9 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     const platformVersion = this.commonService.getValueFromCache(platformVersionKey);
     if (platformVersion) {
       if (videoNotOverrideNative.indexOf(platformVersion) !== -1) {
-        this.playerOptions.html5.vhs.overrideNative = false;
-        this.playerOptions.html5.nativeAudioTracks = true;
-        this.playerOptions.html5.nativeVideoTracks = true;
+        playerOptions.html5.vhs.overrideNative = false;
+        playerOptions.html5.nativeAudioTracks = true;
+        playerOptions.html5.nativeVideoTracks = true;
       }
     }
 
@@ -128,74 +127,20 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
       this.visibilityChange(e);
     });
 
-    this.createPlayer(langTag);
+    this.preparePlayer(playerOptions, langTag);
 
-    this.addErrorInterval();
+    this.addErrorInterval(playerOptions);
   }
 
   ngOnDestroy(): void {
     this.release();
   }
 
-  createPlayer(langTag: string): void {
-
-    console.log('video.js options: ', this.playerOptions);
-
+  preparePlayer(options: any, langTag: string): void {
     this.archiveService.getTranslation(this.selectedProgram.id, langTag, (data: any) => {
       if (data !== null) {
-        if (data.lang) {
-          this.createTrackElement(data.lang);
-        }
-
-        this.player = videojs(this.target.nativeElement, this.playerOptions, () => {
-          this.player.on('play', () => {
-            videojs.log('Video play!');
-          });
-
-          this.player.on('loadedmetadata', () => {
-            videojs.log('Video loadedmetadata!');
-
-            if (this.videoStatus && this.videoStatus.p < 100) {
-              this.player.currentTime(this.videoStatus.c);
-            }
-          });
-
-          this.player.on('timeupdate', () => {
-            if (this.controlsVisible && this.player) {
-              if (!this.videoDuration) {
-                this.videoDuration = this.player.duration();
-              }
-
-              this.updateControls(this.player.currentTime());
-            }
-          });
-
-          this.player.on('ended', () => {
-            videojs.log('Video end!');
-            this.saveVideoStatus();
-
-            this.release();
-            this.commonService.toPreviousPage(programInfoPage);
-          });
-
-          this.player.on('pause', () => {
-            videojs.log('Video paused!');
-          });
-
-          this.player.on('error', () => {
-            if (this.player) {
-              const code = this.player.error().code;
-              videojs.log('Video error: code: ', code);
-
-              var time = this.player.currentTime();
-              videojs.log('Video current time: ', time);
-
-              this.saveVideoStatus();
-              this.release();
-              this.commonService.toPage(errorPage, null);
-            }
-          });
-        });
+        this.translation = data;
+        this.createPlayer(options);
       }
       else {
         this.removeEventListeners();
@@ -203,6 +148,89 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
         this.commonService.toPage(errorPage, null);
       }
     });
+  }
+
+  createPlayer(options: any): void {
+    console.log('video.js options: ', options);
+
+    this.createVideoElement();
+
+    if (this.translation && this.translation.lang) {
+      this.createTrackElement(this.translation.lang);
+    }
+    
+    this.videoStatus = this.getVideoStatus();
+
+    const videoElem = this.commonService.getElementById('videoPlayer');
+    if (videoElem) {
+      this.player = videojs(videoElem, options, () => {
+
+        this.player.on('play', () => {
+          videojs.log('Video play!');
+          this.player.error(null);
+        });
+
+        this.player.on('loadedmetadata', () => {
+          videojs.log('Video loadedmetadata!');
+
+          if (this.videoStatus && this.videoStatus.p < 100) {
+            this.player.currentTime(this.videoStatus.c);
+          }
+        });
+
+        this.player.on('timeupdate', () => {
+          const time = this.player.currentTime();
+          if (time > 0) {
+            this.reconnecting = false;
+          }
+
+          if (this.controlsVisible && this.player) {
+            if (!this.videoDuration) {
+              this.videoDuration = this.player.duration();
+            }
+
+            this.updateControls(time);
+          }
+
+          this.player.error(null);
+        });
+
+        this.player.on('ended', () => {
+          videojs.log('Video end!');
+          this.player.error(null);
+
+          this.saveVideoStatus();
+
+          this.release();
+          this.commonService.toPreviousPage(programInfoPage);
+        });
+
+        this.player.on('pause', () => {
+          videojs.log('Video paused!');
+          this.player.error(null);
+        });
+
+        this.player.on('error', () => {
+          if (this.player) {
+            this.player.error(null);
+            this.saveVideoStatus();
+          }
+        });
+      });
+    }
+  }
+
+  createVideoElement(): void {
+    let videoElem = document.createElement('video');
+    if (videoElem) {
+      videoElem.setAttribute('id', 'videoPlayer');
+      videoElem.setAttribute('class', 'video-js');
+
+      const container = this.commonService.getElementById('videoPlayerContainer');
+      if (container) {
+        container.appendChild(videoElem);
+      }
+    }
   }
 
   removeEventListeners(): void {
@@ -432,34 +460,36 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
       vs = [];
     }
 
-    const { id } = this.selectedProgram;
-
-    for (let i = 0; i < vs.length; i++) {
-      if (vs[i].id === id) {
-        vs.splice(i, 1);
-        break;
-      }
-    }
-
     let p = 0;
     const c = this.player.currentTime();
-    const d = this.player.duration();
+    if (c > 0) {
+      const { id } = this.selectedProgram;
 
-    if (d - c <= 60) {
-      p = 100;
-    }
-    else {
-      p = Math.round(c / d * 100);
-      if (p < 0) {
-        p = 0;
+      for (let i = 0; i < vs.length; i++) {
+        if (vs[i].id === id) {
+          vs.splice(i, 1);
+          break;
+        }
       }
-      if (p > 100) {
+
+      const d = this.player.duration();
+
+      if (d - c <= 60) {
         p = 100;
       }
-    }
+      else {
+        p = Math.round(c / d * 100);
+        if (p < 0) {
+          p = 0;
+        }
+        if (p > 100) {
+          p = 100;
+        }
+      }
 
-    vs.unshift({ id: id, c: Math.round(c), p: p });
-    this.commonService.saveValue(videoStatusDataKey, this.commonService.jsonToString(vs));
+      vs.unshift({ id: id, c: Math.round(c), p: p });
+      this.commonService.saveValue(videoStatusDataKey, this.commonService.jsonToString(vs));
+    }
   }
 
   showPlayPauseIcon(isPlayIcon: boolean): void {
@@ -593,24 +623,44 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     }
   }
 
-  addErrorInterval(): void {
+  addErrorInterval(options: any): void {
     this.errorInterval = setInterval(() => {
       if (this.player) {
         let currentTime = Math.round(this.player.currentTime());
-        //console.log('Stream currentTime: ', currentTime);
+        console.log('***Stream currentTime: ', currentTime, '***');
 
         if (currentTime <= this.streamPosition) {
-          // stream stopped
-          if (this.streamStopCounter === 9) {
-            this.saveVideoStatus();
+          console.log('***Video stopped: ', currentTime, '***');
+
+          if (this.streamRecoverCounter === 5) {
+            // to error page
             this.release();
             this.commonService.toPage(errorPage, null);
           }
 
-          this.streamStopCounter++;
+          // stream stopped
+          if (this.streamRetryCounter === 3) {
+
+            console.log('***Recreate player to recover: ', currentTime, '***');
+
+            this.streamRetryCounter = 0;
+            this.streamRecoverCounter++;
+
+            this.player.dispose();
+            this.createPlayer(options);
+
+            this.reconnecting = true;
+          }
+
+          this.streamRetryCounter++;
         }
         else {
-          this.streamStopCounter = 0;
+          this.saveVideoStatus();
+
+          this.streamRetryCounter = 0;
+          this.streamRecoverCounter = 0;
+
+          this.reconnecting = false;
         }
 
         this.streamPosition = currentTime;

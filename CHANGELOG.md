@@ -1,3 +1,15 @@
+# 20.03.2021 13:11
+
+### Bug Fixes
+
+* none
+
+### Features
+
+* Changes to stream reconnecting functionality.
+* New version number.
+
+
 # 19.03.2021 10:54
 
 ### Bug Fixes

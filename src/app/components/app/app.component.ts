@@ -57,11 +57,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
   visibilityChange(e: any): void {
     if (!document.hidden) {
+      /*
       const isConnected = this.commonService.isConnectedToGateway();
       if (!isConnected) {
         this.commonService.cacheValue(errorTextKey, noNetworkConnectionText);
         this.commonService.toPage(errorPage, null);
       }
+      */
     }
   }
 

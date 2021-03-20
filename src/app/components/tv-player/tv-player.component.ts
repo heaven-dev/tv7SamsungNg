@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Renderer2, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2, ViewEncapsulation } from '@angular/core';
 
 import { CommonService } from '../../services/common.service';
 import { ProgramScheduleService } from '../../services/program-schedule.service';
@@ -22,6 +22,7 @@ import {
   RETURN,
   ESC
 } from '../../helpers/constants';
+
 import videojs from 'video.js';
 
 @Component({
@@ -31,9 +32,6 @@ import videojs from 'video.js';
   encapsulation: ViewEncapsulation.None
 })
 export class TvPlayerComponent implements OnInit, OnDestroy {
-  @ViewChild('target', { static: true }) target: ElementRef;
-
-  playerOptions: any = null;
   controlsVisible: boolean = false;
   programIndex: number = 0;
   programData: any = null;
@@ -41,7 +39,10 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
   controlsInterval: any = null;
   errorInterval: any = null;
   streamPosition: number = 0;
-  streamStopCounter: number = 0;
+  streamRetryCounter: number = 0;
+  streamRecoverCounter: number = 0;
+
+  reconnecting: boolean = false;
 
   keydownListener: Function;
   visibilityChangeListener: Function = null;
@@ -58,11 +59,13 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.commonService.screenSaverOff();
 
-    this.playerOptions = {
+    let playerOptions = {
       preload: 'auto',
       autoplay: true,
       muted: false,
       fluid: true,
+      playsinline: true,
+      //poster: 'assets/tv7logo.png',
       html5: {
         vhs: {
           overrideNative: true
@@ -80,9 +83,9 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
     const platformVersion = this.commonService.getValueFromCache(platformVersionKey);
     if (platformVersion) {
       if (videoNotOverrideNative.indexOf(platformVersion) !== -1) {
-        this.playerOptions.html5.vhs.overrideNative = false;
-        this.playerOptions.html5.nativeAudioTracks = true;
-        this.playerOptions.html5.nativeVideoTracks = true;
+        playerOptions.html5.vhs.overrideNative = false;
+        playerOptions.html5.nativeAudioTracks = true;
+        playerOptions.html5.nativeVideoTracks = true;
       }
     }
 
@@ -100,54 +103,81 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
       //console.log('Program count: ', programData.length);
     }
 
-    this.createPlayer();
+    this.createPlayer(playerOptions);
 
-    this.addErrorInterval();
+    this.addErrorInterval(playerOptions);
   }
 
   ngOnDestroy(): void {
     this.release();
   }
 
-  createPlayer(): void {
-    console.log('video.js options: ', this.playerOptions);
+  createPlayer(options: any): void {
+    console.log('video.js options: ', options);
 
-    this.player = videojs(this.target.nativeElement, this.playerOptions, () => {
-      this.player.on('play', () => {
-        videojs.log('Video play!');
-      });
+    this.createVideoElement();
 
-      this.player.on('ended', () => {
-        videojs.log('Video end!');
-      });
+    const videoElem = this.commonService.getElementById('videoPlayer');
+    if (videoElem) {
+      this.player = videojs(videoElem, options, () => {
+        this.player.on('play', () => {
+          if (this.player) {
+            videojs.log('Video play!');
 
-      this.player.on('pause', () => {
-        videojs.log('Video paused!');
-      });
-
-      this.player.on('error', () => {
-        if (this.player) {
-          const code = this.player.error().code;
-          videojs.log('Video error: code: ', code);
-
-          var time = this.player.currentTime();
-          videojs.log('Video current time: ', time);
-
-          this.release();
-          this.commonService.toPage(errorPage, null);
-
-          /*
-          if (time && code === 2) {
             this.player.error(null);
-            this.player.pause();
-            this.player.load();
-            this.player.currentTime(time);
-            this.player.play();
           }
-          */
-        }
+        });
+
+        this.player.on('timeupdate', () => {
+          if (this.player) {
+            //videojs.log('Video timeupdate!');
+
+            this.player.error(null);
+
+            if (this.player.currentTime() > 0) {
+              this.reconnecting = false;
+            }
+          }
+        });
+
+        this.player.on('ended', () => {
+          if (this.player) {
+            videojs.log('Video end!');
+
+            this.player.error(null);
+          }
+        });
+
+        this.player.on('pause', () => {
+          if (this.player) {
+            videojs.log('Video paused!');
+
+            this.player.error(null);
+          }
+        });
+
+        this.player.on('error', () => {
+          if (this.player) {
+            videojs.log('Video error!');
+
+            this.player.error(null);
+          }
+        });
       });
-    });
+    }
+  }
+
+  createVideoElement(): void {
+    let videoElem = document.createElement('video');
+    if (videoElem) {
+      videoElem.setAttribute('id', 'videoPlayer');
+      videoElem.setAttribute('class', 'video-js');
+
+      const container = this.commonService.getElementById('videoPlayerContainer');
+      if (container) {
+        container.appendChild(videoElem);
+      }
+    }
   }
 
   removeEventListeners(): void {
@@ -224,7 +254,7 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
 
     if (this.player) {
       this.player.dispose();
-      this.playerOptions = null;
+      this.player = null;
     }
   }
 
@@ -254,23 +284,41 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
     }
   }
 
-  addErrorInterval(): void {
+  addErrorInterval(options: any): void {
     this.errorInterval = setInterval(() => {
       if (this.player) {
         let currentTime = Math.round(this.player.currentTime());
-        //console.log('Stream currentTime: ', currentTime);
+        console.log('***Stream currentTime: ', currentTime, '***');
 
         if (currentTime <= this.streamPosition) {
-          // stream stopped
-          if (this.streamStopCounter === 9) {
+
+          if (this.streamRecoverCounter === 5) {
+            // to error page
             this.release();
             this.commonService.toPage(errorPage, null);
           }
 
-          this.streamStopCounter++;
+          // stream stopped
+          if (this.streamRetryCounter === 3) {
+
+            console.log('***Recreate player to recover: ', currentTime, '***');
+
+            this.streamRetryCounter = 0;
+            this.streamRecoverCounter++;
+
+            this.player.dispose();
+            this.createPlayer(options);
+
+            this.reconnecting = true;
+          }
+
+          this.streamRetryCounter++;
         }
         else {
-          this.streamStopCounter = 0;
+          this.streamRetryCounter = 0;
+          this.streamRecoverCounter = 0;
+
+          this.reconnecting = false;
         }
 
         this.streamPosition = currentTime;

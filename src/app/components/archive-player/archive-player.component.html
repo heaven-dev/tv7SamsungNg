@@ -1,4 +1,6 @@
 <div class="archivePlayerContainer" [ngStyle]="{'height': windowHeight + 'px'}">
+    <app-reconnecting *ngIf="reconnecting"></app-reconnecting>
+
     <div id="archivePlayerBusyLoader" class="busyLoader archivePlayerBusyLoader">
         <div></div>
         <div></div>
@@ -38,7 +40,5 @@
         <img id="playPauseIcon" class="apPlayPauseIcon" src="assets/pause.svg" alt="" />
     </div>
 
-    <div class="apVideoPlayerContainer">
-        <video id="videoPlayer" class="video-js" #target playsinline></video>
-    </div>
+    <div id="videoPlayerContainer" class="apVideoPlayerContainer"></div>
 </div>
