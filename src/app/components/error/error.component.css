@@ -11,13 +11,13 @@
 }
 
 .errorIcon {
-    width: 400px;
-    height: 400px;
+    width: 280px;
+    height: 280px;
 }
 
 .somethingWentWrongText {
     color: #444444;
-    font-size: 80px;
+    font-size: 44px;
 	white-space: nowrap;
 }
 
