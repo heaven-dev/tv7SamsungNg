@@ -12,6 +12,8 @@ import {
   selectedArchiveProgramKey,
   programInfoPage,
   errorPage,
+  errorTextKey,
+  errorReadingVideoStreamText,
   subtitlesUrlPart,
   archivePlayerControlsVisibleTimeout,
   streamErrorInterval,
@@ -159,7 +161,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     if (this.translation && this.translation.lang) {
       this.createTrackElement(this.translation.lang);
     }
-    
+
     this.videoStatus = this.getVideoStatus();
 
     const videoElem = this.commonService.getElementById('videoPlayer');
@@ -637,6 +639,8 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
           if (this.streamRecoverCounter === 5) {
             // to error page
+            this.commonService.cacheValue(errorTextKey, errorReadingVideoStreamText);
+
             this.reconnecting = false;
             this.release();
             this.commonService.toPage(errorPage, null);

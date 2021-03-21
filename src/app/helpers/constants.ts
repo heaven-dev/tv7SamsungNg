@@ -137,6 +137,8 @@ export const somethingWentWrongText = 'Something went wrong :-(';
 export const noNetworkConnectionText = 'No network connection :-(';
 export const networkRequestFailedText = 'Network request failed :-(';
 export const networkRequestTimeoutText = 'Network request timeout :-(';
+export const errorReadingTvStreamText = 'Error reading tv stream from server :-(';
+export const errorReadingVideoStreamText = 'Error reading video stream from server :-(';
 
 export const archiveCacheExpTimeMs = 1800000;
 
@@ -152,11 +154,11 @@ export const toolbarHeight = 90;
 export const videoBandwidthBits = 50000000;
 
 export const sidebarIconIds = [
-    tvIconContainer, 
-    archiveIconContainer, 
-    guideIconContainer, 
-    searchIconContainer, 
-    favoritesIconContainer, 
+    tvIconContainer,
+    archiveIconContainer,
+    guideIconContainer,
+    searchIconContainer,
+    favoritesIconContainer,
     channelInfoIconContainer,
     platformInfoIconContainer
 ];
