@@ -44,7 +44,7 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
   streamRetryCounter: number = 0;
   streamRecoverCounter: number = 0;
 
-  reconnecting: boolean = false;
+  connecting: boolean = false;
 
   keydownListener: Function;
   visibilityChangeListener: Function = null;
@@ -137,7 +137,7 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
             this.player.error(null);
 
             if (this.player.currentTime() > 0) {
-              this.reconnecting = false;
+              this.connecting = false;
             }
           }
         });
@@ -298,7 +298,7 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
             // to error page
             this.commonService.cacheValue(errorTextKey, errorReadingTvStreamText);
 
-            this.reconnecting = false;
+            this.connecting = false;
             this.release();
             this.commonService.toPage(errorPage, null);
           }
@@ -314,7 +314,7 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
             this.player.dispose();
             this.createPlayer(options);
 
-            this.reconnecting = true;
+            this.connecting = true;
           }
 
           this.streamRetryCounter++;
@@ -323,7 +323,7 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
           this.streamRetryCounter = 0;
           this.streamRecoverCounter = 0;
 
-          this.reconnecting = false;
+          this.connecting = false;
         }
 
         this.streamPosition = currentTime;

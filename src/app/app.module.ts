@@ -23,7 +23,7 @@ import { FavoritesComponent } from './components/favorites/favorites.component';
 import { ChannelInfoComponent } from './components/channel-info/channel-info.component';
 import { SearchResultComponent } from './components/search-result/search-result.component';
 import { ErrorComponent } from './components/error/error.component';
-import { ReconnectingComponent } from './components/reconnecting/reconnecting.component';
+import { ConnectingComponent } from './components/connecting/connecting.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +45,7 @@ import { ReconnectingComponent } from './components/reconnecting/reconnecting.co
     ChannelInfoComponent,
     SearchResultComponent,
     ErrorComponent,
-    ReconnectingComponent
+    ConnectingComponent
   ],
   imports: [
     BrowserModule,

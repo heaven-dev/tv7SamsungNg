@@ -2,11 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonService } from '../../services/common.service';
 
 @Component({
-  selector: 'app-reconnecting',
-  templateUrl: './reconnecting.component.html',
-  styleUrls: ['./reconnecting.component.css']
+  selector: 'app-connecting',
+  templateUrl: './connecting.component.html',
+  styleUrls: ['./connecting.component.css']
 })
-export class ReconnectingComponent implements OnInit, OnDestroy {
+export class ConnectingComponent implements OnInit, OnDestroy {
 
   interval: any = null;
   intervalTimeout: number = 600;
@@ -18,19 +18,19 @@ export class ReconnectingComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.interval = setInterval(() => {
-      let element = this.commonService.getElementById('reconnecting');
+      let element = this.commonService.getElementById('connecting');
       if (element) {
         if (this.counter === 0) {
-          element.innerHTML = 'Reconnecting';
+          element.innerHTML = 'Connecting';
         }
         else if (this.counter === 1) {
-          element.innerHTML = 'Reconnecting.';
+          element.innerHTML = 'Connecting.';
         }
         else if (this.counter === 2) {
-          element.innerHTML = 'Reconnecting..';
+          element.innerHTML = 'Connecting..';
         }
         else if (this.counter === 3) {
-          element.innerHTML = 'Reconnecting...';
+          element.innerHTML = 'Connecting...';
         }
       }
 

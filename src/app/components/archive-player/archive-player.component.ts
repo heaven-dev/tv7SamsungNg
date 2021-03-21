@@ -66,7 +66,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
   streamRecoverCounter: number = 0;
   paused: boolean = false;
 
-  reconnecting: boolean = false;
+  connecting: boolean = false;
   iconAnimationDuration: number = 1400;
 
   keydownListener: Function;
@@ -184,7 +184,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
         this.player.on('timeupdate', () => {
           const time = this.player.currentTime();
           if (time > 0) {
-            this.reconnecting = false;
+            this.connecting = false;
           }
 
           if (this.controlsVisible && this.player) {
@@ -641,7 +641,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
             // to error page
             this.commonService.cacheValue(errorTextKey, errorReadingVideoStreamText);
 
-            this.reconnecting = false;
+            this.connecting = false;
             this.release();
             this.commonService.toPage(errorPage, null);
           }
@@ -657,7 +657,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
             this.player.dispose();
             this.createPlayer(options);
 
-            this.reconnecting = true;
+            this.connecting = true;
           }
 
           this.streamRetryCounter++;
@@ -668,7 +668,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
           this.streamRetryCounter = 0;
           this.streamRecoverCounter = 0;
 
-          this.reconnecting = false;
+          this.connecting = false;
         }
 
         this.streamPosition = currentTime;
