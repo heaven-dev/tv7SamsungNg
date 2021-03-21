@@ -19,6 +19,7 @@ import {
   RIGHT,
   UP,
   DOWN,
+  STOP,
   OK,
   INFO,
   RETURN,
@@ -217,6 +218,9 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
         this.programIndex++;
         this.updateProgramDetails(false);
       }
+    }
+    else if (keyCode === STOP) {
+      this.exitFromPlayer();
     }
     else if (keyCode === OK || keyCode === INFO) {
       // OK button

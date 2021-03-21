@@ -1,4 +1,4 @@
-# 21.03.2021 11:22
+# 21.03.2021 15:14
 
 ### Bug Fixes
 
@@ -6,6 +6,7 @@
 
 ### Features
 
+* Changed STOP remote key functionality.
 * Reconnecting component renamed.
 * Change to keydown handler and styles of error page.
 * Changes to stream reconnecting functionality.

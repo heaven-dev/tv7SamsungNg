@@ -315,7 +315,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
         this.hideControls();
       }
     }
-    else if (keyCode === PAUSE || keyCode === STOP) {
+    else if (keyCode === PAUSE) {
       if (!this.player.paused()) {
         this.stopTimeout();
         this.updateControls(this.videoCurrentTime);
@@ -324,6 +324,14 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
         this.addProgramDetails();
         this.pausePlayer();
       }
+    }
+    else if (keyCode === STOP) {
+      this.saveVideoStatus();
+
+      this.commonService.screenSaverOn();
+      this.release();
+
+      this.commonService.toPreviousPage(programInfoPage);
     }
     else if (keyCode === PLAY) {
       if (this.player.paused()) {
