@@ -4,7 +4,9 @@ import {
   errorTextKey,
   somethingWentWrongText,
   runOnBrowser,
-  OK
+  OK,
+  RETURN,
+  ESC
 } from '../../helpers/constants';
 
 @Component({
@@ -51,7 +53,7 @@ export class ErrorComponent implements OnInit, AfterViewInit {
   keyDownEventListener(e: any): void {
     const keyCode = e.keyCode;
 
-    if (keyCode === OK) {
+    if (keyCode === OK || keyCode === RETURN || keyCode === ESC) {
       // OK button
       console.log('Button clicked.');
 

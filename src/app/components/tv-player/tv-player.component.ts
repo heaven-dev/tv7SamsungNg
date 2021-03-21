@@ -253,6 +253,7 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
     this.commonService.screenSaverOn();
     this.stopControlsInterval();
     this.stopErrorInterval();
+    this.removeEventListeners();
 
     if (this.player) {
       this.player.dispose();
@@ -263,7 +264,6 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
   exitFromPlayer(): void {
     //this.commonService.showElementById('tvPlayerBusyLoader');
     this.release();
-    this.removeEventListeners();
 
     this.commonService.toPage(tvMainPage, tvMainPage);
   }

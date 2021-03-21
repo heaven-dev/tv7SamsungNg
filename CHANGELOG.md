@@ -1,4 +1,4 @@
-# 21.03.2021 09:54
+# 21.03.2021 10:39
 
 ### Bug Fixes
 
@@ -6,6 +6,7 @@
 
 ### Features
 
+* Change to keydown handler and styles of error page.
 * Changes to stream reconnecting functionality.
 * New version number.
 
