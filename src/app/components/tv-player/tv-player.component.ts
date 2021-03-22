@@ -41,7 +41,7 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
   ongoingProgramIndex: number = 0;
   controlsInterval: any = null;
   errorInterval: any = null;
-  streamPosition: number = 0;
+  streamPosition: number = -1;
   streamRetryCounter: number = 0;
   streamRecoverCounter: number = 0;
 
@@ -344,7 +344,7 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
   addErrorInterval(options: any): void {
     this.errorInterval = setInterval(() => {
       if (this.player) {
-        let currentTime = Math.round(this.player.currentTime());
+        let currentTime = this.player.currentTime();
         console.log('***Stream currentTime: ', currentTime, '***');
 
         if (currentTime <= this.streamPosition) {
