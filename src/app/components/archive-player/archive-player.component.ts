@@ -263,7 +263,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
           if (this.player) {
             videojs.log('Video waiting!');
 
-            //this.waiting = true;
+            this.waiting = true;
             this.player.error(null);
           }
         });
