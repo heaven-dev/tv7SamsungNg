@@ -1,4 +1,4 @@
-# 21.03.2021 15:14
+# 22.03.2021 11:14
 
 ### Bug Fixes
 
@@ -6,6 +6,7 @@
 
 ### Features
 
+* Added videojs event handlers. Change to error handling.
 * Changed STOP remote key functionality.
 * Reconnecting component renamed.
 * Change to keydown handler and styles of error page.

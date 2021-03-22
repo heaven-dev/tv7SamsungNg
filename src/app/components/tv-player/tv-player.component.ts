@@ -46,6 +46,8 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
   streamRecoverCounter: number = 0;
 
   connecting: boolean = false;
+  waiting: boolean = true;
+  ready: boolean = false;
 
   keydownListener: Function;
   visibilityChangeListener: Function = null;
@@ -133,12 +135,12 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
 
         this.player.on('timeupdate', () => {
           if (this.player) {
-            //videojs.log('Video timeupdate!');
+            const time = this.player.currentTime();
+            //videojs.log('Video timeupdate: ', time);
 
-            this.player.error(null);
-
-            if (this.player.currentTime() > 0) {
-              this.connecting = false;
+            if (time > 0) {
+              this.waiting = false;
+              this.ready = true;
             }
           }
         });
@@ -166,8 +168,55 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
             this.player.error(null);
           }
         });
+
+        this.player.on('suspend', () => {
+          videojs.log('Video suspend!');
+        });
+
+        this.player.on('abort', () => {
+          videojs.log('Video abort!');
+        });
+
+        this.player.on('emptied', () => {
+          videojs.log('Video emptied!');
+        });
+
+        this.player.on('stalled', () => {
+          videojs.log('Video stalled!');
+        });
+
+        this.player.on('canplaythrough', () => {
+          videojs.log('Video canplaythrough!');
+        });
+
+        this.player.on('canplay', () => {
+          if (this.player) {
+            videojs.log('Video canplay!');
+          }
+        });
+
+        this.player.on('playing', () => {
+          if (this.player) {
+            videojs.log('Video playing!');
+            this.hideConnectingAndWaiting();
+          }
+        });
+
+        this.player.on('waiting', () => {
+          if (this.player) {
+            videojs.log('Video waiting!');
+
+            //this.waiting = true;
+            this.player.error(null);
+          }
+        });
       });
     }
+  }
+
+  hideConnectingAndWaiting(): void {
+    this.connecting = false;
+    this.waiting = false;
   }
 
   createVideoElement(): void {
@@ -297,28 +346,31 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
         console.log('***Stream currentTime: ', currentTime, '***');
 
         if (currentTime <= this.streamPosition) {
+          if (this.ready && !this.connecting) {
+            this.waiting = true;
+          }
 
           if (this.streamRecoverCounter === 5) {
             // to error page
             this.commonService.cacheValue(errorTextKey, errorReadingTvStreamText);
 
-            this.connecting = false;
+            this.hideConnectingAndWaiting();
             this.release();
             this.commonService.toPage(errorPage, null);
           }
 
           // stream stopped
-          if (this.streamRetryCounter === 3) {
-
+          if (this.streamRetryCounter === 6) {
             console.log('***Recreate player to recover: ', currentTime, '***');
+
+            this.waiting = false;
+            this.connecting = true;
 
             this.streamRetryCounter = 0;
             this.streamRecoverCounter++;
 
             this.player.dispose();
             this.createPlayer(options);
-
-            this.connecting = true;
           }
 
           this.streamRetryCounter++;
@@ -326,8 +378,6 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
         else {
           this.streamRetryCounter = 0;
           this.streamRecoverCounter = 0;
-
-          this.connecting = false;
         }
 
         this.streamPosition = currentTime;

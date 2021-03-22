@@ -1,7 +1,7 @@
 <div id="tvPlayerContainer" class="tvPlayerContainer">
     <app-connecting *ngIf="connecting"></app-connecting>
     
-    <div id="tvPlayerBusyLoader" class="busyLoader busyLoaderBorder tvPlayerBusyLoader">
+    <div id="tvPlayerBusyLoader" class="busyLoader tvPlayerBusyLoader" *ngIf="waiting">
         <div></div>
         <div></div>
         <div></div>

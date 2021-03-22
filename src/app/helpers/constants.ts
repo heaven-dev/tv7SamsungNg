@@ -144,7 +144,7 @@ export const archiveCacheExpTimeMs = 1800000;
 
 export const mainPageUpdateInterval = 10000;
 export const tvPlayerControlsUpdateInterval = 10000;
-export const streamErrorInterval = 5000;
+export const streamErrorInterval = 2500;
 export const archivePlayerControlsVisibleTimeout = 6000;
 
 export const programListMinSize = 22;

@@ -1,7 +1,7 @@
 <div class="archivePlayerContainer" [ngStyle]="{'height': windowHeight + 'px'}">
     <app-connecting *ngIf="connecting"></app-connecting>
 
-    <div id="archivePlayerBusyLoader" class="busyLoader busyLoaderBorder archivePlayerBusyLoader">
+    <div id="archivePlayerBusyLoader" class="busyLoader archivePlayerBusyLoader" *ngIf="waiting">
         <div></div>
         <div></div>
         <div></div>

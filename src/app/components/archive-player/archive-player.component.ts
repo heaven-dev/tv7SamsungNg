@@ -67,6 +67,8 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
   paused: boolean = false;
 
   connecting: boolean = false;
+  waiting: boolean = true;
+  ready: boolean = false;
   iconAnimationDuration: number = 1400;
 
   keydownListener: Function;
@@ -170,6 +172,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
         this.player.on('play', () => {
           videojs.log('Video play!');
+
           this.player.error(null);
         });
 
@@ -184,7 +187,8 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
         this.player.on('timeupdate', () => {
           const time = this.player.currentTime();
           if (time > 0) {
-            this.connecting = false;
+            this.waiting = false;
+            this.ready = true;
           }
 
           if (this.controlsVisible && this.player) {
@@ -219,8 +223,55 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
             this.saveVideoStatus();
           }
         });
+
+        this.player.on('suspend', () => {
+          videojs.log('Video suspend!');
+        });
+
+        this.player.on('abort', () => {
+          videojs.log('Video abort!');
+        });
+
+        this.player.on('emptied', () => {
+          videojs.log('Video emptied!');
+        });
+
+        this.player.on('stalled', () => {
+          videojs.log('Video stalled!');
+        });
+
+        this.player.on('canplaythrough', () => {
+          videojs.log('Video canplaythrough!');
+        });
+
+        this.player.on('canplay', () => {
+          if (this.player) {
+            videojs.log('Video canplay!');
+          }
+        });
+
+        this.player.on('playing', () => {
+          if (this.player) {
+            videojs.log('Video playing!');
+            this.hideConnectingAndWaiting();
+          }
+        });
+
+        this.player.on('waiting', () => {
+          if (this.player) {
+            videojs.log('Video waiting!');
+
+            //this.waiting = true;
+            this.player.error(null);
+          }
+        });
       });
     }
+  }
+
+  hideConnectingAndWaiting(): void {
+    this.connecting = false;
+    this.waiting = false;
   }
 
   createVideoElement(): void {
@@ -644,28 +695,32 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
         if (currentTime <= this.streamPosition) {
           console.log('***Video stopped: ', currentTime, '***');
+          if (this.ready && !this.connecting) {
+            this.waiting = true;
+          }
 
           if (this.streamRecoverCounter === 5) {
             // to error page
             this.commonService.cacheValue(errorTextKey, errorReadingVideoStreamText);
 
-            this.connecting = false;
+            this.hideConnectingAndWaiting();
             this.release();
             this.commonService.toPage(errorPage, null);
           }
 
           // stream stopped
-          if (this.streamRetryCounter === 3) {
+          if (this.streamRetryCounter === 6) {
 
             console.log('***Recreate player to recover: ', currentTime, '***');
+
+            this.waiting = false;
+            this.connecting = true;
 
             this.streamRetryCounter = 0;
             this.streamRecoverCounter++;
 
             this.player.dispose();
             this.createPlayer(options);
-
-            this.connecting = true;
           }
 
           this.streamRetryCounter++;
@@ -675,8 +730,6 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
           this.streamRetryCounter = 0;
           this.streamRecoverCounter = 0;
-
-          this.connecting = false;
         }
 
         this.streamPosition = currentTime;
