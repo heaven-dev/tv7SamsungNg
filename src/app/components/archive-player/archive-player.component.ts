@@ -173,6 +173,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
         this.player.on('play', () => {
           videojs.log('Video play!');
 
+          this.ready = true;
           this.player.error(null);
         });
 
@@ -254,6 +255,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
           if (this.player) {
             videojs.log('Video playing!');
             this.hideConnectingAndWaiting();
+            this.ready = true;
           }
         });
 

@@ -129,6 +129,7 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
           if (this.player) {
             videojs.log('Video play!');
 
+            this.ready = true;
             this.player.error(null);
           }
         });
@@ -199,6 +200,7 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
           if (this.player) {
             videojs.log('Video playing!');
             this.hideConnectingAndWaiting();
+            this.ready = true;
           }
         });
 
