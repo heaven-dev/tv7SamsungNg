@@ -68,7 +68,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
   connecting: boolean = false;
   waiting: boolean = true;
-  ready: boolean = false;
+
   iconAnimationDuration: number = 1400;
 
   keydownListener: Function;
@@ -173,7 +173,6 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
         this.player.on('play', () => {
           videojs.log('Video play!');
 
-          this.ready = true;
           this.player.error(null);
         });
 
@@ -187,9 +186,9 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
         this.player.on('timeupdate', () => {
           const time = this.player.currentTime();
+
           if (time > 0) {
             this.waiting = false;
-            this.ready = true;
           }
 
           if (this.controlsVisible && this.player) {
@@ -255,7 +254,6 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
           if (this.player) {
             videojs.log('Video playing!');
             this.hideConnectingAndWaiting();
-            this.ready = true;
           }
         });
 
@@ -693,27 +691,15 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     this.errorInterval = setInterval(() => {
       if (this.player && !this.paused) {
         let currentTime = this.player.currentTime();
-        console.log('***Stream currentTime: ', currentTime, '***');
+        //console.log('***Stream currentTime: ', currentTime, '***');
 
         if (currentTime <= this.streamPosition) {
-          console.log('***Video stopped: ', currentTime, '***');
-          if (this.ready && !this.connecting) {
-            this.waiting = true;
-          }
-
-          if (this.streamRecoverCounter === 5) {
-            // to error page
-            this.commonService.cacheValue(errorTextKey, errorReadingVideoStreamText);
-
-            this.hideConnectingAndWaiting();
-            this.release();
-            this.commonService.toPage(errorPage, null);
-          }
+          //console.log('***Video stopped: ', currentTime, '***');
 
           // stream stopped
-          if (this.streamRetryCounter === 6) {
-
-            console.log('***Recreate player to recover: ', currentTime, '***');
+          const retryValue = this.streamRecoverCounter === 0 ? 20 : 5;
+          if (this.streamRetryCounter === retryValue) {
+            //console.log('***Recreate player to recover: ', currentTime, '***');
 
             this.waiting = false;
             this.connecting = true;
@@ -726,6 +712,18 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
           }
 
           this.streamRetryCounter++;
+
+          if (this.streamRetryCounter === 3) {
+            this.waiting = true;
+          }
+
+          if (this.streamRecoverCounter === 10) {
+            // to error page
+            this.commonService.cacheValue(errorTextKey, errorReadingVideoStreamText);
+
+            this.release();
+            this.commonService.toPage(errorPage, null);
+          }
         }
         else {
           this.saveVideoStatus();

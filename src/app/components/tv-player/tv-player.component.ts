@@ -47,7 +47,6 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
 
   connecting: boolean = false;
   waiting: boolean = true;
-  ready: boolean = false;
 
   keydownListener: Function;
   visibilityChangeListener: Function = null;
@@ -129,7 +128,6 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
           if (this.player) {
             videojs.log('Video play!');
 
-            this.ready = true;
             this.player.error(null);
           }
         });
@@ -141,7 +139,6 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
 
             if (time > 0) {
               this.waiting = false;
-              this.ready = true;
             }
           }
         });
@@ -200,7 +197,6 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
           if (this.player) {
             videojs.log('Video playing!');
             this.hideConnectingAndWaiting();
-            this.ready = true;
           }
         });
 
@@ -345,25 +341,15 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
     this.errorInterval = setInterval(() => {
       if (this.player) {
         let currentTime = this.player.currentTime();
-        console.log('***Stream currentTime: ', currentTime, '***');
+        //console.log('***Stream currentTime: ', currentTime, '***');
 
         if (currentTime <= this.streamPosition) {
-          if (this.ready && !this.connecting) {
-            this.waiting = true;
-          }
-
-          if (this.streamRecoverCounter === 5) {
-            // to error page
-            this.commonService.cacheValue(errorTextKey, errorReadingTvStreamText);
-
-            this.hideConnectingAndWaiting();
-            this.release();
-            this.commonService.toPage(errorPage, null);
-          }
+          //console.log('***Stream stopped: ', currentTime, '***');
 
           // stream stopped
-          if (this.streamRetryCounter === 6) {
-            console.log('***Recreate player to recover: ', currentTime, '***');
+          const retryValue = this.streamRecoverCounter === 0 ? 20 : 5;
+          if (this.streamRetryCounter === retryValue) {
+            //console.log('***Recreate player to recover: ', currentTime, '***');
 
             this.waiting = false;
             this.connecting = true;
@@ -376,6 +362,19 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
           }
 
           this.streamRetryCounter++;
+
+          if (this.streamRetryCounter === 3) {
+            this.waiting = true;
+          }
+
+          if (this.streamRecoverCounter === 10) {
+            // to error page
+            this.commonService.cacheValue(errorTextKey, errorReadingTvStreamText);
+
+            this.hideConnectingAndWaiting();
+            this.release();
+            this.commonService.toPage(errorPage, null);
+          }
         }
         else {
           this.streamRetryCounter = 0;
