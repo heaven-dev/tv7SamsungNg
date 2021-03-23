@@ -721,6 +721,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
             // to error page
             this.commonService.cacheValue(errorTextKey, errorReadingVideoStreamText);
 
+            this.hideConnectingAndWaiting();
             this.release();
             this.commonService.toPage(errorPage, null);
           }
