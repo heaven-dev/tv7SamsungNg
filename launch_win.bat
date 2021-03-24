@@ -14,8 +14,8 @@ set BUILT_APP_NAME=TaivasTV7.wgt
 
 npm run build-fi
 
-CALL %TIZEN_EXE% build-web -e %EXCLUDE_FROM_BUILD% -- %WORKING_DIR%/tizen/dist/fi -out %WORKING_DIR%/tizen/dist/fi/dist/build
-CALL %TIZEN_EXE% package -t wgt -s MyProfile -- %WORKING_DIR%/tizen/dist/fi/dist/build -o %WORKING_DIR%/tizen/dist/fi/dist/app
+CALL %TIZEN_EXE% build-web -e %EXCLUDE_FROM_BUILD% -- %WORKING_DIR%/tizen/dist/%LANG% -out %WORKING_DIR%/tizen/dist/%LANG%/dist/build
+CALL %TIZEN_EXE% package -t wgt -s MyProfile -- %WORKING_DIR%/tizen/dist/%LANG%/dist/build -o %WORKING_DIR%/tizen/dist/%LANG%/dist/app
 
-CALL %TIZEN_EXE% install -- %WORKING_DIR%/tizen/dist/fi/dist/app -n %BUILT_APP_NAME% -t %DEVICE_NAME%
+CALL %TIZEN_EXE% install -- %WORKING_DIR%/tizen/dist/%LANG%/dist/app -n %BUILT_APP_NAME% -t %DEVICE_NAME%
 CALL %TIZEN_EXE% run -p %APP_ID% -t %DEVICE_NAME%
