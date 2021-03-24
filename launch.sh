@@ -7,6 +7,7 @@
 TIZEN_EXE=~/tizen-studio/tools/ide/bin/tizen
 PROFILE_DIR=~/tizen-studio-data/profile
 EMULATOR6='T-samsung-6.0-x86'
+EMULATOR4='T-samsung-4.0-x86'
 EMULATOR3='t-0123-1-emulator-312'
 TV='UE43RU7475UXXC'
 DEVICE_NAME=${EMULATOR6}
@@ -18,7 +19,7 @@ EXCLUDE_FROM_BUILD='.project .tproject'
 LANG='fi'
 
 if [ "$#" -ne 2 ]; then
-  echo 'Usage: ./run.sh <fi|et|ru|sv> <e6|e3|tv>'
+  echo 'Usage: ./run.sh <fi|et|ru|sv> <e6|e4|e3|tv>'
   echo 'For example run fi locale on tizen 6 emulator: "./run.sh fi e6"'
   exit 1
 fi
@@ -59,6 +60,11 @@ then
     DEVICE_NAME=${EMULATOR6}
 fi
 
+if [ $2 == 'e4' ]
+then
+    DEVICE_NAME=${EMULATOR4}
+fi
+
 if [ $2 == 'e3' ]
 then
     DEVICE_NAME=${EMULATOR3}
@@ -74,8 +80,8 @@ echo 'BUILT_APP_NAME: ' ${BUILT_APP_NAME}
 
 npm run build-${LANG}
 
-rm -rf ${PROFILE_DIR}/profiles.xml
-cp ${PROFILE_DIR}/profiles.xml.bu ${PROFILE_DIR}/profiles.xml
+#rm -rf ${PROFILE_DIR}/profiles.xml
+#cp ${PROFILE_DIR}/profiles.xml.bu ${PROFILE_DIR}/profiles.xml
 
 ${TIZEN_EXE} build-web -e ${EXCLUDE_FROM_BUILD} -- ./tizen/dist/${LANG} -out dist/build
 ${TIZEN_EXE} package -t wgt -s MyProfile -- tizen/dist/${LANG}/dist/build -o tizen/dist/${LANG}/dist/app
