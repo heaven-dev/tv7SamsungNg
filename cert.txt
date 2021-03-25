@@ -1,0 +1,17 @@
+# Generate an author certificate
+# ~/tizen-studio/tools/ide/bin/tizen certificate -a MyTizen -p 1234 -c FI -s Helsinki -ct Helsinki -o Tizen -n user -e user@tv7.fi -f usercert
+
+# Add new security profile
+# ~/tizen-studio/tools/ide/bin/tizen security-profiles add -n MyProfile -a ~/tizen-studio-data/keystore/author/usercert.p12 -p 1234
+
+# Display security profile list
+# ~/tizen-studio/tools/ide/bin/tizen security-profiles list
+
+# Display the details for a security profile
+# ~/tizen-studio/tools/ide/bin/tizen security-profiles list -n MyProfile
+
+Above CLI command details: https://developer.tizen.org/development/tizen-studio/web-tools/cli
+
+
+
+# Samsung distributor pw: tizenpkcs12passfordsigner
