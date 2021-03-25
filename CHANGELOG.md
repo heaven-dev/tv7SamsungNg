@@ -1,3 +1,15 @@
+# 25.03.2021 12:03
+
+### Bug Fixes
+
+* none
+
+### Features
+
+* Changes to archive and tv player components.
+* New version number.
+
+
 # 23.03.2021 08:03
 
 ### Bug Fixes

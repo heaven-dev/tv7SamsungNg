@@ -62,8 +62,8 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
   timeout: any = null;
   errorInterval: any = null;
   streamPosition: number = -1;
-  streamRetryCounter: number = 0;
-  streamRecoverCounter: number = 0;
+  errorCounter: number = 0;
+  recoveryDone: boolean = false
   paused: boolean = false;
 
   connecting: boolean = false;
@@ -237,7 +237,12 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
         });
 
         this.player.on('stalled', () => {
-          videojs.log('Video stalled!');
+          if (this.player) {
+            videojs.log('Video stalled!');
+
+            this.waiting = true;
+            this.player.error(null);
+          }
         });
 
         this.player.on('canplaythrough', () => {
@@ -254,6 +259,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
           if (this.player) {
             videojs.log('Video playing!');
             this.hideConnectingAndWaiting();
+            this.recoveryDone = false;
           }
         });
 
@@ -688,49 +694,50 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
   }
 
   addErrorInterval(options: any): void {
+    let vStatus = 0;
     this.errorInterval = setInterval(() => {
       if (this.player && !this.paused) {
         let currentTime = this.player.currentTime();
         //console.log('***Stream currentTime: ', currentTime, '***');
 
         if (currentTime <= this.streamPosition) {
-          //console.log('***Video stopped: ', currentTime, '***');
+          //console.log('***Stream stopped: ', currentTime, '***');
+          this.errorCounter++;
 
-          // stream stopped
-          const retryValue = this.streamRecoverCounter === 0 ? 20 : 5;
-          if (this.streamRetryCounter === retryValue) {
-            //console.log('***Recreate player to recover: ', currentTime, '***');
-
-            this.waiting = false;
-            this.connecting = true;
-
-            this.streamRetryCounter = 0;
-            this.streamRecoverCounter++;
-
-            this.player.dispose();
-            this.createPlayer(options);
-          }
-
-          this.streamRetryCounter++;
-
-          if (this.streamRetryCounter === 3) {
+          if (this.errorCounter === 5) {
             this.waiting = true;
           }
 
-          if (this.streamRecoverCounter === 10) {
-            // to error page
-            this.commonService.cacheValue(errorTextKey, errorReadingVideoStreamText);
+          // stream stopped
+          if (this.errorCounter >= 45) {
+            if (!this.recoveryDone) {
+              //console.log('***Recreate player to recover: ', currentTime, '***');
 
-            this.hideConnectingAndWaiting();
-            this.release();
-            this.commonService.toPage(errorPage, null);
+              this.waiting = false;
+              this.connecting = true;
+              this.errorCounter = 0;
+              this.recoveryDone = true;
+
+              this.player.dispose();
+              this.createPlayer(options);
+            }
+            else {
+              // to error page
+              this.commonService.cacheValue(errorTextKey, errorReadingVideoStreamText);
+
+              this.hideConnectingAndWaiting();
+              this.release();
+              this.commonService.toPage(errorPage, null);
+            }
           }
         }
         else {
-          this.saveVideoStatus();
+          if (currentTime - vStatus >= 10) {
+            this.saveVideoStatus();
+            vStatus = currentTime;
+          }
 
-          this.streamRetryCounter = 0;
-          this.streamRecoverCounter = 0;
+          this.errorCounter = 0;
         }
 
         this.streamPosition = currentTime;
