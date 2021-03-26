@@ -2,7 +2,7 @@
     "channelName": "Небеса ТВ7",
     "tizenFolder": "tizen",
     "configXmlId": "https://www.nebesatv7.com",
-    "configXmlVersion": "2.1.2",
+    "configXmlVersion": "2.1.3",
     "configXmlName": "NebesaTV7",
     "configXmlPackage": "eA33rRRHbq"
 }

@@ -11,6 +11,7 @@ import {
   programScheduleDataKey,
   tvPlayerControlsUpdateInterval,
   streamErrorInterval,
+  streamErrorRecoveryCount,
   tvMainPage,
   errorPage,
   errorTextKey,
@@ -43,7 +44,7 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
   errorInterval: any = null;
   streamPosition: number = -1;
   errorCounter: number = 0;
-  recoveryDone: boolean = false;
+  errorRecoveryCounter: number = 0;
 
   connecting: boolean = false;
   waiting: boolean = true;
@@ -202,7 +203,6 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
           if (this.player) {
             videojs.log('Video playing!');
             this.hideConnectingAndWaiting();
-            this.recoveryDone = false;
           }
         });
 
@@ -358,19 +358,23 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
           }
 
           // stream stopped
-          if (this.errorCounter >= 45) {
-            if (!this.recoveryDone) {
-              //console.log('***Recreate player to recover: ', currentTime, '***');
+          if (this.errorRecoveryCounter < streamErrorRecoveryCount) {
+            const retryTime = this.errorRecoveryCounter === 0 ? 45 : 20;
+
+            if (this.errorCounter >= retryTime) {
+              console.log('Recover. Error counter: ', this.errorCounter);
 
               this.waiting = false;
               this.connecting = true;
               this.errorCounter = 0;
-              this.recoveryDone = true;
+              this.errorRecoveryCounter++;
 
               this.player.dispose();
               this.createPlayer(options);
             }
-            else {
+          }
+          else {
+            if (this.errorCounter >= 20) {
               // to error page
               this.commonService.cacheValue(errorTextKey, errorReadingTvStreamText);
 
@@ -382,6 +386,7 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
         }
         else {
           this.errorCounter = 0;
+          this.errorRecoveryCounter = 0;
         }
 
         this.streamPosition = currentTime;
