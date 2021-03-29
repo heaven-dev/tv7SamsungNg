@@ -4,9 +4,12 @@ import {
   errorTextKey,
   somethingWentWrongText,
   runOnBrowser,
+  landingPage,
   OK,
   RETURN,
-  ESC
+  ESC,
+  LEFT,
+  RIGHT
 } from '../../helpers/constants';
 
 @Component({
@@ -43,26 +46,39 @@ export class ErrorComponent implements OnInit, AfterViewInit {
         elem.innerHTML = somethingWentWrongText;
       }
 
-      let closeButton = this.commonService.getElementById('closeButton');
-      if (closeButton) {
-        closeButton.focus();
-      }
+      this.commonService.focusToElement('restartButton');
     }
   }
 
   keyDownEventListener(e: any): void {
     const keyCode = e.keyCode;
+    const contentId = e.target.id;
 
-    if (keyCode === OK || keyCode === RETURN || keyCode === ESC) {
-      // OK button
-      console.log('Button clicked.');
-
-      if (!runOnBrowser) {
-        this.removeKeydownEventListener();
-
-        // @ts-ignore
-        tizen.application.getCurrentApplication().exit();
+    if (keyCode === LEFT) {
+      // LEFT arrow
+      if (contentId === 'exitButton') {
+        this.commonService.focusToElement('restartButton');
       }
+    }
+    else if (keyCode === RIGHT) {
+      // RIGHT arrow
+      if (contentId === 'restartButton') {
+        this.commonService.focusToElement('exitButton');
+      }
+    }
+    else if (keyCode === OK) {
+      // OK button
+      if (contentId === 'restartButton') {
+        this.removeKeydownEventListener();
+        this.commonService.toPage(landingPage, null);
+      }
+      else if (contentId === 'exitButton') {
+        this.exitFromApp();
+      }
+    }
+    else if (keyCode === RETURN || keyCode === ESC) {
+      // RETURN button
+      this.exitFromApp();
     }
   }
 
@@ -70,6 +86,16 @@ export class ErrorComponent implements OnInit, AfterViewInit {
     if (this.keydownListener) {
       this.keydownListener();
       this.keydownListener = null;
+    }
+  }
+
+  exitFromApp(): void {
+    console.log('Exit from app!');
+
+    this.removeKeydownEventListener();
+    if (!runOnBrowser) {
+      // @ts-ignore
+      tizen.application.getCurrentApplication().exit();
     }
   }
 }

@@ -1,3 +1,15 @@
+# 29.03.2021 14:32
+
+### Bug Fixes
+
+* none
+
+### Features
+
+* Added restart button to error page.
+* New version number.
+
+
 # 26.03.2021 09:10
 
 ### Bug Fixes

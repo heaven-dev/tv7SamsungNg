@@ -28,9 +28,11 @@
 	margin-top: 80px;
 }
 
-.closeButton  {
+.restartButton,
+.exitButton  {
+	width: 240px;
     margin-right: 20px;
-	padding: 6px 60px;
+	padding: 6px 0px;
 	border: 5px solid #777777;
 	border-radius: 60px;
 	background-color: #777777;
@@ -42,7 +44,8 @@
 	cursor: pointer;
 }
 
-.closeButton:focus {
+.restartButton:focus,
+.exitButton:focus {
 	background-color: #0099CC;
 	color: #ffffff;
 	border: 5px solid #0099CC;
