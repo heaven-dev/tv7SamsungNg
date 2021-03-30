@@ -14,6 +14,7 @@ import {
   errorPage,
   errorTextKey,
   errorReadingVideoStreamText,
+  videoCouldNotBeLoadedText,
   subtitlesUrlPart,
   archivePlayerControlsVisibleTimeout,
   streamErrorInterval,
@@ -220,8 +221,14 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
         this.player.on('error', () => {
           if (this.player) {
-            this.player.error(null);
-            this.saveVideoStatus();
+            const error = this.player.error();
+            if (error && error.code === 4) {
+              // media error source not supported - to error page
+              this.commonService.cacheValue(errorTextKey, videoCouldNotBeLoadedText);
+
+              this.release();
+              this.commonService.toPage(errorPage, null);
+            }
           }
         });
 

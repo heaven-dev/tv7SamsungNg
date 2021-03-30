@@ -139,6 +139,8 @@ export const networkRequestFailedText = 'Network request failed :-(';
 export const networkRequestTimeoutText = 'Network request timeout :-(';
 export const errorReadingTvStreamText = 'Error reading tv stream from server :-(';
 export const errorReadingVideoStreamText = 'Error reading video stream from server :-(';
+export const videoCouldNotBeLoadedText = 'The video could not be loaded :-(';
+export const streamCouldNotBeLoadedText = 'The stream could not be loaded :-(';
 
 export const archiveCacheExpTimeMs = 1800000;
 

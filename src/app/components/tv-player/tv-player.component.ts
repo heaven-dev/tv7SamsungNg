@@ -16,6 +16,7 @@ import {
   errorPage,
   errorTextKey,
   errorReadingTvStreamText,
+  streamCouldNotBeLoadedText,
   LEFT,
   RIGHT,
   UP,
@@ -164,7 +165,14 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
           if (this.player) {
             videojs.log('Video error!');
 
-            this.player.error(null);
+            const error = this.player.error();
+            if (error && error.code === 4) {
+              // media error source not supported - to error page
+              this.commonService.cacheValue(errorTextKey, streamCouldNotBeLoadedText);
+
+              this.release();
+              this.commonService.toPage(errorPage, null);
+            }
           }
         });
 

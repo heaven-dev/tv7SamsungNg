@@ -1,3 +1,15 @@
+# 30.03.2021 12:02
+
+### Bug Fixes
+
+* none
+
+### Features
+
+* Added media error handler to archive and tv player.
+* New version number.
+
+
 # 29.03.2021 14:32
 
 ### Bug Fixes
