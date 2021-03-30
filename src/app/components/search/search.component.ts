@@ -385,4 +385,11 @@ export class SearchComponent implements OnInit, AfterViewInit {
       this.commonService.focusToElement(defaultRowCol);
     });
   }
+
+  handleInputFocus(event: any): void {
+    if (event) {
+      event.target.blur();
+    }
+    this.commonService.focusToElement(defaultRowCol);
+  }
 }
