@@ -166,8 +166,8 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
             videojs.log('Video error!');
 
             const error = this.player.error();
-            if (error && error.code === 4) {
-              // media error source not supported - to error page
+            if (error && (error.code === 1 || error.code === 4)) {
+              // media error (abort or source not supported) - to error page
               this.commonService.cacheValue(errorTextKey, streamCouldNotBeLoadedText);
 
               this.release();
