@@ -30,6 +30,29 @@
         <div id="statusBarContainer" class="apStatusBarContainer">
             <div id="statusBar" class="apStatusBar"></div>
         </div>
+
+        <div id="arrowDownContainer" class="apArrowDownContainer">
+            <img id="arrowDownIcon" class="apArrowDownIcon" src="assets/arrow_down.svg" alt="" />
+        </div>
+    </div>
+
+    <div id="otherVideos" class="apOtherVideos mainContentAnimationFadeIn">
+        <div id="gradient" class="apGradient"></div>
+
+        <div class="iconVideosContainer">
+            <div id="arrowUpContainer" class="apArrowUpContainer">
+                <img id="arrowUpIcon" class="apArrowUpIcon" src="assets/arrow_up.svg" alt="" />
+            </div>
+
+            <div id="videosContainer" class="apVideosContainer">
+                <div id="0_{{i}}" class="apVideoItem" *ngFor="let n of newestPrograms; let i = index" [ngStyle]="{'min-width': programItemWidth + 'px'}" tabindex="0">
+                    <div class="apProgramDate">{{n.broadcast_date_time}}</div>
+                    <div class="apProgramTime">{{n.duration_time}}</div>
+                    <img class="apProgramImg" [ngStyle]="{'width': programItemWidth + 'px', 'height': programItemHeight + 'px'}" src="{{n.image_path}}" onerror="if (this.src != 'assets/tv7logo.png') this.src='assets/tv7logo.png';" alt="" />
+                    <div class="apProgramDesc">{{n.name_desc}}</div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id="playIconContainer" class="apPlayPauseIconContainer">

@@ -14,7 +14,7 @@ const appName: string = 'Taivas TV7';
 /**
  * Updated by gulp script during a build of the app.
  */
-const appVersion: string = '2.1.7';
+const appVersion: string = '2.1.8';
 
 export const localeFi: string = 'fi';
 export const localeEt: string = 'et';

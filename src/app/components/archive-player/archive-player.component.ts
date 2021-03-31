@@ -19,6 +19,7 @@ import {
   archivePlayerControlsVisibleTimeout,
   streamErrorInterval,
   streamErrorRecoveryCount,
+  defaultRowCol,
   videoUrlPart,
   _LINK_PATH_,
   pnidParam,
@@ -42,6 +43,7 @@ import {
 } from '../../helpers/constants';
 
 import videojs from 'video.js';
+import anime from 'animejs/lib/anime.es.js';
 
 @Component({
   selector: 'app-archive-player',
@@ -58,7 +60,8 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
   selectedProgram: any = null;
   videoStatus: any = null;
   translation: any = null;
-  controlsVisible: boolean = false;
+  archiveLanguage: string = null;
+  controlsVisible: number = 0; // 0 = nothing visible, 1 = controls visible, 2 = videos visible
   seeking: boolean = false;
   seekingStep: number = 10;
   timeout: any = null;
@@ -67,6 +70,11 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
   errorCounter: number = 0;
   errorRecoveryCounter: number = 0;
   paused: boolean = false;
+  newestPrograms: any = null;
+  programItemWidth: number = 0;
+  programItemHeight: number = 0;
+  animationOngoing: boolean = false;
+  rightMargin: number = 0;
 
   connecting: boolean = false;
   waiting: boolean = true;
@@ -76,6 +84,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
   keydownListener: Function;
   visibilityChangeListener: Function = null;
 
+  playerOptions: any = null;
   player: videojs.Player;
 
   constructor(
@@ -92,11 +101,13 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
     this.selectedProgram = this.commonService.stringToJson(this.commonService.getValueFromCache(selectedArchiveProgramKey));
 
-    const archiveLanguage = this.localeService.getArchiveLanguage();
-    const videoUrl = this.getVideoUrl(archiveLanguage);
-    const langTag = this.getLanguageTag(archiveLanguage);
+    this.archiveLanguage = this.localeService.getArchiveLanguage();
 
-    let playerOptions = {
+    const videoUrl = this.getVideoUrl(this.archiveLanguage);
+
+    this.readNewestPrograms(this.commonService.getTodayDate(), 30, 0, null);
+
+    this.playerOptions = {
       preload: 'auto',
       autoplay: true,
       muted: false,
@@ -120,9 +131,9 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     const platformVersion = this.commonService.getValueFromCache(platformVersionKey);
     if (platformVersion) {
       if (videoNotOverrideNative.indexOf(platformVersion) !== -1) {
-        playerOptions.html5.vhs.overrideNative = false;
-        playerOptions.html5.nativeAudioTracks = true;
-        playerOptions.html5.nativeVideoTracks = true;
+        this.playerOptions.html5.vhs.overrideNative = false;
+        this.playerOptions.html5.nativeAudioTracks = true;
+        this.playerOptions.html5.nativeVideoTracks = true;
       }
     }
 
@@ -134,20 +145,25 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
       this.visibilityChange(e);
     });
 
-    this.preparePlayer(playerOptions, langTag);
+    this.preparePlayer();
 
-    this.addErrorInterval(playerOptions);
+    this.addErrorInterval();
+
+    this.programItemWidth = this.calculateItemWidth() - 20;
+    this.programItemHeight = this.calculateRowHeight() - 20;
   }
 
   ngOnDestroy(): void {
     this.release();
   }
 
-  preparePlayer(options: any, langTag: string): void {
+  preparePlayer(): void {
+    const langTag = this.getLanguageTag(this.archiveLanguage);
+
     this.archiveService.getTranslation(this.selectedProgram.id, langTag, (data: any) => {
       if (data !== null) {
         this.translation = data;
-        this.createPlayer(options);
+        this.createPlayer();
       }
       else {
         this.removeEventListeners();
@@ -157,8 +173,8 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     });
   }
 
-  createPlayer(options: any): void {
-    console.log('video.js options: ', options);
+  createPlayer(): void {
+    console.log('video.js options: ', this.playerOptions);
 
     this.createVideoElement();
 
@@ -170,7 +186,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
     const videoElem = this.commonService.getElementById('videoPlayer');
     if (videoElem) {
-      this.player = videojs(videoElem, options, () => {
+      this.player = videojs(videoElem, this.playerOptions, () => {
 
         this.player.on('play', () => {
           videojs.log('Video play!');
@@ -193,7 +209,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
             this.waiting = false;
           }
 
-          if (this.controlsVisible && this.player) {
+          if (this.controlsVisible === 1 && this.player) {
             if (!this.videoDuration) {
               this.videoDuration = this.player.duration();
             }
@@ -314,16 +330,36 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
   keyDownEventListener(e: any): void {
     const keyCode = e.keyCode;
+    const contentId = e.target.id;
+
+    let row = null;
+    let col = null;
+
+    if (this.controlsVisible === 2) {
+      const split = contentId.split('_');
+      if (split.length > 1) {
+        row = parseInt(split[0]);
+        col = parseInt(split[1]);
+      }
+    }
 
     if (keyCode === UP) {
       // UP arrow
+      if (this.controlsVisible === 2) {
+        this.hideOtherVideos();
+        this.addTimeout();
+      }
     }
     else if (keyCode === DOWN) {
       // DOWN arrow
+      if (this.controlsVisible === 1) {
+        this.stopTimeout();
+        this.showOtherVideos();
+      }
     }
     else if (keyCode === LEFT || keyCode === REWIND) {
       // LEFT arrow
-      if (this.controlsVisible) {
+      if (this.controlsVisible === 1) {
         if (!this.seeking && this.player) {
           this.stopTimeout();
 
@@ -340,10 +376,20 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
         this.updateControls(this.videoCurrentTime);
       }
+      else if (this.controlsVisible === 2) {
+        const newCol = col - 1;
+        const newFocus = row + '_' + newCol;
+        if (this.commonService.elementExist(newFocus) && !this.animationOngoing) {
+          this.animationOngoing = true;
+
+          this.rowMoveLeftRight(row, newCol, false);
+          this.commonService.focusToElement(newFocus);
+        }
+      }
     }
     else if (keyCode === RIGHT || keyCode === FORWARD) {
       // RIGHT arrow
-      if (this.controlsVisible) {
+      if (this.controlsVisible === 1) {
         if (!this.seeking && this.player) {
           this.stopTimeout();
 
@@ -360,27 +406,39 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
         this.updateControls(this.videoCurrentTime);
       }
+      else if (this.controlsVisible === 2) {
+        const newCol = col + 1;
+        const newFocus = row + '_' + newCol;
+        if (this.commonService.elementExist(newFocus) && !this.animationOngoing) {
+          this.animationOngoing = true;
+
+          this.rowMoveLeftRight(row, newCol, true);
+          this.commonService.focusToElement(newFocus);
+        }
+      }
     }
     else if (keyCode === PLAYPAUSE) {
-      if (!this.player.paused()) {
-        this.stopTimeout();
-        this.updateControls(this.videoCurrentTime);
+      if (this.controlsVisible === 1) {
+        if (!this.player.paused()) {
+          this.stopTimeout();
+          this.updateControls(this.videoCurrentTime);
 
-        this.showControls();
-        this.addProgramDetails();
-        this.pausePlayer();
-      }
-      else {
-        if (this.seeking) {
-          this.player.currentTime(this.videoCurrentTime);
+          this.showControls();
+          this.addProgramDetails();
+          this.pausePlayer();
         }
+        else {
+          if (this.seeking) {
+            this.player.currentTime(this.videoCurrentTime);
+          }
 
-        this.playPlayer();
-        this.hideControls();
+          this.playPlayer();
+          this.hideControls();
+        }
       }
     }
     else if (keyCode === PAUSE) {
-      if (!this.player.paused()) {
+      if (this.controlsVisible === 1 && !this.player.paused()) {
         this.stopTimeout();
         this.updateControls(this.videoCurrentTime);
 
@@ -398,7 +456,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
       this.commonService.toPreviousPage(programInfoPage);
     }
     else if (keyCode === PLAY) {
-      if (this.player.paused()) {
+      if (this.controlsVisible === 1 && this.player.paused()) {
         if (this.seeking) {
           this.player.currentTime(this.videoCurrentTime);
         }
@@ -409,7 +467,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     }
     else if (keyCode === OK) {
       // OK button
-      if (this.controlsVisible) {
+      if (this.controlsVisible === 1) {
         this.stopTimeout();
 
         if (this.seeking) {
@@ -428,7 +486,24 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
           }
         }
       }
-      else {
+      else if (this.controlsVisible === 2) {
+        if (this.newestPrograms && this.newestPrograms[col]) {
+          this.selectedProgram = this.newestPrograms[col];
+          this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(this.selectedProgram));
+
+          this.playerOptions.sources.src = this.getVideoUrl(this.archiveLanguage);
+
+          this.commonService.deletePageStates();
+          this.commonService.removeOriginPage();
+
+          this.hideOtherVideos();
+          this.hideControls();
+
+          this.player.dispose();
+          this.preparePlayer();
+        }
+      }
+      else if (this.controlsVisible === 0) {
         this.addTimeout();
         this.updateControls(this.videoCurrentTime);
 
@@ -437,7 +512,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
       }
     }
     else if (keyCode === INFO) {
-      if (!this.controlsVisible) {
+      if (this.controlsVisible === 0) {
         this.addTimeout();
         this.updateControls(this.videoCurrentTime);
 
@@ -447,7 +522,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     }
     else if (keyCode === RETURN || keyCode === ESC) {
       // RETURN button
-      if (this.controlsVisible) {
+      if (this.controlsVisible === 1) {
         this.stopTimeout();
         this.hideControls();
 
@@ -455,7 +530,11 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
         this.playPlayer();
       }
-      else {
+      else if (this.controlsVisible === 2) {
+        this.hideOtherVideos();
+        this.hideControls();
+      }
+      else if (this.controlsVisible === 0) {
         //this.commonService.showElementById('archivePlayerBusyLoader');
 
         this.saveVideoStatus();
@@ -465,6 +544,52 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
         this.commonService.toPreviousPage(programInfoPage);
       }
+    }
+  }
+
+  rowMoveLeftRight(row: number, col: number, right: boolean): void {
+    this.rightMargin = this.calculateRightMargin(col, right, this.rightMargin);
+
+    const element = this.commonService.getElementById('videosContainer');
+    if (element) {
+      //console.log('Right margin value: ', margin);
+
+      anime({
+        targets: element,
+        right: this.rightMargin + 'px',
+        duration: 180,
+        easing: 'linear',
+        complete: () => {
+          this.animationOngoing = false;
+        }
+      });
+    }
+  }
+
+  calculateRightMargin(col: number, right: boolean, margin: number): number {
+    const itemWidth = this.calculateItemWidth();
+    const itemWidthWithMargin = itemWidth + 10;
+
+    if (col > 1) {
+      if (col === 2 && right) {
+        margin -= Math.round(itemWidth / 10);
+      }
+
+      margin = right ? margin + itemWidthWithMargin : margin - itemWidthWithMargin;
+    }
+    else {
+      margin = 0;
+    }
+
+    return margin;
+  }
+
+  resetRightMargin(): void {
+    this.rightMargin = 0;
+
+    const element = this.commonService.getElementById('videosContainer');
+    if (element) {
+      element.style.right = 0 + 'px';
     }
   }
 
@@ -642,17 +767,35 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
     this.currentTime();
 
-    this.controlsVisible = true;
+    this.controlsVisible = 1;
     this.updateControls(this.videoCurrentTime);
   }
 
   hideControls(): void {
     this.commonService.hideElementById('controls');
 
-    this.controlsVisible = false;
+    this.controlsVisible = 0;
     this.seeking = false;
 
     this.updateControls(0);
+  }
+
+  showOtherVideos(): void {
+    this.resetRightMargin();
+
+    this.commonService.hideElementById('controls');
+    this.commonService.showElementById('otherVideos');
+    this.commonService.focusToElement(defaultRowCol);
+
+    this.controlsVisible = 2;
+  }
+
+  hideOtherVideos(): void {
+    this.resetRightMargin();
+    this.commonService.hideElementById('otherVideos');
+    this.commonService.showElementById('controls');
+
+    this.controlsVisible = 1;
   }
 
   addProgramDetails(): void {
@@ -687,7 +830,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
   addTimeout(): void {
     this.timeout = setTimeout(() => {
-      if (this.controlsVisible) {
+      if (this.controlsVisible === 1) {
         this.hideControls();
       }
     }, archivePlayerControlsVisibleTimeout);
@@ -700,7 +843,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     }
   }
 
-  addErrorInterval(options: any): void {
+  addErrorInterval(): void {
     let vStatus = 0;
     this.errorInterval = setInterval(() => {
       if (this.player && !this.paused) {
@@ -728,7 +871,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
               this.errorRecoveryCounter++;
 
               this.player.dispose();
-              this.createPlayer(options);
+              this.createPlayer();
             }
           }
           else {
@@ -796,5 +939,24 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
         videoPlayer.appendChild(track);
       }
     }
+  }
+
+  readNewestPrograms(date: string, limit: number, offset: number, category: string): void {
+    this.archiveService.getNewestPrograms(date, limit, offset, category, (data: any) => {
+      if (data !== null) {
+        this.newestPrograms = data;
+        //console.log('readNewestPrograms(): response: ', this.newestPrograms);
+      }
+    });
+  }
+
+  calculateItemWidth(): number {
+    const width = this.commonService.getWindowWidth() - 40;
+    return Math.round(width / 3.2);
+  }
+
+  calculateRowHeight(): number {
+    const height = this.commonService.getWindowHeight() - 180;
+    return Math.round(height / 2.5);
   }
 }

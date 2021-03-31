@@ -72,7 +72,7 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
 
   recommended: any = null;
   mostViewed: any = null;
-  newest = null;
+  newest: any = null;
   categories: any = null;
   categoryImage: string = '';
 
