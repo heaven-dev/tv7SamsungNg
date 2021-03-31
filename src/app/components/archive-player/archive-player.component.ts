@@ -357,7 +357,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
         this.showOtherVideos();
       }
     }
-    else if (keyCode === LEFT || keyCode === REWIND) {
+    else if (keyCode === LEFT) {
       // LEFT arrow
       if (this.controlsVisible === 1) {
         if (!this.seeking && this.player) {
@@ -387,7 +387,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
         }
       }
     }
-    else if (keyCode === RIGHT || keyCode === FORWARD) {
+    else if (keyCode === RIGHT) {
       // RIGHT arrow
       if (this.controlsVisible === 1) {
         if (!this.seeking && this.player) {
@@ -415,6 +415,58 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
           this.rowMoveLeftRight(row, newCol, true);
           this.commonService.focusToElement(newFocus);
         }
+      }
+    }
+    else if (keyCode === REWIND) {
+      if (this.controlsVisible === 0) {
+        this.addTimeout();
+        this.updateControls(this.videoCurrentTime);
+
+        this.showControls();
+        this.addProgramDetails();
+      }
+      else if (this.controlsVisible === 1) {
+        if (!this.seeking && this.player) {
+          this.stopTimeout();
+
+          this.pausePlayer();
+          this.currentTime();
+
+          this.seeking = true;
+        }
+
+        this.videoCurrentTime -= this.seekingStep;
+        if (this.videoCurrentTime < 0) {
+          this.videoCurrentTime = 0;
+        }
+
+        this.updateControls(this.videoCurrentTime);
+      }
+    }
+    else if (keyCode === FORWARD) {
+      if (this.controlsVisible === 0) {
+        this.addTimeout();
+        this.updateControls(this.videoCurrentTime);
+
+        this.showControls();
+        this.addProgramDetails();
+      }
+      else if (this.controlsVisible === 1) {
+        if (!this.seeking && this.player) {
+          this.stopTimeout();
+
+          this.pausePlayer();
+          this.currentTime();
+
+          this.seeking = true;
+        }
+
+        this.videoCurrentTime += this.seekingStep;
+        if (this.videoCurrentTime > this.videoDuration) {
+          this.videoCurrentTime = this.videoDuration;
+        }
+
+        this.updateControls(this.videoCurrentTime);
       }
     }
     else if (keyCode === PLAYPAUSE) {

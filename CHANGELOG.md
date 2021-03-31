@@ -1,3 +1,15 @@
+# 31.03.2021 17:58
+
+### Bug Fixes
+
+* none
+
+### Features
+
+* Added own handler to rewind and forward events on archive player.
+* New version number.
+
+
 # 31.03.2021 11:39
 
 ### Bug Fixes
