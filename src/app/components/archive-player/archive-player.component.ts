@@ -538,6 +538,10 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
       else if (this.controlsVisible === 2) {
         this.hideOtherVideos();
         this.hideControls();
+
+        if (this.player.paused()) {
+          this.playPlayer();
+        }
       }
       else if (this.controlsVisible === 0) {
         //this.commonService.showElementById('archivePlayerBusyLoader');
