@@ -456,7 +456,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
       this.commonService.toPreviousPage(programInfoPage);
     }
     else if (keyCode === PLAY) {
-      if (this.controlsVisible === 1 && this.player.paused()) {
+      if (this.controlsVisible !== 2 && this.player.paused()) {
         if (this.seeking) {
           this.player.currentTime(this.videoCurrentTime);
         }
