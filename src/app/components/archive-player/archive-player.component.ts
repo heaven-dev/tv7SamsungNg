@@ -418,7 +418,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
       }
     }
     else if (keyCode === PLAYPAUSE) {
-      if (this.controlsVisible === 1) {
+      if (this.controlsVisible !== 2) {
         if (!this.player.paused()) {
           this.stopTimeout();
           this.updateControls(this.videoCurrentTime);
@@ -438,7 +438,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
       }
     }
     else if (keyCode === PAUSE) {
-      if (this.controlsVisible === 1 && !this.player.paused()) {
+      if (this.controlsVisible !== 2 && !this.player.paused()) {
         this.stopTimeout();
         this.updateControls(this.videoCurrentTime);
 
