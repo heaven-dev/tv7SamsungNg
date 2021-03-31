@@ -56,7 +56,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
   videoDuration: number = null;
   videoCurrentTime: number = null;
   videoDurationLabel: string = null;
-  videoCurrenTimeLabel: string = null;
+  videoCurrentTimeLabel: string = null;
   selectedProgram: any = null;
   videoStatus: any = null;
   translation: any = null;
@@ -499,6 +499,11 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
           this.hideOtherVideos();
           this.hideControls();
 
+          this.videoDuration = null;
+          this.videoCurrentTime = null;
+          this.videoDurationLabel = null;
+          this.videoCurrentTimeLabel = null;
+
           this.player.dispose();
           this.preparePlayer();
         }
@@ -816,9 +821,9 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
   updateControls(currentTime: number): void {
     this.videoDurationLabel = this.commonService.getTimeStampByDuration(this.videoDuration * 1000);
-    this.videoCurrenTimeLabel = this.commonService.getTimeStampByDuration(currentTime * 1000);
+    this.videoCurrentTimeLabel = this.commonService.getTimeStampByDuration(currentTime * 1000);
 
-    const timeAndDurationLabel = this.videoCurrenTimeLabel + ' / ' + this.videoDurationLabel;
+    const timeAndDurationLabel = this.videoCurrentTimeLabel + ' / ' + this.videoDurationLabel;
     this.commonService.addToElement('durationCurrentTime', timeAndDurationLabel);
 
     const percent = currentTime / this.videoDuration * 100;
