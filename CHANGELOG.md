@@ -1,3 +1,15 @@
+# 01.04.2021 08:14
+
+### Bug Fixes
+
+* none
+
+### Features
+
+* Added play icon to focused other video item on archive player page.
+* New version number.
+
+
 # 31.03.2021 17:58
 
 ### Bug Fixes

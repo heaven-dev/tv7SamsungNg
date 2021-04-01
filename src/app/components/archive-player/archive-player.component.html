@@ -45,11 +45,15 @@
             </div>
 
             <div id="videosContainer" class="apVideosContainer">
-                <div id="0_{{i}}" class="apVideoItem" *ngFor="let n of newestPrograms; let i = index" [ngStyle]="{'min-width': programItemWidth + 'px'}" tabindex="0">
+                <div id="0_{{i}}" class="apVideoItem" *ngFor="let n of newestPrograms; let i = index" [ngStyle]="{'min-width': programItemWidth + 'px'}" (focus)="otherVideoFocus($event, i)" (focusout)="otherVideoFocusOut($event, i)" tabindex="0">
                     <div class="apProgramDate">{{n.broadcast_date_time}}</div>
                     <div class="apProgramTime">{{n.duration_time}}</div>
                     <img class="apProgramImg" [ngStyle]="{'width': programItemWidth + 'px', 'height': programItemHeight + 'px'}" src="{{n.image_path}}" onerror="if (this.src != 'assets/tv7logo.png') this.src='assets/tv7logo.png';" alt="" />
                     <div class="apProgramDesc">{{n.name_desc}}</div>
+
+                    <div id="playIconContainer_{{i}}" class="apPlayIconContainer" tabindex="0">
+                        <img class="apPlayIcon" src="assets/play.svg" alt="image/svg+xml" />
+                    </div>
                 </div>
             </div>
         </div>

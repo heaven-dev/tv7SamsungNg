@@ -1011,6 +1011,14 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     });
   }
 
+  otherVideoFocus(event: any, index: number): void {
+    this.commonService.showElementById('playIconContainer_' + index);
+  }
+
+  otherVideoFocusOut(event: any, index: number): void {
+    this.commonService.hideElementById('playIconContainer_' + index);
+  }
+
   calculateItemWidth(): number {
     const width = this.commonService.getWindowWidth() - 40;
     return Math.round(width / 3.2);
