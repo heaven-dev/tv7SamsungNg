@@ -619,7 +619,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
         targets: element,
         right: this.rightMargin + 'px',
         duration: 180,
-        easing: 'linear',
+        easing: 'easeInOutCirc',
         complete: () => {
           this.animationOngoing = false;
         }

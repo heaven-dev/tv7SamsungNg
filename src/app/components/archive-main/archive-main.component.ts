@@ -369,7 +369,7 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
         targets: element,
         bottom: this.bottomMargin + 'px',
         duration: 180,
-        easing: 'linear',
+        easing: 'easeInOutCirc',
         complete: () => {
           this.animationOngoing = false;
         }
@@ -411,7 +411,7 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
         targets: element,
         right: margin + 'px',
         duration: 180,
-        easing: 'linear',
+        easing: 'easeInOutCirc',
         complete: () => {
           this.animationOngoing = false;
         }
