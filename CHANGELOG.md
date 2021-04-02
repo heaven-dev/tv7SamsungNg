@@ -1,3 +1,14 @@
+# 01.04.2021 17:44
+
+### Bug Fixes
+
+* Fix to styles of tv main page.
+
+### Features
+
+* New version number (2.1.12).
+
+
 # 01.04.2021 12:14
 
 ### Bug Fixes
