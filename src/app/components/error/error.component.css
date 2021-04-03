@@ -16,6 +16,7 @@
 }
 
 .somethingWentWrongText {
+	text-align: center;
     color: #444444;
     font-size: 44px;
 	white-space: nowrap;
@@ -31,7 +32,6 @@
 .restartButton,
 .exitButton  {
 	width: 240px;
-    margin-right: 20px;
 	padding: 6px 0px;
 	border: 5px solid #777777;
 	border-radius: 60px;
@@ -42,6 +42,14 @@
 	font-size: 44px;
 	outline: none;
 	cursor: pointer;
+}
+
+.restartButton {
+	margin-right: 10px;
+}
+
+.exitButton {
+	margin-left: 10px;
 }
 
 .restartButton:focus,
