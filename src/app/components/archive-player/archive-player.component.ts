@@ -352,7 +352,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     }
     else if (keyCode === DOWN) {
       // DOWN arrow
-      if (this.controlsVisible === 1) {
+      if (this.controlsVisible === 1 && this.newestPrograms) {
         this.stopTimeout();
         this.showOtherVideos();
       }
