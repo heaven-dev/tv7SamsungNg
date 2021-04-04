@@ -607,6 +607,8 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
   startOtherVideo(col: number): void {
     if (this.newestPrograms && this.newestPrograms[col]) {
+      this.saveVideoStatus();
+      
       this.selectedProgram = this.newestPrograms[col];
       this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(this.selectedProgram));
 
@@ -617,8 +619,6 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
       this.hideOtherVideos();
       this.hideControls();
-
-      this.saveVideoStatus();
 
       this.videoDuration = null;
       this.videoCurrentTime = null;
