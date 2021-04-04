@@ -470,29 +470,40 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
       }
     }
     else if (keyCode === PLAYPAUSE) {
-      if (this.controlsVisible !== 2) {
-        if (!this.player.paused()) {
-          this.stopTimeout();
-          this.updateControls(this.videoCurrentTime);
+      if (!this.player.paused()) {
+        this.stopTimeout();
+        this.updateControls(this.videoCurrentTime);
 
-          this.showControls();
-          this.addProgramDetails();
-          this.pausePlayer();
+        if (this.controlsVisible === 2) {
+          this.hideOtherVideos();
         }
-        else {
-          if (this.seeking) {
-            this.player.currentTime(this.videoCurrentTime);
-          }
 
-          this.playPlayer();
-          this.hideControls();
+        this.showControls();
+        this.addProgramDetails();
+        this.pausePlayer();
+      }
+      else {
+        if (this.seeking) {
+          this.player.currentTime(this.videoCurrentTime);
         }
+
+        this.playPlayer();
+
+        if (this.controlsVisible === 2) {
+          this.hideOtherVideos();
+        }
+        
+        this.hideControls();
       }
     }
     else if (keyCode === PAUSE) {
-      if (this.controlsVisible !== 2 && !this.player.paused()) {
+      if (!this.player.paused()) {
         this.stopTimeout();
         this.updateControls(this.videoCurrentTime);
+
+        if (this.controlsVisible === 2) {
+          this.hideOtherVideos();
+        }
 
         this.showControls();
         this.addProgramDetails();
@@ -508,12 +519,17 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
       this.commonService.toPreviousPage(programInfoPage);
     }
     else if (keyCode === PLAY) {
-      if (this.controlsVisible !== 2 && this.player.paused()) {
+      if (this.player.paused()) {
         if (this.seeking) {
           this.player.currentTime(this.videoCurrentTime);
         }
 
         this.playPlayer();
+
+        if (this.controlsVisible === 2) {
+          this.hideOtherVideos();
+        }
+
         this.hideControls();
       }
     }

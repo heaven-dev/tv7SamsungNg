@@ -1,3 +1,14 @@
+# 03.04.2021 16:46
+
+### Bug Fixes
+
+* Fix to archive player component.
+
+### Features
+
+* New version number (2.1.15).
+
+
 # 03.04.2021 14:36
 
 ### Bug Fixes
