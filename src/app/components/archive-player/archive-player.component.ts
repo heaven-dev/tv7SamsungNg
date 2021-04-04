@@ -352,7 +352,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     }
     else if (keyCode === DOWN) {
       // DOWN arrow
-      if (this.controlsVisible === 1 && this.newestPrograms) {
+      if (this.controlsVisible === 1 && this.newestPrograms && this.newestPrograms.length > 0) {
         this.stopTimeout();
         this.showOtherVideos();
       }
@@ -1006,7 +1006,12 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
     this.archiveService.getNewestPrograms(date, limit, offset, category, (data: any) => {
       if (data !== null) {
         this.newestPrograms = data;
+
         //console.log('readNewestPrograms(): response: ', this.newestPrograms);
+
+        if (!this.newestPrograms || this.newestPrograms.length === 0) {
+          this.commonService.hideElementById('arrowDownContainer');
+        }
       }
     });
   }

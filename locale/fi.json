@@ -2,7 +2,7 @@
     "channelName": "Taivas TV7",
     "tizenFolder": "tizen",
     "configXmlId": "https://www.tv7.fi",
-    "configXmlVersion": "2.1.13",
+    "configXmlVersion": "2.1.14",
     "configXmlName": "TaivasTV7",
     "configXmlPackage": "M8S1y7Jdfp"
 }
