@@ -539,26 +539,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
         }
       }
       else if (this.controlsVisible === 2) {
-        if (this.newestPrograms && this.newestPrograms[col]) {
-          this.selectedProgram = this.newestPrograms[col];
-          this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(this.selectedProgram));
-
-          this.playerOptions.sources.src = this.getVideoUrl(this.archiveLanguage);
-
-          this.commonService.deletePageStates();
-          this.commonService.removeOriginPage();
-
-          this.hideOtherVideos();
-          this.hideControls();
-
-          this.videoDuration = null;
-          this.videoCurrentTime = null;
-          this.videoDurationLabel = null;
-          this.videoCurrentTimeLabel = null;
-
-          this.player.dispose();
-          this.preparePlayer();
-        }
+        this.startOtherVideo(col);
       }
       else if (this.controlsVisible === 0) {
         this.addTimeout();
@@ -605,6 +586,33 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
         this.commonService.toPreviousPage(programInfoPage);
       }
+    }
+  }
+
+  startOtherVideo(col: number): void {
+    if (this.newestPrograms && this.newestPrograms[col]) {
+      this.selectedProgram = this.newestPrograms[col];
+      this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(this.selectedProgram));
+
+      this.playerOptions.sources.src = this.getVideoUrl(this.archiveLanguage);
+
+      this.commonService.deletePageStates();
+      this.commonService.removeOriginPage();
+
+      this.hideOtherVideos();
+      this.hideControls();
+
+      this.saveVideoStatus();
+
+      this.videoDuration = null;
+      this.videoCurrentTime = null;
+      this.videoDurationLabel = null;
+      this.videoCurrentTimeLabel = null;
+
+      this.controlsVisible = 0;
+
+      this.player.dispose();
+      this.preparePlayer();
     }
   }
 
