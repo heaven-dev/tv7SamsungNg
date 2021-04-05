@@ -2,7 +2,7 @@
     "channelName": "Himlen TV7",
     "tizenFolder": "tizen",
     "configXmlId": "https://www.himlentv7.se",
-    "configXmlVersion": "2.1.15",
+    "configXmlVersion": "2.2.0",
     "configXmlName": "HimlenTV7",
     "configXmlPackage": "b6QZbPO8Pr"
 }

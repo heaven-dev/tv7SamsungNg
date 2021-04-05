@@ -492,7 +492,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
         if (this.controlsVisible === 2) {
           this.hideOtherVideos();
         }
-        
+
         this.hideControls();
       }
     }
@@ -573,6 +573,14 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
         this.showControls();
         this.addProgramDetails();
       }
+      else if (this.controlsVisible === 2) {
+        this.hideOtherVideos();
+        this.addTimeout();
+        this.updateControls(this.videoCurrentTime);
+
+        this.showControls();
+        this.addProgramDetails();
+      }
     }
     else if (keyCode === RETURN || keyCode === ESC) {
       // RETURN button
@@ -608,7 +616,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
   startOtherVideo(col: number): void {
     if (this.newestPrograms && this.newestPrograms[col]) {
       this.saveVideoStatus();
-      
+
       this.selectedProgram = this.newestPrograms[col];
       this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(this.selectedProgram));
 
@@ -626,6 +634,10 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
       this.videoCurrentTimeLabel = null;
 
       this.controlsVisible = 0;
+
+      this.commonService.addToElement('nameDesc', '');
+      this.commonService.addToElement('caption', '');
+      this.commonService.addToElement('episodeNumber', '');
 
       this.player.dispose();
       this.preparePlayer();
