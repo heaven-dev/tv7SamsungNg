@@ -636,6 +636,8 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
       this.videoDurationLabel = null;
       this.videoCurrentTimeLabel = null;
 
+      this.paused = false;
+      this.seeking = false;
       this.controlsVisible = 0;
 
       this.commonService.addToElement('nameDesc', '');
