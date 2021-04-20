@@ -49,3 +49,6 @@ tizen/dist/fi
 tizen/dist/et
 tizen/dist/ru
 tizen/dist/sv
+
+security/sec_prof.txt
+security/profiles.xml

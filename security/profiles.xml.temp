@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<profiles active="MyTv7TestSamsungNgProfile" version="3.1">
+<profile name="MyTv7SamsungNgSecurityProfile">
+<profileitem ca="" distributor="0" key="_HOME_DIR_/tizen-studio-data/keystore/author/tv7SamsungNgUserCert.p12" password="1234" rootca=""/>
+<profileitem ca="_HOME_DIR_/tizen-studio/tools/certificate-generator/certificates/distributor/tizen-distributor-ca.cer" distributor="1" key="_HOME_DIR_/tizen-studio/tools/certificate-generator/certificates/distributor/tizen-distributor-signer.p12" password="tizenpkcs12passfordsigner" rootca=""/>
+<profileitem ca="" distributor="2" key="" password="" rootca=""/>
+</profile>
+</profiles>
