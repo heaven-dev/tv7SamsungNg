@@ -209,6 +209,9 @@ export class ArchiveService {
       cb(parentCategories);
     }
     else {
+      // Read sub categories to cache
+      this.getSubCategories(() => {});
+
       const url = this.localeService.getArchiveUrl() + parentCategoriesMethod;
 
       console.log('Parent categories URL: ', url);
