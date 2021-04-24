@@ -185,6 +185,7 @@ export class PlatformInfoComponent implements OnInit, AfterViewInit {
       }
       else {
         //this.commonService.showElementById('platformInfoBusyLoader');
+        this.removeKeydownEventListener();
         this.commonService.toPage(archiveMainPage, null);
       }
     }

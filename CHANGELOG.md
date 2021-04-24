@@ -1,3 +1,14 @@
+# 24.04.2021 16:12
+
+### Bug Fixes
+
+* Fixed platform info page keydown event remove bug.
+
+### Features
+
+* New version number (2.2.2).
+
+
 # 21.04.2021 09:39
 
 ### Bug Fixes
