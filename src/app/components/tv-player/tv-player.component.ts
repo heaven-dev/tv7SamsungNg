@@ -69,7 +69,6 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
       preload: 'auto',
       autoplay: true,
       muted: false,
-      fluid: true,
       playsinline: true,
       //poster: 'assets/tv7logo.png',
       html5: {
@@ -235,7 +234,7 @@ export class TvPlayerComponent implements OnInit, OnDestroy {
     let videoElem = document.createElement('video');
     if (videoElem) {
       videoElem.setAttribute('id', 'videoPlayer');
-      videoElem.setAttribute('class', 'video-js');
+      videoElem.setAttribute('class', 'video-js vjs-16-9');
 
       const container = this.commonService.getElementById('videoPlayerContainer');
       if (container) {

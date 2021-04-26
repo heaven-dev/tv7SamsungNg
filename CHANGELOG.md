@@ -1,3 +1,14 @@
+# 26.04.2021 18:56
+
+### Bug Fixes
+
+* Fixed tv player and archive player 4:3 aspect ratio video bug.
+
+### Features
+
+* New version number (2.2.3).
+
+
 # 24.04.2021 16:12
 
 ### Bug Fixes
