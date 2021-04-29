@@ -6,14 +6,12 @@
 .channelInfoContentContainer {
     height: 100%;
 	outline: none;
-    overflow: hidden;
 }
 
 .channelInfoTextContainer {
-    height: 100%;
 	margin: 20px 20px 20px 10px;
+	overflow-y: scroll;
 	position: absolute;
-	z-index: -1;
 }
 
 .channelInfoBusyLoader {
@@ -69,10 +67,6 @@
 	display: none;
 }
 
-.endImageContainer {
-	text-align: center;
-}
-
-.endImage {
-	width: 80px;
+.channelInfoTextContainer::-webkit-scrollbar {
+    display: none;
 }

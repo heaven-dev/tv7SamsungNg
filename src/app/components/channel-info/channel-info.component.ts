@@ -40,7 +40,7 @@ import {
 })
 export class ChannelInfoComponent implements OnInit, AfterViewInit {
 
-  bottomMargin: number = 0;
+  scrollTop: number = 0;
 
   keydownListener: Function = null;
 
@@ -61,7 +61,7 @@ export class ChannelInfoComponent implements OnInit, AfterViewInit {
       this.keyDownEventListener(e);
     });
 
-    this.bottomMargin = 0;
+    this.scrollTop = 0;
   }
 
   ngAfterViewInit(): void {
@@ -80,6 +80,11 @@ export class ChannelInfoComponent implements OnInit, AfterViewInit {
     }
 
     setTimeout(() => {
+      let element = this.commonService.getElementById('channelInfoTextContainer');
+      if (element) {
+        element.style.height = (this.commonService.getWindowHeight() - 130) + 'px';
+      }
+
       this.commonService.focusToElement('channelInfoContentContainer');
     });
   }
@@ -182,16 +187,20 @@ export class ChannelInfoComponent implements OnInit, AfterViewInit {
     let element = this.commonService.getElementById('channelInfoTextContainer');
     if (element) {
       if (down) {
-        this.bottomMargin += 50;
+        this.scrollTop += 50;
+        const maxScroll = element.scrollHeight - element.offsetHeight;
+        if (this.scrollTop > maxScroll) {
+          this.scrollTop = maxScroll;
+        }
       }
       else {
-        this.bottomMargin -= 50;
-        if (this.bottomMargin < 0) {
-          this.bottomMargin = 0;
+        this.scrollTop -= 50;
+        if (this.scrollTop < 0) {
+          this.scrollTop = 0;
         }
       }
 
-      element.style.bottom = this.bottomMargin === 0 ? null : this.bottomMargin + 'px';
+      element.scrollTop = this.scrollTop;
     }
   }
 }
