@@ -1,3 +1,14 @@
+# 17.05.2021 09:42
+
+### Bug Fixes
+
+* Fix to the startOtherVideo() method of the archive player.
+
+### Features
+
+* New version number (2.2.5).
+
+
 # 29.04.2021 08:14
 
 ### Bug Fixes

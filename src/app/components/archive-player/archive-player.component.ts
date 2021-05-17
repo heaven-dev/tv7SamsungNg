@@ -639,6 +639,10 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
       this.seeking = false;
       this.controlsVisible = 0;
 
+      this.streamPosition = -1;
+      this.errorCounter = 0;
+      this.errorRecoveryCounter = 0;
+
       this.commonService.addToElement('nameDesc', '');
       this.commonService.addToElement('caption', '');
       this.commonService.addToElement('episodeNumber', '');
