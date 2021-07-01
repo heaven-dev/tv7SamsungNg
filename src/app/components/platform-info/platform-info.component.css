@@ -29,7 +29,7 @@
 	width: 100%;
 }
 
-.platformInfoTable tr td {
+.platformInfoTableText {
 	color: #444444;
 	font-size: 34px;
 	padding: 6px 14px;

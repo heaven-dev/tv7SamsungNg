@@ -14,7 +14,7 @@ const appName: string = 'Taivas TV7';
 /**
  * Updated by gulp script during a build of the app.
  */
-const appVersion: string = '2.2.5';
+const appVersion: string = '2.2.6';
 
 export const localeFi: string = 'fi';
 export const localeEt: string = 'et';
@@ -323,7 +323,7 @@ export class LocaleService {
     { id: 'addedToFavoritesText', text: 'Lisätty suosikkeihin' },
     { id: 'removedFromFavoritesText', text: 'Poistettu suosikeista' },
     { id: 'aspectRatioText', text: 'Kuvasuhde' },
-    { id: 'copyrightText', text: 'Copyright Taivas TV7. Unauthorized publication of programs or subtitles is prohibited.' }
+    { id: 'copyrightText', text: 'Copyright © Taivas TV7. Unauthorized publication of programs or subtitles is prohibited.' }
   ];
 
   localeTextEt: Array<any> = [
@@ -360,7 +360,7 @@ export class LocaleService {
     { id: 'addedToFavoritesText', text: 'Lisatud lemmikutesse' },
     { id: 'removedFromFavoritesText', text: 'Lemmikutest eemaldatud' },
     { id: 'aspectRatioText', text: 'Kuvasuhe' },
-    { id: 'copyrightText', text: 'Copyright Taevas TV7. Unauthorized publication of programs or subtitles is prohibited.' }
+    { id: 'copyrightText', text: 'Copyright © Taevas TV7. Unauthorized publication of programs or subtitles is prohibited.' }
   ];
 
   localeTextRu: Array<any> = [
@@ -397,7 +397,7 @@ export class LocaleService {
     { id: 'addedToFavoritesText', text: 'Добавлено в Избранные' },
     { id: 'removedFromFavoritesText', text: 'Удалено из Избранных' },
     { id: 'aspectRatioText', text: 'Соотношение сторон' },
-    { id: 'copyrightText', text: 'Copyright Небеса ТВ7. Unauthorized publication of programs or subtitles is prohibited.' }
+    { id: 'copyrightText', text: 'Copyright © Небеса ТВ7. Unauthorized publication of programs or subtitles is prohibited.' }
   ];
 
   localeTextSv: Array<any> = [
@@ -434,7 +434,7 @@ export class LocaleService {
     { id: 'addedToFavoritesText', text: 'Tillagd bland favoriter' },
     { id: 'removedFromFavoritesText', text: 'Borttagen från favoriter' },
     { id: 'aspectRatioText', text: 'Bildförhållande' },
-    { id: 'copyrightText', text: 'Copyright Himlen TV7. Unauthorized publication of programs or subtitles is prohibited.' }
+    { id: 'copyrightText', text: 'Copyright © Himlen TV7. Unauthorized publication of programs or subtitles is prohibited.' }
   ];
 
   constructor(private commonService: CommonService) { }

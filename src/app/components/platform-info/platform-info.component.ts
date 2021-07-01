@@ -55,6 +55,8 @@ export class PlatformInfoComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.setFontSizes(this.calculateTableFontSize());
+    
     let platformInfo: any = this.commonService.getValueFromCache(platformInfoKey);
     if (platformInfo) {
       platformInfo = this.commonService.stringToJson(platformInfo);
@@ -188,6 +190,27 @@ export class PlatformInfoComponent implements OnInit, AfterViewInit {
         this.removeKeydownEventListener();
         this.commonService.toPage(archiveMainPage, null);
       }
+    }
+  }
+
+  calculateTableFontSize(): number {
+    return 50 / 100 * ((this.commonService.getWindowWidth() / 2.4) / 11);
+  }
+
+  setFontSizes(tableFontSize: number): void {
+    let platformInfoTable: any = this.commonService.getElementById('platformInfoTable');
+    if (platformInfoTable) {
+      let tableElements: any = this.commonService.getElementsByClass(platformInfoTable, 'platformInfoText');
+      for(let e of tableElements) {
+        if (e) {
+          e.style.fontSize = tableFontSize + 'px';
+        }
+      }
+    }
+
+    let copyrightText: any = this.commonService.getElementById('copyrightText');
+    if (copyrightText) {
+      copyrightText.style.fontSize = (tableFontSize - 4) + 'px';
     }
   }
 }
