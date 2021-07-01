@@ -194,13 +194,13 @@ export class PlatformInfoComponent implements OnInit, AfterViewInit {
   }
 
   calculateTableFontSize(): number {
-    return 50 / 100 * ((this.commonService.getWindowWidth() / 2.4) / 11);
+    return Math.ceil(50 / 100 * ((this.commonService.getWindowWidth() / 2.4) / 11));
   }
 
   setFontSizes(tableFontSize: number): void {
     let platformInfoTable: any = this.commonService.getElementById('platformInfoTable');
     if (platformInfoTable) {
-      let tableElements: any = this.commonService.getElementsByClass(platformInfoTable, 'platformInfoText');
+      let tableElements: any = this.commonService.getElementsByClass(platformInfoTable, 'platformInfoTableText');
       for(let e of tableElements) {
         if (e) {
           e.style.fontSize = tableFontSize + 'px';
