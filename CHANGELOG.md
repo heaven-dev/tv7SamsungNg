@@ -1,3 +1,16 @@
+# 04.07.2021 16:02
+
+### Bug Fixes
+
+* none
+
+### Features
+
+* Search string appended to the title of search result page.
+* Search history is available on the search page.
+* New version number (2.2.7).
+
+
 # 01.07.2021 12:40
 
 ### Bug Fixes

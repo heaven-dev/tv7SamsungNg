@@ -95,7 +95,23 @@
                 <div id="row4" class="keyboardRow">
                     <div id="searchKey" class="key textKey" [ngStyle]="{'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px', 'font-size': keyFontSize + 'px'}" key="search" tabindex="0">{{getSearchText()}}</div>
                     <div id="clearKey" class="key textKey" [ngStyle]="{'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px', 'font-size': keyFontSize + 'px'}" key="clear" tabindex="0">{{getClearText()}}</div>
+                
+                    <div id="savedSearchKey" class="key savedSearchKey" 
+                        [ngStyle]="{'width': keyWidthAndHeight + 'px', 'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px'}" key="savedSearch" tabindex="0">
+                        <img id="spaceIcon" [ngStyle]="{'width': iconWidth + 'px', 'height': keyWidthAndHeight + 'px', 'line-height': keyWidthAndHeight + 'px'}" src="assets/saved_search.svg" />
+                    </div>
                 </div>
+            </div>
+        </div>
+
+        <div id="savedSearchContainer" class="savedSearchContainer">
+			<div class="savedSearchTitleContainer">
+				<img class="searchIcon" src="assets/search.svg" />
+				<div id="savedSearchTitle" class="savedSearchTitle"></div>
+			</div>
+
+            <div class="savedSearchItems">
+                <div id="{{i}}_ss" id="savedSearchItem" class="savedSearchItem" *ngFor="let s of savedSearches; let i = index" key="savedSearchItem" tabindex="0">{{s}}</div>
             </div>
         </div>
     </div>

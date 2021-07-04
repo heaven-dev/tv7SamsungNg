@@ -94,6 +94,12 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
       if (searchPageState) {
         //console.log('Search page state: ', searchPageState);
         const { searchText } = this.commonService.stringToJson(searchPageState);
+      
+        let elem = this.commonService.getElementById('searchResultText');
+        if (elem) {
+          elem.innerHTML = elem.innerHTML + ' | ' + searchText;
+        }
+
         this.searchByString(searchText);
       }
     }
@@ -360,6 +366,15 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
   restorePageState(ps: any): void {
     if (ps) {
       this.commonService.showElementById('searchResultBusyLoader');
+
+      const searchPageState = this.commonService.getValueFromCache(searchPageStateKey);
+      if (searchPageState) {
+        const { searchText } = this.commonService.stringToJson(searchPageState);
+        let elem = this.commonService.getElementById('searchResultText');
+        if (elem) {
+          elem.innerHTML = elem.innerHTML + ' | ' + searchText;
+        }
+      }
 
       this.bottomMargin = ps.bottomMargin;
       let element = this.commonService.getElementById('searchResultContainer');

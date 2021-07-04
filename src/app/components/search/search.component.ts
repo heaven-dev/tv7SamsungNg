@@ -24,6 +24,8 @@ import {
   favoritesIconContainer,
   channelInfoIconContainer,
   platformInfoIconContainer,
+  savedSearchDataKey,
+  savedSearchKey,
   clearKey,
   searchKey,
   LEFT,
@@ -56,6 +58,10 @@ export class SearchComponent implements OnInit, AfterViewInit {
   keyWidthAndHeight: number = 0;
   keyFontSize: number = 0;
   iconWidth: number = 0;
+
+  savedSearchOverlayVisible: boolean = false;
+  savedSearches: any = [];
+  savedSearchItemMaxCount: number = 12;
 
   keydownListener: Function = null;
 
@@ -92,6 +98,14 @@ export class SearchComponent implements OnInit, AfterViewInit {
     this.row1Special = this.keyboard.special['1'];
     this.row2Special = this.keyboard.special['2'];
     this.row3Special = this.keyboard.special['3'];
+
+    let sKey: any = this.commonService.getSavedValue(this.getSavedSearchDataKey());
+    if (sKey) {
+      let elem: any = this.commonService.getElementById(savedSearchKey);
+      if (elem) {
+        elem.style.display = 'block';
+      }
+    }
   }
 
   ngAfterViewInit(): void {
@@ -140,6 +154,11 @@ export class SearchComponent implements OnInit, AfterViewInit {
           this.commonService.focusToElement(searchKey);
         }
       }
+      else if (contentId === savedSearchKey) {
+        if (this.commonService.elementExist(clearKey)) {
+          this.commonService.focusToElement(clearKey);
+        }
+      }
       else {
         const newCol = col - 1;
         const newFocus = row + '_' + newCol;
@@ -158,6 +177,11 @@ export class SearchComponent implements OnInit, AfterViewInit {
           this.commonService.focusToElement(clearKey);
         }
       }
+      else if (contentId === clearKey) {
+        if (this.commonService.elementExist(savedSearchKey)) {
+          this.commonService.focusToElement(savedSearchKey);
+        }
+      }
       else {
         const newCol = col + 1;
         const newFocus = row + '_' + newCol;
@@ -171,8 +195,15 @@ export class SearchComponent implements OnInit, AfterViewInit {
       if (this.commonService.isSideBarMenuActive(contentId)) {
         this.commonService.menuFocusUp(contentId);
       }
+      else if (this.savedSearchOverlayVisible) {
+        const newRow = row - 1;
+        let newFocus = newRow + '_ss';
+        if (this.commonService.elementExist(newFocus)) {
+          this.commonService.focusToElement(newFocus);
+        }
+      }
       else {
-        if (contentId === searchKey || contentId === clearKey) {
+        if (contentId === searchKey || contentId === clearKey || contentId === savedSearchKey) {
           const newFocus = '2_0';
           if (this.commonService.elementExist(newFocus)) {
             this.commonService.focusToElement(newFocus);
@@ -191,6 +222,13 @@ export class SearchComponent implements OnInit, AfterViewInit {
       // DOWN arrow
       if (this.commonService.isSideBarMenuActive(contentId)) {
         this.commonService.menuFocusDown(contentId);
+      }
+      else if (this.savedSearchOverlayVisible) {
+        const newRow = row + 1;
+        let newFocus = newRow + '_ss';
+        if (this.commonService.elementExist(newFocus)) {
+          this.commonService.focusToElement(newFocus);
+        }
       }
       else {
         if (row === 2) {
@@ -254,10 +292,15 @@ export class SearchComponent implements OnInit, AfterViewInit {
         this.commonService.focusToElement(defaultRowCol);
       }
       else {
-        //this.commonService.showElementById('searchBusyLoader');
-        this.removeKeydownEventListener();
+        if (this.savedSearchOverlayVisible) {
+          this.showHideSavedSearch();
+        }
+        else {
+          //this.commonService.showElementById('searchBusyLoader');
+          this.removeKeydownEventListener();
 
-        this.commonService.toPage(archiveMainPage, null);
+          this.commonService.toPage(archiveMainPage, null);
+        }
       }
     }
   }
@@ -268,11 +311,18 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
       let elem = this.commonService.getElementById('searchTextField');
       if (elem) {
-        elem.value = pageState.searchText;
+        elem.value = this.validateChars(pageState.searchText);
       }
 
       this.commonService.removeValueFromCache(searchPageStateKey);
     }
+  }
+
+  validateChars(value: string): string {
+    value = value.replace('&amp;', '&');
+    value = value.replace('&lt;', '<');
+    value = value.replace('&gt;', '>');
+    return value;
   }
 
   itemSelected(element: any): void {
@@ -313,32 +363,22 @@ export class SearchComponent implements OnInit, AfterViewInit {
         else if (key === 'search') {
           if (value && value.length > 0) {
             //console.log('Search text: ', value);
-
-            this.removeKeydownEventListener();
-
-            const pageState = {
-              searchText: value
-            };
-
-            this.commonService.cacheValue(searchPageStateKey, this.commonService.jsonToString(pageState));
-            this.commonService.toPage(searchResultPage, searchPage);
+            this.search(value);
           }
           else {
             searchTextField.style.backgroundColor = '#fadbd8';
           }
         }
+        else if (key === 'savedSearchItem') {
+          //console.log('Saved search text: ', element.innerHTML);
+          this.search(element.innerHTML);
+        }
+        else if (key === 'savedSearch') {
+          this.showHideSavedSearch();
+        }
       }
       else {
-        value = element.innerHTML;
-        if (value === '&amp;') {
-          value = '&';
-        }
-        else if (value === '&lt;') {
-          value = '<';
-        }
-        else if (value === '&gt;') {
-          value = '>';
-        }
+        value = this.validateChars(element.innerHTML);
 
         value = searchTextField.value + value;
         searchTextField.style.backgroundColor = '#fafafa';
@@ -346,6 +386,98 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
       searchTextField.value = value;
     }
+  }
+
+  search(searchText: string): void {
+    this.removeKeydownEventListener();
+
+    const pageState = {
+      searchText: searchText
+    };
+
+    if (this.savedSearchOverlayVisible) {
+      this.showHideSavedSearch();
+    }
+
+    this.saveSearchValue(searchText);
+
+    this.commonService.cacheValue(searchPageStateKey, this.commonService.jsonToString(pageState));
+    this.commonService.toPage(searchResultPage, searchPage);
+  }
+
+  saveSearchValue(searchText: string): void {
+    searchText = this.validateChars(searchText);
+
+    let savedSearchData: any = this.commonService.getSavedValue(this.getSavedSearchDataKey());
+    if (savedSearchData) {
+      savedSearchData = this.commonService.stringToJson(savedSearchData);
+
+      const idx = savedSearchData.indexOf(searchText);
+      if (idx !== -1) {
+        savedSearchData.splice(idx, 1);
+      }
+
+      savedSearchData.unshift(searchText);
+
+      if (savedSearchData.length > this.savedSearchItemMaxCount) {
+        savedSearchData.pop();
+      }
+
+      this.commonService.saveValue(this.getSavedSearchDataKey(), this.commonService.jsonToString(savedSearchData));
+    }
+    else {
+      savedSearchData = [];
+      savedSearchData.push(searchText);
+      this.commonService.saveValue(this.getSavedSearchDataKey(), this.commonService.jsonToString(savedSearchData));
+    }
+  }
+
+  showHideSavedSearch(): void {
+    let sContainer: any = this.commonService.getElementById('savedSearchContainer');
+    if (sContainer) {
+      if (this.savedSearchOverlayVisible) {
+        sContainer.style.display = 'none';
+        this.commonService.focusToElement('savedSearchKey');
+      }
+      else {
+        let savedSearchData: any = this.commonService.getSavedValue(this.getSavedSearchDataKey());
+        if (savedSearchData) {
+          this.savedSearches = this.commonService.stringToJson(savedSearchData);
+        }
+
+        sContainer.style.display = 'block';
+
+        setTimeout(() => {
+          this.localeService.setLocaleText('savedSearchTitle');
+
+          let height: number = this.commonService.getWindowHeight();
+          height -= 280;
+          height /= this.savedSearchItemMaxCount;
+          height = height;
+
+          //console.log('Item height: ', height);
+
+          let elems: any = this.commonService.getElementsByClass(sContainer, 'savedSearchItem');
+          if (elems) {
+            for (let e of elems) {
+              if (e) {
+                e.style.height = height + 'px';
+                e.style.lineHeight = height + 'px';
+                e.style.fontSize = Math.ceil(0.70 * height) + 'px';
+              }
+            }
+          }
+
+          this.commonService.focusToElement('0_ss');
+        });
+      }
+
+      this.savedSearchOverlayVisible = !this.savedSearchOverlayVisible;
+    }
+  }
+
+  getSavedSearchDataKey(): string {
+    return savedSearchDataKey + this.localeService.getSelectedLocale();
   }
 
   stringEndsWith(value: string, target: string): boolean {

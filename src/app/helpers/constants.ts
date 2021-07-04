@@ -45,6 +45,7 @@ export const searchMethod = 'searchMethod';
 export const defaultRowCol = '0_0';
 export const categoryDefaultRowCol = '3_0';
 export const categoryRowNumber = 3;
+export const savedSearchKey = 'savedSearchKey';
 export const searchKey = 'searchKey';
 export const clearKey = 'clearKey';
 export const nullValue = 'null';
@@ -103,7 +104,7 @@ export const keyboardSpecial = 3;
 export const pnidParam = 'pnid';
 export const audioIndexParam = 'audioindex';
 
-export const tvBrand = 'samsung';
+export const tvBrand = 'samsungTV';
 
 export const programScheduleDataKey = 'programScheduleDataKey';
 export const platformVersionKey = 'platformVersionKey';
@@ -128,6 +129,7 @@ export const searchPageStateKey = 'searchPageStateKey';
 export const selectedCategoryKey = 'selectedCategoryKey';
 export const favoritesDataKey = 'favoritesDataKey';
 export const videoStatusDataKey = 'videoStatusDataKey';
+export const savedSearchDataKey = 'savedSearchDataKey';
 export const visiblePageKey = 'visiblePageKey';
 
 export const channelUrlKey = 'channelUrlKey';

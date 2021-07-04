@@ -14,7 +14,7 @@ const appName: string = 'Taivas TV7';
 /**
  * Updated by gulp script during a build of the app.
  */
-const appVersion: string = '2.2.6';
+const appVersion: string = '2.2.7';
 
 export const localeFi: string = 'fi';
 export const localeEt: string = 'et';
@@ -304,6 +304,7 @@ export class LocaleService {
     { id: 'favoritesIconText', text: 'Suosikit' },
     { id: 'channelInfoIconText', text: 'Taivas TV7' },
     { id: 'platformInfoIconText', text: 'Tietoja' },
+    { id: 'savedSearchTitle', text: 'Haku' },
     { id: 'searchText', text: 'Hae' },
     { id: 'searchResultText', text: 'Haku tulokset' },
     { id: 'clearText', text: 'Tyhjennä' },
@@ -341,6 +342,7 @@ export class LocaleService {
     { id: 'favoritesIconText', text: 'Lemmikud' },
     { id: 'channelInfoIconText', text: 'Taevas TV7' },
     { id: 'platformInfoIconText', text: 'Infot' },
+    { id: 'savedSearchTitle', text: 'Otsing' },
     { id: 'searchText', text: 'Otsi' },
     { id: 'searchResultText', text: 'Otsingu tulemused' },
     { id: 'clearText', text: 'Kustuta' },
@@ -378,6 +380,7 @@ export class LocaleService {
     { id: 'favoritesIconText', text: 'Избранные' },
     { id: 'channelInfoIconText', text: 'Небеса ТВ7' },
     { id: 'platformInfoIconText', text: 'Информация' },
+    { id: 'savedSearchTitle', text: 'Поиск' },
     { id: 'searchText', text: 'Найти' },
     { id: 'searchResultText', text: 'Результаты поиска' },
     { id: 'clearText', text: 'стере́ть' },
@@ -415,6 +418,7 @@ export class LocaleService {
     { id: 'favoritesIconText', text: 'Favoriter' },
     { id: 'channelInfoIconText', text: 'Himlen TV7' },
     { id: 'platformInfoIconText', text: 'Information' },
+    { id: 'savedSearchTitle', text: 'Sök' },
     { id: 'searchText', text: 'Sök' },
     { id: 'searchResultText', text: 'Sökresultat' },
     { id: 'clearText', text: 'Radera' },
