@@ -319,9 +319,9 @@ export class SearchComponent implements OnInit, AfterViewInit {
   }
 
   validateChars(value: string): string {
-    value = value.replace('&amp;', '&');
-    value = value.replace('&lt;', '<');
-    value = value.replace('&gt;', '>');
+    value = value.replace(/&amp;/g, '&');
+    value = value.replace(/&lt;/g, '<');
+    value = value.replace(/&gt;/g, '>');
     return value;
   }
 
@@ -389,6 +389,8 @@ export class SearchComponent implements OnInit, AfterViewInit {
   }
 
   search(searchText: string): void {
+    searchText = this.validateChars(searchText);
+
     this.removeKeydownEventListener();
 
     const pageState = {
