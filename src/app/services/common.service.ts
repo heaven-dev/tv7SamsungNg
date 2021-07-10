@@ -9,6 +9,7 @@ import {
   channelInfoIconContainer,
   platformInfoIconContainer,
   runOnBrowser,
+  nullValue,
   archivePageStateKey,
   searchResultPageStateKey,
   categoriesPageStateKey,
@@ -355,6 +356,13 @@ export class CommonService {
     this.removeValueFromCache(guidePageStateKey);
     this.removeValueFromCache(searchPageStateKey);
     this.removeValueFromCache(favoritesPageStateKey);
+  }
+
+  addSeriesProperties(series: any, sid: string): any {
+    series.sid = sid;
+    series.name_desc = series.name;
+    series.is_series = true;
+    return series;
   }
 
   screenSaverOn(): void {

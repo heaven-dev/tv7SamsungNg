@@ -7,9 +7,10 @@ import { ArchiveService } from '../../services/archive.service';
 import {
   searchPageStateKey,
   searchResultPage,
-  seriesProgramsPage,
+  seriesInfoPage,
   nullValue,
   searchResultPageStateKey,
+  selectedArchiveSeriesKey,
   tvMainPage,
   archiveMainPage,
   guidePage,
@@ -94,7 +95,7 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
       if (searchPageState) {
         //console.log('Search page state: ', searchPageState);
         const { searchText } = this.commonService.stringToJson(searchPageState);
-      
+
         let elem = this.commonService.getElementById('searchResultText');
         if (elem) {
           elem.innerHTML = elem.innerHTML + ' | ' + searchText;
@@ -278,24 +279,41 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
 
   toItemPage(row: number): void {
     if (this.searchData[row]) {
-      const data = this.searchData[row];
-
-      //console.log('Selected item: ', data);
 
       this.savePageState(row);
       this.removeKeydownEventListener();
 
-      if (data.series_id && data.series_id !== '' && data.series_id !== nullValue && data.type === 'series') {
-        this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(data));
+      //console.log('Selected item: ', this.searchData[row]);
 
-        this.commonService.toPage(seriesProgramsPage, searchResultPage);
+      this.commonService.showElementById('searchResultBusyLoader');
+
+      const { id, series_id, type } = this.searchData[row];
+
+      if (series_id && series_id !== '' && series_id !== nullValue && type === 'series') {
+        this.archiveService.getSeriesInfo(series_id, (series: any) => {
+          if (series !== null) {
+            series = series[0];
+
+            series = this.commonService.addSeriesProperties(series, series_id);
+
+            this.commonService.cacheValue(selectedArchiveSeriesKey, this.commonService.jsonToString(series));
+
+            this.commonService.hideElementById('searchResultBusyLoader');
+
+            this.commonService.toPage(seriesInfoPage, searchResultPage);
+          }
+          else {
+            this.commonService.hideElementById('searchResultBusyLoader');
+            this.commonService.toPage(errorPage, null);
+          }
+        });
       }
       else {
-        this.commonService.showElementById('searchResultBusyLoader');
-
-        this.archiveService.getProgramInfo(data.id, (program: any) => {
+        this.archiveService.getProgramInfo(id, (program: any) => {
           if (program !== null) {
-            this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
+            program = program[0];
+
+            this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program));
 
             this.commonService.hideElementById('searchResultBusyLoader');
 

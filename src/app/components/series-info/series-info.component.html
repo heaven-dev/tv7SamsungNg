@@ -1,0 +1,38 @@
+<div id="mainView" class="mainView">
+    <div id="contentContainer" class="seriesInfoContentContainer mainContentAnimationFadeIn">
+        <div id="seriesInfoBusyLoader" class="busyLoader seriesInfoBusyLoader">
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+        </div>
+
+        <div class="gradient" [ngStyle]="{'height': contentHeight + 'px'}"></div>
+        <img id="backgroundImage" class="backgroundImage" [ngStyle]="{'height': contentHeight + 'px'}" src="assets/tv7logo.png" onerror="if (this.src != 'assets/tv7logo.png') this.src='assets/tv7logo.png';" alt="" tabindex="0" />
+
+        <div id="addedToFavoritesText" class="addedToFavoritesText"></div>
+        <div id="removedFromFavoritesText" class="removedFromFavoritesText"></div>
+
+        <div id="favoriteIconContainer" class="favoriteIconContainer" tabindex="0">
+            <img id="favoriteIcon" class="favoriteIcon" src="assets/favorites_not_selected.svg" alt="image/svg+xml" />
+        </div>
+
+        <div id="seriesIconContainer" class="seriesIconContainer" tabindex="0">
+            <img class="seriesIcon" src="assets/series.svg" alt="image/svg+xml" />
+        </div>
+
+        <div class="infoArea">
+            <div id="seriesName" class="seriesName"></div>
+            <div id="caption" class="caption"></div>
+            <div id="description" class="description"></div>
+        </div>
+    </div>
+</div>

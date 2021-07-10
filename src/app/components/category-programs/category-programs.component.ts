@@ -12,9 +12,9 @@ import {
   favoritesPage,
   channelInfoPage,
   platformInfoPage,
-  seriesProgramsPage,
   categoryProgramsPage,
   programInfoPage,
+  seriesInfoPage,
   tvIconContainer,
   archiveIconContainer,
   guideIconContainer,
@@ -25,6 +25,7 @@ import {
   selectedCategoryKey,
   categoriesPageStateKey,
   selectedArchiveProgramKey,
+  selectedArchiveSeriesKey,
   nullValue,
   errorPage,
   LEFT,
@@ -212,34 +213,7 @@ export class CategoryProgramsComponent implements OnInit, AfterViewInit {
         this.commonService.sideMenuSelection(platformInfoPage);
       }
       else {
-        if (this.categoryProgramData && this.categoryProgramData[row]) {
-          this.savePageState(row);
-
-          this.removeKeydownEventListener();
-
-          if (this.categoryProgramData[row].sid) {
-            this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(this.categoryProgramData[row]));
-            this.commonService.toPage(seriesProgramsPage, categoryProgramsPage);
-          }
-          else {
-            this.commonService.showElementById('categoryProgramsBusyLoader');
-            this.removeKeydownEventListener();
-
-            this.archiveService.getProgramInfo(this.categoryProgramData[row].id, (program: any) => {
-              if (program !== null) {
-                this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
-
-                this.commonService.hideElementById('categoryProgramsBusyLoader');
-
-                this.commonService.toPage(programInfoPage, categoryProgramsPage);
-              }
-              else {
-                this.commonService.hideElementById('categoryProgramsBusyLoader');
-                this.commonService.toPage(errorPage, null);
-              }
-            });
-          }
-        }
+        this.toInfoPage(row);
       }
     }
     else if (keyCode === RETURN || keyCode === ESC) {
@@ -384,6 +358,57 @@ export class CategoryProgramsComponent implements OnInit, AfterViewInit {
         const focusRow = ps.row + '_c';
         this.commonService.focusToElement(focusRow);
       });
+    }
+  }
+
+  toInfoPage(row: number): void {
+    if (this.categoryProgramData && this.categoryProgramData[row]) {
+      this.savePageState(row);
+
+      this.removeKeydownEventListener();
+
+      this.commonService.showElementById('categoryProgramsBusyLoader');
+
+      const { id, sid } = this.categoryProgramData[row];
+
+      //console.log('Selected item: ', this.categoryProgramData[row])
+
+      if (sid && sid !== '' && sid !== nullValue) {
+        this.archiveService.getSeriesInfo(sid, (series: any) => {
+          if (series !== null) {
+            series = series[0];
+
+            series = this.commonService.addSeriesProperties(series, sid);
+
+            this.commonService.cacheValue(selectedArchiveSeriesKey, this.commonService.jsonToString(series));
+
+            this.commonService.hideElementById('categoryProgramsBusyLoader');
+
+            this.commonService.toPage(seriesInfoPage, categoryProgramsPage);
+          }
+          else {
+            this.commonService.hideElementById('categoryProgramsBusyLoader');
+            this.commonService.toPage(errorPage, null);
+          }
+        });
+      }
+      else {
+        this.archiveService.getProgramInfo(id, (program: any) => {
+          if (program !== null) {
+            program = program[0];
+
+            this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program));
+
+            this.commonService.hideElementById('categoryProgramsBusyLoader');
+
+            this.commonService.toPage(programInfoPage, categoryProgramsPage);
+          }
+          else {
+            this.commonService.hideElementById('categoryProgramsBusyLoader');
+            this.commonService.toPage(errorPage, null);
+          }
+        });
+      }
     }
   }
 

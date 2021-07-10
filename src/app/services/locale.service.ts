@@ -14,7 +14,7 @@ const appName: string = 'Taivas TV7';
 /**
  * Updated by gulp script during a build of the app.
  */
-const appVersion: string = '2.2.7';
+const appVersion: string = '2.2.8';
 
 export const localeFi: string = 'fi';
 export const localeEt: string = 'et';
@@ -26,10 +26,10 @@ const logoTaevas: string = 'assets/logo_taevas.png';
 const logoNebesa: string = 'assets/logo_nebesa.png';
 const logoHimlen: string = 'assets/logo_himlen.png';
 
-const categoryLogoTaivas: string = 'assets/category_logo_taivas.png';
-const categoryLogoTaevas: string = 'assets/category_logo_taevas.png';
-const categoryLogoNebesa: string = 'assets/category_logo_nebesa.png';
-const categoryLogoHimlen: string = 'assets/category_logo_himlen.png';
+const archivePageImageTaivas: string = 'assets/archive_page_image_taivas.png';
+const archivePageImageTaevas: string = 'assets/archive_page_image_taevas.png';
+const archivePageImageNebesa: string = 'assets/archive_page_image_nebesa.png';
+const archivePageImageHimlen: string = 'assets/archive_page_image_himlen.png';
 
 const channelUrlFi: string = 'https://vod.tv7.fi:443/tv7-fi/_definst_/smil:tv7-fi.smil/playlist.m3u8';
 const channelUrlEt: string = 'https://vod.tv7.fi:443/tv7-ee/_definst_/smil:tv7-ee.smil/playlist.m3u8';
@@ -313,6 +313,7 @@ export class LocaleService {
     { id: 'newestProgramsText', text: 'Uusimmat' },
     { id: 'categoryText', text: 'Kategoria' },
     { id: 'categoriesText', text: 'Kategoriat' },
+    { id: 'topicalSeriesText', text: 'Ajankohtaiset sarjat' },
     { id: 'categoryBackText', text: 'Takaisin' },
     { id: 'episodeText', text: 'Jakso' },
     { id: 'seriesText', text: 'Sarja' },
@@ -351,6 +352,7 @@ export class LocaleService {
     { id: 'newestProgramsText', text: 'Kõige uuemad' },
     { id: 'categoryText', text: 'Kategooria' },
     { id: 'categoriesText', text: 'Kategooriad' },
+    { id: 'topicalSeriesText', text: 'Praegused sarjad' },
     { id: 'categoryBackText', text: 'Tagasi' },
     { id: 'episodeText', text: 'Osa' },
     { id: 'seriesText', text: 'Saatesari' },
@@ -389,6 +391,7 @@ export class LocaleService {
     { id: 'newestProgramsText', text: 'Новые' },
     { id: 'categoryText', text: 'Категория' },
     { id: 'categoriesText', text: 'Категории' },
+    { id: 'topicalSeriesText', text: 'Текущая серия' },
     { id: 'categoryBackText', text: 'Обратно' },
     { id: 'episodeText', text: 'Выпуск' },
     { id: 'seriesText', text: 'Серия' },
@@ -427,6 +430,7 @@ export class LocaleService {
     { id: 'newestProgramsText', text: 'Senaste' },
     { id: 'categoryText', text: 'Kategori' },
     { id: 'categoriesText', text: 'Kategorier' },
+    { id: 'topicalSeriesText', text: 'Aktuella serier' },
     { id: 'categoryBackText', text: 'Tillbaka' },
     { id: 'episodeText', text: 'Avsnitt' },
     { id: 'seriesText', text: 'Programserie' },
@@ -538,19 +542,19 @@ export class LocaleService {
     return url;
   }
 
-  getCategoryLogo(): string {
+  getArchivePageImage(): string {
     let logo: string = '';
     if (selectedLocale === localeFi) {
-      logo = categoryLogoTaivas;
+      logo = archivePageImageTaivas;
     }
     else if (selectedLocale === localeEt) {
-      logo = categoryLogoTaevas;
+      logo = archivePageImageTaevas;
     }
     else if (selectedLocale === localeRu) {
-      logo = categoryLogoNebesa;
+      logo = archivePageImageNebesa;
     }
     else if (selectedLocale === localeSv) {
-      logo = categoryLogoHimlen;
+      logo = archivePageImageHimlen;
     }
 
     return logo;

@@ -91,7 +91,7 @@ export class SeriesProgramsComponent implements OnInit, AfterViewInit {
 
     this.selectedProgram = this.commonService.stringToJson(this.commonService.getValueFromCache(selectedArchiveProgramKey));
     if (this.selectedProgram) {
-      //console.log('Selected program: ', selectedProgram);
+      //console.log('Selected program: ', this.selectedProgram);
 
       this.checkSeriesId();
 

@@ -118,9 +118,9 @@
                 <div id="categories" class="categories categoriesAnimationFadeIn" *ngIf="categoriesVisible" [ngStyle]="{'width': categoriesRowWidth + 'px'}">
                     <div id="3_{{i}}" *ngFor="let c of categories; let i = index" class="categoriesItem" tabindex="0">
                         <div>
-                            <img id="categoryImage" class="categoryImage" [src]="categoryImage" alt=""/>
-                            <div class="categoryNameText" *ngIf="c.parent_id" [ngStyle]="{'width': categoriesRowItemWidth + 'px'}">{{c.category_name}}</div>
-                            <div class="categoryNameText" *ngIf="!c.parent_id" [ngStyle]="{'width': categoriesRowItemWidth + 'px'}">{{c.name}}</div>
+                            <img id="categoryImage" class="categoryImage" [src]="archivePageImage" alt=""/>
+                            <div class="categoryNameText" *ngIf="c.parent_id" [ngStyle]="{'width': categoriesSeriesRowItemWidth + 'px'}">{{c.category_name}}</div>
+                            <div class="categoryNameText" *ngIf="!c.parent_id" [ngStyle]="{'width': categoriesSeriesRowItemWidth + 'px'}">{{c.name}}</div>
                         </div>
                     </div>
         
@@ -134,6 +134,43 @@
                     </div>
                 </div>
             </div>
+
+            <div id="topicalSeriesText" class="seriesText"></div>
+            <div id="seriesContainer" class="rowContainer seriesContainer">
+                <div id="seriesBusyLoader" class="busyLoader seriesBusyLoader">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+
+                <div id="series" class="series" [ngStyle]="{'width': seriesRowWidth + 'px'}">
+                <!--
+                    <div id="4_{{i}}" *ngFor="let s of seriesData; let i = index" class="seriesItem" tabindex="0">
+                        <div>
+                            <img id="seriesImage" class="seriesImage" [src]="archivePageImage" alt=""/>
+                            <div class="seriesNameText" [ngStyle]="{'width': categoriesSeriesRowItemWidth + 'px'}">{{s.series}}</div>
+                        </div>
+                    </div>
+                -->
+                <div id="4_{{i}}" *ngFor="let s of seriesData; let i = index" class="programItem seriesItem" [ngStyle]="{'min-width': programRowItemWidth + 'px'}" tabindex="0">
+                    <div class="programDate">{{s.localStartDate}}</div>
+                    <div class="programTime">{{s.duration_time}}</div>
+                    <img class="programImg" [ngStyle]="{'width': programRowItemWidth + 'px', 'height': programRowItemHeight + 'px'}" src="{{s.image_path}}" onerror="if (this.src != 'assets/tv7logo.png') this.src='assets/tv7logo.png';" alt="" />
+                    <div class="programDesc">{{s.name_desc}}</div>
+                </div>
+
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

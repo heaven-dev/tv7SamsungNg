@@ -13,6 +13,7 @@ import {
   channelInfoPage,
   platformInfoPage,
   programInfoPage,
+  seriesInfoPage,
   errorPage,
   tvIconContainer,
   archiveIconContainer,
@@ -22,6 +23,7 @@ import {
   channelInfoIconContainer,
   platformInfoIconContainer,
   selectedArchiveProgramKey,
+  selectedArchiveSeriesKey,
   favoritesDataKey,
   favoritesPageStateKey,
   LEFT,
@@ -91,7 +93,6 @@ export class FavoritesComponent implements OnInit, AfterViewInit {
         this.favoritesData = this.commonService.stringToJson(this.favoritesData);
       }
       this.preparePage();
-
     }
   }
 
@@ -209,7 +210,7 @@ export class FavoritesComponent implements OnInit, AfterViewInit {
         this.commonService.sideMenuSelection(platformInfoPage);
       }
       else {
-        this.toProgramInfoPage(row);
+        this.toInfoPage(row);
       }
     }
     else if (keyCode === RETURN || keyCode === ESC) {
@@ -232,29 +233,53 @@ export class FavoritesComponent implements OnInit, AfterViewInit {
     }
   }
 
-  toProgramInfoPage(row: number): void {
+  toInfoPage(row: number): void {
     if (this.favoritesData) {
       this.savePageState(row);
 
-      const id = this.favoritesData[row].id;
+      const { is_series, sid, id } = this.favoritesData[row];
 
       this.commonService.showElementById('favoritesBusyLoader');
       this.removeKeydownEventListener();
 
-      this.archiveService.getProgramInfo(id, (program: any) => {
-        if (program !== null) {
-          this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
+      //console.log('Selected item: ', this.favoritesData[row]);
 
-          this.commonService.hideElementById('favoritesBusyLoader');
+      if (is_series) {
+        this.archiveService.getSeriesInfo(sid, (series: any) => {
+          if (series !== null) {
+            series = series[0];
 
+            series = this.commonService.addSeriesProperties(series, sid);
 
-          this.commonService.toPage(programInfoPage, favoritesPage);
-        }
-        else {
-          this.commonService.hideElementById('favoritesBusyLoader');
-          this.commonService.toPage(errorPage, null);
-        }
-      });
+            this.commonService.cacheValue(selectedArchiveSeriesKey, this.commonService.jsonToString(series));
+
+            this.commonService.hideElementById('favoritesBusyLoader');
+
+            this.commonService.toPage(seriesInfoPage, favoritesPage);
+          }
+          else {
+            this.commonService.hideElementById('favoritesBusyLoader');
+            this.commonService.toPage(errorPage, null);
+          }
+        });
+      }
+      else {
+        this.archiveService.getProgramInfo(id, (program: any) => {
+          if (program !== null) {
+            program = program[0];
+
+            this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program));
+
+            this.commonService.hideElementById('favoritesBusyLoader');
+
+            this.commonService.toPage(programInfoPage, favoritesPage);
+          }
+          else {
+            this.commonService.hideElementById('favoritesBusyLoader');
+            this.commonService.toPage(errorPage, null);
+          }
+        });
+      }
     }
   }
 

@@ -24,7 +24,8 @@
                     <img class="favoritesImage" style="height: {{rowItemHeight}}px; width: {{rowImageWidth}}px" src="{{f.image_path}}" onerror="if (this.src != 'assets/tv7logo.png') this.src='assets/tv7logo.png';" alt=""/>
                     <div class="favoritesInfoArea" style="left: {{rowImageWidth}}px">
                         <div class="favoritesTitleContainer">
-                            <img class="favoritesTypeIcon" src="assets/episode.svg" alt=""/>
+                            <img class="favoritesTypeIcon" *ngIf="f.is_series" src="assets/series.svg" alt=""/>
+                            <img class="favoritesTypeIcon" *ngIf="!f.is_series" src="assets/episode.svg" alt=""/>
                             <div id="nameDesc" class="favoritesNameDesc">{{f.name_desc}}</div>
                         </div>
                         <div id="caption" class="favoritesCaption">{{f.caption}}</div>

@@ -9,6 +9,7 @@ import {
   archivePageStateKey,
   selectedCategoryKey,
   selectedArchiveProgramKey,
+  selectedArchiveSeriesKey,
   defaultRowCol,
   archiveIconContainer,
   tvIconContainer,
@@ -20,6 +21,7 @@ import {
   tvMainPage,
   categoryProgramsPage,
   programInfoPage,
+  seriesInfoPage,
   archiveMainPage,
   guidePage,
   searchPage,
@@ -28,6 +30,9 @@ import {
   platformInfoPage,
   errorPage,
   categoryRowNumber,
+  seriesRowNumber,
+  programScheduleDataKey,
+  nullValue,
   LEFT,
   RIGHT,
   UP,
@@ -54,6 +59,7 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
   mostViewedMargin: number = 0;
   newestMargin: number = 0;
   categoriesMargin: number = 0;
+  seriesMargin: number = 0;
   bottomMargin: number = 0;
   animationOngoing: boolean = false;
 
@@ -61,9 +67,10 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
   mostViewedRowWidth: number = 0;
   newestRowWidth: number = 0;
   categoriesRowWidth: number = 0;
+  seriesRowWidth: number = 0;
 
   programRowItemWidth: number = 0;
-  categoriesRowItemWidth: number = 0;
+  categoriesSeriesRowItemWidth: number = 0;
   programRowItemHeight: number = 0;
   categoriesRowItemHeight: number = 0;
 
@@ -73,8 +80,9 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
   recommended: any = null;
   mostViewed: any = null;
   newest: any = null;
+  seriesData: any = null;
   categories: any = null;
-  categoryImage: string = '';
+  archivePageImage: string = '';
 
   lastParentCategoryId: any = null;
   subCategoriesVisible: boolean = false;
@@ -103,15 +111,16 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
     this.localeService.setLocaleText('mostViewedProgramsText');
     this.localeService.setLocaleText('newestProgramsText');
     this.localeService.setLocaleText('categoriesText');
+    this.localeService.setLocaleText('topicalSeriesText');
 
-    this.categoryImage = this.localeService.getCategoryLogo();
+    this.archivePageImage = this.localeService.getArchivePageImage();
 
     this.keydownListener = this.renderer.listen('document', 'keydown', e => {
       this.keyDownEventListener(e);
     });
 
     this.programRowItemWidth = this.calculateItemWidth() - 20;
-    this.categoriesRowItemWidth = this.calculateItemWidth() - 40;
+    this.categoriesSeriesRowItemWidth = this.calculateItemWidth() - 40;
     this.programRowItemHeight = this.calculateRowHeight() - 20;
     this.categoriesRowItemHeight = this.calculateRowHeight() - 40;
   }
@@ -141,6 +150,8 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
     else {
       this.readParentCategories(this.pageState, true, () => { });
     }
+
+    this.handleSeries(this.pageState);
   }
 
   removeKeydownEventListener(): void {
@@ -293,6 +304,9 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
           if (row === categoryRowNumber) {
             this.handleCategorySelection(row, col, this.pageState);
           }
+          else if (row === seriesRowNumber) {
+            this.toSeriesInfoPage(row, col);
+          }
           else {
             this.toProgramInfoPage(row, col);
           }
@@ -401,6 +415,11 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
       rowElement = 'categories';
       margin = this.calculateRightMargin(col, right, this.categoriesMargin);
       this.categoriesMargin = margin;
+    }
+    else if (row === 4) {
+      rowElement = 'series';
+      margin = this.calculateRightMargin(col, right, this.seriesMargin);
+      this.seriesMargin = margin;
     }
 
     const element = this.commonService.getElementById(rowElement);
@@ -544,6 +563,9 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
         subCategoryId = this.categories[col].category_id;
       }
     }
+    else if (row === 4) {
+      margin = this.seriesMargin;
+    }
 
     const pageState = {
       row: row,
@@ -583,6 +605,9 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
       else if (row === 3) {
         marginVariable = 'categoriesMargin';
       }
+      else if (row === 4) {
+        marginVariable = 'seriesMargin';
+      }
 
       let marginValue = pageState['rightMargin'];
       let elem = this.commonService.getElementById(elementId);
@@ -615,6 +640,9 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
     else if (row === 3) {
       this.categoriesMargin = value;
     }
+    else if (row === 4) {
+      this.seriesMargin = value;
+    }
   }
 
   restoreBottomMargin(pageState: any): void {
@@ -633,6 +661,7 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
     this.commonService.showElementById('mostViewedBusyLoader');
     this.commonService.showElementById('newestBusyLoader');
     this.commonService.showElementById('categoriesBusyLoader');
+    this.commonService.showElementById('seriesBusyLoader');
   }
 
   changeRowBackgroundColor(elementId: string, color: string): void {
@@ -674,6 +703,11 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
       if (element) {
         element.style.height = rowHeight + 'px';
       }
+
+      element = this.commonService.getElementById('seriesContainer');
+      if (element) {
+        element.style.height = rowHeight + 'px';
+      }
     }
   }
 
@@ -703,6 +737,36 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
         else {
           this.commonService.hideElementById('commonBusyLoader');
 
+          this.commonService.toPage(errorPage, null);
+        }
+      });
+    }
+  }
+
+  toSeriesInfoPage(row: number, col: number): void {
+    if (this.seriesData && this.seriesData[col]) {
+      const { sid } = this.seriesData[col];
+
+      this.savePageState(row, col);
+
+      this.commonService.showElementById('commonBusyLoader');
+      this.removeKeydownEventListener();
+
+      this.archiveService.getSeriesInfo(sid, (series: any) => {
+        if (series != null) {
+          series = series[0];
+
+          series = this.commonService.addSeriesProperties(series, sid);
+
+          //console.log('Selected series: ', series);
+
+          this.commonService.cacheValue(selectedArchiveSeriesKey, this.commonService.jsonToString(series));
+
+          this.commonService.hideElementById('commonBusyLoader');
+          this.commonService.toPage(seriesInfoPage, archiveMainPage);
+        }
+        else {
+          this.commonService.hideElementById('commonBusyLoader');
           this.commonService.toPage(errorPage, null);
         }
       });
@@ -870,6 +934,25 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
     });
   }
 
+  handleSeries(pageState: any): void {
+    this.seriesData = this.removeDuplicates(this.commonService.stringToJson(this.commonService.getValueFromCache(programScheduleDataKey)));
+    if (this.seriesData) {
+      this.cdRef.detectChanges();
+
+      //console.log('Series data: ', this.seriesData);
+      console.log('Series data length: ', this.seriesData.length);
+
+      const itemWidth = this.calculateItemWidth() + 20;
+      this.seriesRowWidth = this.seriesData.length * itemWidth;
+      this.cdRef.detectChanges();
+
+      this.restoreRightMargin(pageState, 'series', 4);
+
+      this.commonService.hideElementById('seriesBusyLoader');
+      this.changeRowBackgroundColor('seriesContainer', '#ffffff');
+    }
+  }
+
   getCategoriesCount(): number {
     return this.categories.length;
   }
@@ -885,5 +968,28 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
     if (categoriesText) {
       this.commonService.addToElement('categoriesText', categoriesText);
     }
+  }
+
+  removeDuplicates(guide: any): any {
+    let seen = [];
+    let retVal = [];
+    for (let i = 0; i < guide.length; i++) {
+      let { sid, episode_number, is_visible_on_vod, series, image_path, name_desc, localStartDate, duration_time } = guide[i];
+
+      if (!this.validateValue(sid) || !this.validateValue(episode_number) || !this.validateValue(is_visible_on_vod)) {
+        continue;
+      }
+
+      if (Number(episode_number) > 1 && is_visible_on_vod !== '-1' && seen.indexOf(sid) === -1) {
+        retVal.push({ sid, series, image_path, name_desc, localStartDate, duration_time });
+        seen.push(guide[i].sid);
+      }
+    }
+
+    return retVal;
+  }
+
+  validateValue(value: string): boolean {
+    return value && value !== '' && value !== nullValue;
   }
 }

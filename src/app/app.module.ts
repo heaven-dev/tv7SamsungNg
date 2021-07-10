@@ -13,6 +13,7 @@ import { ExitModalComponent } from './components/exit-modal/exit-modal.component
 import { TvPlayerComponent } from './components/tv-player/tv-player.component';
 import { ArchiveMainComponent } from './components/archive-main/archive-main.component';
 import { ProgramInfoComponent } from './components/program-info/program-info.component';
+import { SeriesInfoComponent } from './components/series-info/series-info.component';
 import { ArchivePlayerComponent } from './components/archive-player/archive-player.component';
 import { CategoryProgramsComponent } from './components/category-programs/category-programs.component';
 import { SeriesProgramsComponent } from './components/series-programs/series-programs.component';
@@ -35,6 +36,7 @@ import { ConnectingComponent } from './components/connecting/connecting.componen
     TvPlayerComponent,
     ArchiveMainComponent,
     ProgramInfoComponent,
+    SeriesInfoComponent,
     ArchivePlayerComponent,
     CategoryProgramsComponent,
     SeriesProgramsComponent,

@@ -30,7 +30,8 @@
 .recommendedProgramsText,
 .mostViewedProgramsText,
 .newestProgramsText,
-.categoriesText {
+.categoriesText,
+.seriesText {
 	font-size: 32px;
 	font-weight: bold;
 	color: #444444;
@@ -44,7 +45,8 @@
 }
 
 .categoryNameText,
-.categoryBackText {
+.categoryBackText,
+.seriesNameText {
 	width: calc(100% - 20px);
 	padding: 10px;
 	font-size: 32px;
@@ -63,29 +65,34 @@
 .recommendedPrograms,
 .mostViewedPrograms,
 .newestPrograms,
-.categories {
+.categories,
+.series {
 	height: 100%;
 	position: relative;
 	display: -webkit-flex;
 	display: flex;
 }
 
-.categories {
+.categories,
+.series {
 	display: -webkit-flex;
 	display: flex;
 }
 
-.categoriesContainer {
+.categoriesContainer,
+.seriesContainer {
 	position: relative;
 }
 
-.categoriesBusyLoader {
+.categoriesBusyLoader,
+.seriesBusyLoader {
 	position: absolute;
 	z-index: 300;
 }
 
 .programItem,
 .categoriesItem,
+.seriesItem,
 .categoriesBackItem {
 	position: relative;
 	border: 10px solid #444444;
@@ -94,22 +101,26 @@
 }
 
 .programItem,
-.categoriesItem {
+.categoriesItem,
+.seriesItem {
 	margin-right: 10px;
 }
 
-.categoriesItem {
+.categoriesItem,
+.seriesItem {
 	display: -webkit-flex;
 	display: flex;
     align-items: center;
 }
 
-.categoryImage {
+.categoryImage,
+.seriesImage {
 	width: 60%;
 }
 
 .programItem:first-child,
-.categoriesItem:first-child {
+.categoriesItem:first-child,
+.seriesItem:first-child {
 	margin-left: 10px;
 }
 
@@ -125,7 +136,8 @@
 
 .programItem:focus,
 .categoriesItem:focus,
-.categoriesBackItem:focus {
+.categoriesBackItem:focus,
+.seriesItem:focus {
 	border: 10px solid #0099CC;
 	border-radius: 4px;
 	/*

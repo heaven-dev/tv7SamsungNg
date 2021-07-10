@@ -6,6 +6,7 @@ import { TvMainComponent } from './components/tv-main/tv-main.component';
 import { TvPlayerComponent } from './components/tv-player/tv-player.component';
 import { ArchiveMainComponent } from './components/archive-main/archive-main.component';
 import { ProgramInfoComponent } from './components/program-info/program-info.component';
+import { SeriesInfoComponent } from './components/series-info/series-info.component';
 import { ArchivePlayerComponent } from './components/archive-player/archive-player.component';
 import { CategoryProgramsComponent } from './components/category-programs/category-programs.component';
 import { SeriesProgramsComponent } from './components/series-programs/series-programs.component';
@@ -23,6 +24,7 @@ import {
   tvPlayerPage,
   archiveMainPage,
   programInfoPage,
+  seriesInfoPage,
   archivePlayerPage,
   categoryProgramsPage,
   seriesProgramsPage,
@@ -42,6 +44,7 @@ const routes: Routes = [
   { path: tvPlayerPage, component: TvPlayerComponent },
   { path: archiveMainPage, component: ArchiveMainComponent },
   { path: programInfoPage, component: ProgramInfoComponent },
+  { path: seriesInfoPage, component: SeriesInfoComponent },
   { path: archivePlayerPage, component: ArchivePlayerComponent },
   { path: categoryProgramsPage, component: CategoryProgramsComponent },
   { path: seriesProgramsPage, component: SeriesProgramsComponent },
