@@ -81,6 +81,7 @@ export const platformInfoIconContainer = 'platformInfoIconContainer';
 export const mainActiveElementId = 'mainActiveElementId';
 export const backIconContainer = 'backIconContainer';
 export const playIconContainer = 'playIconContainer';
+export const clearIconContainer = 'clearIconContainer';
 export const favoriteIconContainer = 'favoriteIconContainer';
 export const channelInfoIconContainer = 'channelInfoIconContainer';
 export const seriesIconContainer = 'seriesIconContainer';

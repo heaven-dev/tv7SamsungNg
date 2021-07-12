@@ -43,6 +43,29 @@
                 </tr>
             </table>
         </div>
+
+        <div id="clearIconContainer" class="clearIconContainer" tabindex="0">
+            <img id="clearIcon" class="clearIcon" src="assets/clear.svg" alt="image/svg+xml" />
+        </div>
+
+        <div id="clearMenuContainer" class="clearMenuContainer">
+			<div class="clearMenuTitleContainer">
+                <img class="clearMenuIcon" src="assets/clear.svg" />
+				<div id="deleteConfigurationsText" class="clearMenuTitle"></div>
+			</div>
+
+            <div class="clearMenuItems">
+                <div id="{{i}}_cm" id="clearMenuItem" class="clearMenuItem" *ngFor="let c of clearMenuItems; let i = index" key="clearMenuItem" tabindex="0">{{c}}</div>
+            </div>
+
+            <div id="clearDataConfirmationContainer" class="clearDataConfirmationContainer">
+                <div id="confirmationQuestionText" class="confirmationQuestionText"></div>
+                <div class="confirmationButtons">
+                    <div id="confirmationOkButton" class="okButton" tabindex="0"></div>
+                    <div id="confirmationCancelButton" class="cancelButton" tabindex="0"></div>
+                </div>
+            </div>
+        </div>
        
         <div id="copyrightText" class="copyrightText"></div>
     </div>

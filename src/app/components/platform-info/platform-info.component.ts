@@ -17,7 +17,11 @@ import {
   favoritesIconContainer,
   channelInfoIconContainer,
   platformInfoIconContainer,
+  clearIconContainer,
   platformInfoKey,
+  videoStatusDataKey,
+  favoritesDataKey,
+  savedSearchDataKey,
   LEFT,
   RIGHT,
   UP,
@@ -33,6 +37,11 @@ import {
   styleUrls: ['./platform-info.component.css']
 })
 export class PlatformInfoComponent implements OnInit, AfterViewInit {
+
+  clearMenuItems: any = [];
+  clearMenuVisible: boolean = false;
+  clearMenuItemMaxCount: number = 12;
+  selectedClearMenuId: string = null;
 
   keydownListener: Function = null;
 
@@ -56,52 +65,31 @@ export class PlatformInfoComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.setFontSizes(this.calculateTableFontSize());
-    
+
     let platformInfo: any = this.commonService.getValueFromCache(platformInfoKey);
     if (platformInfo) {
       platformInfo = this.commonService.stringToJson(platformInfo);
 
-      let elem = this.commonService.getElementById('appName');
-      if (elem) {
-        const appName = this.localeService.getAppName();
-        if (appName && appName.length > 0) {
-          elem.innerHTML = appName;
-        }
+      const appName = this.localeService.getAppName();
+      if (appName && appName.length > 0) {
+        this.commonService.addToElement('appName', appName);
       }
 
-      elem = this.commonService.getElementById('appVersion');
-      if (elem) {
-        const appVersion = this.localeService.getAppVersion();
-        if (appVersion && appVersion.length > 0) {
-          elem.innerHTML = appVersion;
-        }
+      const appVersion = this.localeService.getAppVersion();
+      if (appVersion && appVersion.length > 0) {
+        this.commonService.addToElement('appVersion', appVersion);
       }
 
-      elem = this.commonService.getElementById('platformName');
-      if (elem) {
-        elem.innerHTML = platformInfo.platformName;
-      }
-
-      elem = this.commonService.getElementById('platformVersion');
-      if (elem) {
-        elem.innerHTML = platformInfo.platformVersion;
-      }
-
-      elem = this.commonService.getElementById('platformBuildTime');
-      if (elem) {
-        elem.innerHTML = platformInfo.platformBuildTime;
-      }
-
-      elem = this.commonService.getElementById('tvModel');
-      if (elem) {
-        elem.innerHTML = platformInfo.tvModel;
-      }
+      this.commonService.addToElement('platformName', platformInfo.platformName);
+      this.commonService.addToElement('platformVersion', platformInfo.platformVersion);
+      this.commonService.addToElement('platformBuildTime', platformInfo.platformBuildTime);
+      this.commonService.addToElement('tvModel', platformInfo.tvModel);
     }
 
     this.localeService.setLocaleText('copyrightText');
 
     setTimeout(() => {
-      this.commonService.focusToElement('platformInfoContentContainer');
+      this.commonService.focusToElement(clearIconContainer);
     });
   }
 
@@ -120,16 +108,30 @@ export class PlatformInfoComponent implements OnInit, AfterViewInit {
 
     e.preventDefault();
 
+    let row = null;
+    let col = null;
+    const split = contentId.split('_');
+    if (split.length > 1) {
+      row = parseInt(split[0]);
+      col = split[1];
+    }
+
     if (keyCode === LEFT) {
       // LEFT arrow
-      if (contentId === 'platformInfoContentContainer') {
+      if (contentId === clearIconContainer) {
         this.commonService.focusToElement(platformInfoIconContainer);
+      }
+      else if (contentId === 'confirmationCancelButton') {
+        this.commonService.focusToElement('confirmationOkButton');
       }
     }
     else if (keyCode === RIGHT) {
       // RIGHT arrow			
       if (this.commonService.isSideBarMenuActive(contentId)) {
-        this.commonService.focusToElement('platformInfoContentContainer');
+        this.commonService.focusToElement(clearIconContainer);
+      }
+      else if (contentId === 'confirmationOkButton') {
+        this.commonService.focusToElement('confirmationCancelButton');
       }
     }
     else if (keyCode === UP) {
@@ -137,11 +139,25 @@ export class PlatformInfoComponent implements OnInit, AfterViewInit {
       if (this.commonService.isSideBarMenuActive(contentId)) {
         this.commonService.menuFocusUp(contentId);
       }
+      else if (col === 'cm') {
+        const newRow = row - 1;
+        let newFocus = newRow + '_cm';
+        if (this.commonService.elementExist(newFocus)) {
+          this.commonService.focusToElement(newFocus);
+        }
+      }
     }
     else if (keyCode === DOWN) {
       // DOWN arrow
       if (this.commonService.isSideBarMenuActive(contentId)) {
         this.commonService.menuFocusDown(contentId);
+      }
+      else if (col === 'cm') {
+        const newRow = row + 1;
+        let newFocus = newRow + '_cm';
+        if (this.commonService.elementExist(newFocus)) {
+          this.commonService.focusToElement(newFocus);
+        }
       }
     }
     else if (keyCode === OK) {
@@ -157,7 +173,7 @@ export class PlatformInfoComponent implements OnInit, AfterViewInit {
       if (this.commonService.isSideBarMenuActive(contentId)) {
         if (contentId === platformInfoIconContainer) {
           this.commonService.focusOutFromMenuEvent();
-          this.commonService.focusToElement('platformInfoContentContainer');
+          this.commonService.focusToElement(clearIconContainer);
         }
         else if (contentId === tvIconContainer) {
           this.commonService.sideMenuSelection(tvMainPage);
@@ -178,12 +194,30 @@ export class PlatformInfoComponent implements OnInit, AfterViewInit {
           this.commonService.sideMenuSelection(channelInfoPage);
         }
       }
+      else if (col === 'cm') {
+        this.showConfirmationButtons(row, col);
+      }
+      else if (contentId === 'confirmationOkButton') {
+        this.handleOkButtonSelection();
+      }
+      else if (contentId === 'confirmationCancelButton') {
+        this.hideClearMenu();
+      }
+      else if (!this.clearMenuVisible) {
+        this.showClearMenu();
+      }
+      else if (this.clearMenuVisible) {
+        this.hideClearMenu();
+      }
     }
     else if (keyCode === RETURN || keyCode === ESC) {
       // RETURN button
       if (this.commonService.isSideBarMenuActive(contentId)) {
         this.commonService.focusOutFromMenuEvent();
-        this.commonService.focusToElement('platformInfoContentContainer');
+        this.commonService.focusToElement(clearIconContainer);
+      }
+      else if (this.clearMenuVisible) {
+        this.hideClearMenu();
       }
       else {
         //this.commonService.showElementById('platformInfoBusyLoader');
@@ -191,6 +225,111 @@ export class PlatformInfoComponent implements OnInit, AfterViewInit {
         this.commonService.toPage(archiveMainPage, null);
       }
     }
+  }
+
+  createMenuTexts(): void {
+    this.removeMenuTexts();
+
+    const itemsText = this.localeService.getLocaleTextById('itemsText');
+
+    let itemCount = this.commonService.stringToJson(this.commonService.getSavedValue(videoStatusDataKey));
+    if (!itemCount) {
+      itemCount = [];
+    }
+
+    this.clearMenuItems.push(this.localeService.getLocaleTextById('videoStatusConfiguationText') + ' | ' + itemCount.length + ' ' + itemsText);
+
+    itemCount = this.commonService.stringToJson(this.commonService.getSavedValue(favoritesDataKey + this.localeService.getArchiveLanguage()));
+    if (!itemCount) {
+      itemCount = [];
+    }
+
+    this.clearMenuItems.push(this.localeService.getLocaleTextById('favoritesConfigurationText') + ' | ' + itemCount.length + ' ' + itemsText);
+
+    itemCount = this.commonService.stringToJson(this.commonService.getSavedValue(savedSearchDataKey + this.localeService.getSelectedLocale()));
+    if (!itemCount) {
+      itemCount = [];
+    }
+
+    this.clearMenuItems.push(this.localeService.getLocaleTextById('searchHistoryConfigurationText') + ' | ' + itemCount.length + ' ' + itemsText);
+  }
+
+  removeMenuTexts(): void {
+    if (this.clearMenuItems) {
+      this.clearMenuItems = [];
+    }
+  }
+
+  showClearMenu(): void {
+    this.commonService.showElementById('clearMenuContainer');
+
+    this.createMenuTexts();
+
+    setTimeout(() => {
+      this.localeService.setLocaleText('deleteConfigurationsText');
+
+      let height: number = this.commonService.getWindowHeight();
+      height -= 280;
+      height /= this.clearMenuItemMaxCount;
+      height = height;
+
+      //console.log('Item height: ', height);
+
+      let elems: any = this.commonService.getElementsByClass(
+        this.commonService.getElementById('clearMenuContainer'), 'clearMenuItems');
+      if (elems) {
+        for (let e of elems) {
+          if (e) {
+            e.style.height = height + 'px';
+            e.style.lineHeight = height + 'px';
+            e.style.fontSize = Math.ceil(0.70 * height) + 'px';
+          }
+        }
+      }
+
+      this.commonService.focusToElement('0_cm');
+    });
+
+    this.clearMenuVisible = true;
+  }
+
+  hideClearMenu(): void {
+    this.commonService.hideElementById('clearMenuContainer');
+    this.commonService.hideElementById('clearDataConfirmationContainer');
+
+    this.removeMenuTexts();
+
+    this.clearMenuVisible = false;
+
+    this.commonService.focusToElement(clearIconContainer);
+  }
+
+  showConfirmationButtons(row: number, col: string): void {
+    this.commonService.showElementById('clearDataConfirmationContainer');
+
+    this.selectedClearMenuId = row + '_' + col;
+
+    setTimeout(() => {
+      this.localeService.setLocaleText('confirmationQuestionText');
+      this.localeService.setLocaleText('confirmationOkButton');
+      this.localeService.setLocaleText('confirmationCancelButton');
+
+      this.commonService.focusToElement('confirmationOkButton');
+    });
+  }
+
+  handleOkButtonSelection(): void {
+    if (this.selectedClearMenuId === '0_cm') {
+      this.commonService.removeSavedValue(videoStatusDataKey);
+    }
+    else if (this.selectedClearMenuId === '1_cm') {
+      this.commonService.removeSavedValue(favoritesDataKey + this.localeService.getArchiveLanguage());
+    }
+    else if (this.selectedClearMenuId === '2_cm') {
+      this.commonService.removeSavedValue(savedSearchDataKey + this.localeService.getSelectedLocale());
+    }
+
+    this.hideClearMenu();
   }
 
   calculateTableFontSize(): number {
@@ -201,7 +340,7 @@ export class PlatformInfoComponent implements OnInit, AfterViewInit {
     let platformInfoTable: any = this.commonService.getElementById('platformInfoTable');
     if (platformInfoTable) {
       let tableElements: any = this.commonService.getElementsByClass(platformInfoTable, 'platformInfoTableText');
-      for(let e of tableElements) {
+      for (let e of tableElements) {
         if (e) {
           e.style.fontSize = tableFontSize + 'px';
         }

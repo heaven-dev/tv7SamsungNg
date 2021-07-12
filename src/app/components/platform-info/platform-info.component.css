@@ -45,3 +45,142 @@
 	transform: translate(-50%);
 	white-space: nowrap;
 }
+
+.clearIconContainer {
+	position: absolute;
+	width: 80px;
+	height: 80px;
+	background-color: #ffffff;
+	opacity: 0.7;
+	border-radius: 50%;
+	outline: none;
+	z-index: 200;
+	top: 130px;
+	right: 40px;
+	padding: 8px;
+	border: 2px solid #000000;
+}
+
+.clearIconContainer:focus {
+	background-color: #0099CC;
+	opacity: 1;
+}
+
+.clearIcon {
+	width: 80px;
+	height: 80px;
+}
+
+.clearMenuContainer {
+	background-color: #ffffff;
+	height: calc(100% - 90px);
+	width: 50%;
+	right: 0;
+	position: absolute;
+	display: none;
+	z-index: 301;
+	opacity: 0.97;
+}
+
+.clearMenuItems {
+	padding: 0 20px 20px 20px;
+}
+
+.clearMenuItem {
+	font-size: 35px;
+	background-color: #eeeeee;
+	color: #444444;
+	border-radius: 4px;
+	padding-left: 20px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	outline: none;
+	border: none;
+}
+
+.clearMenuItem:not(:last-child) {
+	margin-bottom: 10px;
+}
+
+.clearMenuItem:focus {
+	background-color: #0099CC;
+	color: #000000;
+}
+
+.clearMenuTitleContainer {
+	display: flex;
+	display: -webkit-flex;
+	align-items: center;
+}
+
+.clearMenuIcon {
+	height: 40px;
+	padding-left: 20px;
+}
+
+.clearMenuTitle {
+	background-color: #fff;
+	font-size: 32px;
+	font-weight: bold;
+	color: #444444;
+	height: 60px;
+	line-height: 60px;
+	padding-left: 10px;
+	white-space: nowrap;
+}
+
+.clearMenuKey {
+	display: none;
+}
+
+.clearDataConfirmationContainer {
+	position: absolute;
+	bottom: 40px;
+	width: 100%;
+	display: none;
+}
+
+.confirmationQuestionText {
+	text-align: center;
+	font-size: 42px;
+	font-weight: bold;
+	color: #444444;
+	white-space: nowrap;
+}
+
+.confirmationButtons {
+	display: -webkit-flex;
+	display: flex;
+	justify-content: center;
+	margin-top: 30px;
+}
+
+.okButton {
+	margin-right: 20px;
+}
+
+.cancelButton {
+	margin-left: 20px;
+}
+
+.okButton,
+.cancelButton {
+	width: 250px;
+	height: 70px;
+	border-radius: 60px;
+	background-color: #777777;
+	color: #ffffff;
+	text-align: center;
+	vertical-align: middle;
+	line-height: 70px;
+	font-size: 50px;
+	outline: none;
+	cursor: pointer;
+}
+
+.okButton:focus, 
+.cancelButton:focus {
+	background-color: #0099CC;
+	color: #ffffff;
+}
