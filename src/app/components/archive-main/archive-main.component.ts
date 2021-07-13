@@ -4,6 +4,7 @@ import { CommonService } from '../../services/common.service';
 import { ArchiveService } from '../../services/archive.service';
 import { AppService } from '../../services/app.service';
 import { LocaleService } from '../../services/locale.service';
+import { ProgramScheduleService } from '../../services/program-schedule.service';
 import {
   categoryDefaultRowCol,
   archivePageStateKey,
@@ -32,6 +33,7 @@ import {
   categoryRowNumber,
   seriesRowNumber,
   programScheduleDataKey,
+  programScheduleYesterdayDataKey,
   nullValue,
   LEFT,
   RIGHT,
@@ -98,7 +100,8 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
     private appService: AppService,
     private archiveService: ArchiveService,
     private commonService: CommonService,
-    private localeService: LocaleService
+    private localeService: LocaleService,
+    private programScheduleService: ProgramScheduleService
   ) { }
 
   ngOnInit(): void {
@@ -151,7 +154,7 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
       this.readParentCategories(this.pageState, true, () => { });
     }
 
-    this.handleSeries(this.pageState);
+    this.readSeries(this.pageState);
   }
 
   removeKeydownEventListener(): void {
@@ -934,22 +937,49 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
     });
   }
 
-  handleSeries(pageState: any): void {
-    this.seriesData = this.removeDuplicates(this.commonService.stringToJson(this.commonService.getValueFromCache(programScheduleDataKey)));
-    if (this.seriesData) {
-      this.cdRef.detectChanges();
+  readSeries(pageState: any): void {
+    let yesterdayGuide: any = this.commonService.getValueFromCache(programScheduleYesterdayDataKey);
+    if (!yesterdayGuide) {
+      this.programScheduleService.getGuideByDate(this.commonService.getYesterdayDate(), (gd) => {
+        if (gd !== null) {
+          this.commonService.cacheValue(programScheduleYesterdayDataKey, this.commonService.jsonToString(gd.data));
 
-      //console.log('Series data: ', this.seriesData);
-      console.log('Series data length: ', this.seriesData.length);
+          this.handleSeries(gd.data, pageState);
+        }
+        else {
+          this.commonService.hideElementById('seriesBusyLoader');
+          this.removeKeydownEventListener();
 
-      const itemWidth = this.calculateItemWidth() + 20;
-      this.seriesRowWidth = this.seriesData.length * itemWidth;
-      this.cdRef.detectChanges();
+          this.commonService.toPage(errorPage, null);
+        }
+      });
+    }
+    else {
+      console.log('**Return series data from cache.');
+      this.handleSeries(this.commonService.stringToJson(yesterdayGuide), pageState);
+    }
+  }
 
-      this.restoreRightMargin(pageState, 'series', 4);
+  handleSeries(guide: any, pageState: any): void {
+    if (guide) {
+      guide = guide.concat(this.commonService.stringToJson(this.commonService.getValueFromCache(programScheduleDataKey)));
 
-      this.commonService.hideElementById('seriesBusyLoader');
-      this.changeRowBackgroundColor('seriesContainer', '#ffffff');
+      this.seriesData = this.removeDuplicates(guide);
+      if (this.seriesData) {
+        this.cdRef.detectChanges();
+
+        //console.log('Series data: ', this.seriesData);
+        console.log('Series data length: ', this.seriesData.length);
+
+        const itemWidth = this.calculateItemWidth() + 20;
+        this.seriesRowWidth = this.seriesData.length * itemWidth;
+        this.cdRef.detectChanges();
+
+        this.restoreRightMargin(pageState, 'series', 4);
+
+        this.commonService.hideElementById('seriesBusyLoader');
+        this.changeRowBackgroundColor('seriesContainer', '#ffffff');
+      }
     }
   }
 
