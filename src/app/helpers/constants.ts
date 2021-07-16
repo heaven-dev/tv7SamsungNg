@@ -110,7 +110,7 @@ export const audioIndexParam = 'audioindex';
 export const tvBrand = 'samsungTV';
 
 export const programScheduleDataKey = 'programScheduleDataKey';
-export const programScheduleYesterdayDataKey = 'programScheduleYesterdayDataKey';
+export const programSchedulePastDataKey = 'programSchedulePastDataKey';
 export const platformVersionKey = 'platformVersionKey';
 export const platformInfoKey = 'platformInfoKey';
 
@@ -136,6 +136,8 @@ export const favoritesDataKey = 'favoritesDataKey';
 export const videoStatusDataKey = 'videoStatusDataKey';
 export const savedSearchDataKey = 'savedSearchDataKey';
 export const visiblePageKey = 'visiblePageKey';
+export const seriesDataKey = 'seriesDataKey';
+export const dynamicRowDataKey = 'dynamicRowDataKey';
 
 export const channelUrlKey = 'channelUrlKey';
 
@@ -172,3 +174,8 @@ export const sidebarIconIds = [
     channelInfoIconContainer,
     platformInfoIconContainer
 ];
+
+export const dateIndexDayBeforeYesterday = -2;
+export const dateIndexYesterday = -1;
+export const dateIndexToday = 0;
+export const dateIndexTomorrow = 1;

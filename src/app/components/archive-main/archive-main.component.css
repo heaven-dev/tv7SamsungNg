@@ -31,7 +31,8 @@
 .mostViewedProgramsText,
 .newestProgramsText,
 .categoriesText,
-.seriesText {
+.seriesText,
+.dynamicRowText {
 	font-size: 32px;
 	font-weight: bold;
 	color: #444444;
@@ -66,7 +67,8 @@
 .mostViewedPrograms,
 .newestPrograms,
 .categories,
-.series {
+.series,
+.dynamicRow {
 	height: 100%;
 	position: relative;
 	display: -webkit-flex;

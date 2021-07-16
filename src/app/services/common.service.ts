@@ -30,23 +30,13 @@ export class CommonService {
 
   constructor(private router: Router) { }
 
-  getYesterdayDate(): string {
+  getDateByDateIndex(dateIndex: number): string {
     const d = new Date();
 
-    d.setDate(d.getDate() - 1);
-    return d.getFullYear() + '-' + this.prependZero((d.getMonth() + 1)) + '-' + this.prependZero(d.getDate());
-  }
+    if (dateIndex != 0) {
+      d.setDate(d.getDate() + dateIndex);
+    }
 
-  getTodayDate(): string {
-    const d = new Date();
-
-    return d.getFullYear() + '-' + this.prependZero((d.getMonth() + 1)) + '-' + this.prependZero(d.getDate());
-  }
-
-  getTomorrowDate(): string {
-    const d = new Date();
-
-    d.setDate(d.getDate() + 1);
     return d.getFullYear() + '-' + this.prependZero((d.getMonth() + 1)) + '-' + this.prependZero(d.getDate());
   }
 

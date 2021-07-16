@@ -24,6 +24,7 @@ import {
   platformInfoIconContainer,
   guidePageStateKey,
   selectedArchiveProgramKey,
+  dateIndexToday,
   LEFT,
   RIGHT,
   UP,
@@ -444,7 +445,7 @@ export class GuideComponent implements OnInit, AfterViewInit {
   }
 
   isDateToday(date: string): boolean {
-    return date === this.commonService.getTodayDate();
+    return date === this.commonService.getDateByDateIndex(dateIndexToday);
   }
 
   createDates(): void {

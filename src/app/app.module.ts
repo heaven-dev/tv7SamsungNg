@@ -25,6 +25,7 @@ import { ChannelInfoComponent } from './components/channel-info/channel-info.com
 import { SearchResultComponent } from './components/search-result/search-result.component';
 import { ErrorComponent } from './components/error/error.component';
 import { ConnectingComponent } from './components/connecting/connecting.component';
+import { DynamicRowPipe } from './pipe/dynamic-row.pipe';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { ConnectingComponent } from './components/connecting/connecting.componen
     ChannelInfoComponent,
     SearchResultComponent,
     ErrorComponent,
-    ConnectingComponent
+    ConnectingComponent,
+    DynamicRowPipe
   ],
   imports: [
     BrowserModule,

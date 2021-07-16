@@ -9,7 +9,9 @@ import {
   errorPage,
   platformInfoKey,
   platformVersionKey,
-  runOnBrowser
+  runOnBrowser,
+  dateIndexToday,
+  dateIndexTomorrow
 } from '../../helpers/constants';
 
 @Component({
@@ -40,11 +42,11 @@ export class LandingComponent implements OnInit, AfterViewInit {
     this.registerRemoteControlKeys();
 
     // get today and tomorrow guide
-    this.programScheduleService.getGuideByDate(this.commonService.getTodayDate(), (gd) => {
+    this.programScheduleService.getGuideByDate(this.commonService.getDateByDateIndex(dateIndexToday), (gd) => {
       if (gd !== null) {
         let guide = gd.data;
 
-        this.programScheduleService.getGuideByDate(this.commonService.getTomorrowDate(), (gd) => {
+        this.programScheduleService.getGuideByDate(this.commonService.getDateByDateIndex(dateIndexTomorrow), (gd) => {
           if (gd !== null) {
             guide = guide.concat(gd.data);
 

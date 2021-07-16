@@ -28,6 +28,8 @@ import {
   playButton,
   mainPageUpdateInterval,
   programListMinSize,
+  dateIndexToday,
+  dateIndexTomorrow,
   LEFT,
   RIGHT,
   UP,
@@ -286,11 +288,11 @@ export class TvMainComponent implements OnInit, AfterViewInit {
     if (count <= programListMinSize) {
 
       // get today and tomorrow guide and update the page
-      this.programScheduleService.getGuideByDate(this.commonService.getTodayDate(), (gToday) => {
+      this.programScheduleService.getGuideByDate(this.commonService.getDateByDateIndex(dateIndexToday), (gToday) => {
         if (gToday !== null) {
           gToday = gToday.data;
 
-          this.programScheduleService.getGuideByDate(this.commonService.getTomorrowDate(), (gTomorrow) => {
+          this.programScheduleService.getGuideByDate(this.commonService.getDateByDateIndex(dateIndexTomorrow), (gTomorrow) => {
             if (gTomorrow !== null) {
               this.guideData = gToday.concat(gTomorrow.data);
 

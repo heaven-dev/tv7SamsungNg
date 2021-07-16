@@ -26,6 +26,7 @@ import {
   vodParam,
   tvBrand,
   audioIndexParam,
+  dateIndexToday,
   LEFT,
   RIGHT,
   UP,
@@ -105,7 +106,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
     const videoUrl = this.getVideoUrl(this.archiveLanguage);
 
-    this.readNewestPrograms(this.commonService.getTodayDate(), 30, 0, null);
+    this.readNewestPrograms(this.commonService.getDateByDateIndex(dateIndexToday), 30, 0, null);
 
     this.playerOptions = {
       preload: 'auto',

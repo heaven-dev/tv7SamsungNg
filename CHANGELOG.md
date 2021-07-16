@@ -1,3 +1,15 @@
+# 16.07.2021 15:45
+
+### Bug Fixes
+
+* none
+
+### Features
+
+* Added dynamic category rows to archive main page.
+* New version number (2.3.0).
+
+
 # 13.07.2021 11:50
 
 ### Bug Fixes
@@ -6,7 +18,7 @@
 
 ### Features
 
-* Configuration clear functionality added to the information page. 
+* Configuration clear functionality added to the information page.
 * New version number (2.2.9).
 
 

@@ -33,7 +33,12 @@ import {
   categoryRowNumber,
   seriesRowNumber,
   programScheduleDataKey,
-  programScheduleYesterdayDataKey,
+  programSchedulePastDataKey,
+  dateIndexDayBeforeYesterday,
+  dateIndexYesterday,
+  dateIndexToday,
+  seriesDataKey,
+  dynamicRowDataKey,
   nullValue,
   LEFT,
   RIGHT,
@@ -57,11 +62,19 @@ import anime from 'animejs/lib/anime.es.js';
 export class ArchiveMainComponent implements OnInit, AfterViewInit {
   modalVisible = false;
 
+  dynamicRowsMap: any = {};
+  dynamicRowData: any = {};
+
   recommendedMargin: number = 0;
   mostViewedMargin: number = 0;
   newestMargin: number = 0;
   categoriesMargin: number = 0;
   seriesMargin: number = 0;
+  dynamicRowOneMargin: number = 0;
+  dynamicRowTwoMargin: number = 0;
+  dynamicRowThreeMargin: number = 0;
+  dynamicRowFourMargin: number = 0;
+  dynamicRowFiveMargin: number = 0;
   bottomMargin: number = 0;
   animationOngoing: boolean = false;
 
@@ -70,6 +83,11 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
   newestRowWidth: number = 0;
   categoriesRowWidth: number = 0;
   seriesRowWidth: number = 0;
+  dynamicRowOneWidth: number = 0;
+  dynamicRowTwoWidth: number = 0;
+  dynamicRowThreeWidth: number = 0;
+  dynamicRowFourWidth: number = 0;
+  dynamicRowFiveWidth: number = 0;
 
   programRowItemWidth: number = 0;
   categoriesSeriesRowItemWidth: number = 0;
@@ -77,7 +95,7 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
   categoriesRowItemHeight: number = 0;
 
   rowFocusWas: any = null;
-  colFocusWas: any = [null, null, null, null];
+  colFocusWas: any = [null, null, null, null, null, null, null, null, null, null];
 
   recommended: any = null;
   mostViewed: any = null;
@@ -140,7 +158,7 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
     this.showBusyLoaders();
 
     // get data
-    const todayDate = this.commonService.getTodayDate();
+    const todayDate = this.commonService.getDateByDateIndex(dateIndexToday);
     const archiveLanguage = this.localeService.getArchiveLanguage();
 
     this.readRecommendedPrograms(todayDate, 30, 0, this.pageState);
@@ -424,6 +442,31 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
       margin = this.calculateRightMargin(col, right, this.seriesMargin);
       this.seriesMargin = margin;
     }
+    else if (row === 5) {
+      rowElement = 'dynamicRowOne';
+      margin = this.calculateRightMargin(col, right, this.dynamicRowOneMargin);
+      this.dynamicRowOneMargin = margin;
+    }
+    else if (row === 6) {
+      rowElement = 'dynamicRowTwo';
+      margin = this.calculateRightMargin(col, right, this.dynamicRowTwoMargin);
+      this.dynamicRowTwoMargin = margin;
+    }
+    else if (row === 7) {
+      rowElement = 'dynamicRowThree';
+      margin = this.calculateRightMargin(col, right, this.dynamicRowThreeMargin);
+      this.dynamicRowThreeMargin = margin;
+    }
+    else if (row === 8) {
+      rowElement = 'dynamicRowFour';
+      margin = this.calculateRightMargin(col, right, this.dynamicRowFourMargin);
+      this.dynamicRowFourMargin = margin;
+    }
+    else if (row === 9) {
+      rowElement = 'dynamicRowFive';
+      margin = this.calculateRightMargin(col, right, this.dynamicRowFiveMargin);
+      this.dynamicRowFiveMargin = margin;
+    }
 
     const element = this.commonService.getElementById(rowElement);
     if (element) {
@@ -545,6 +588,21 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
     else if (row === 2) {
       return this.newest[col];
     }
+    else if (row === 5) {
+      return this.dynamicRowData[0][col];
+    }
+    else if (row === 6) {
+      return this.dynamicRowData[1][col];
+    }
+    else if (row === 7) {
+      return this.dynamicRowData[2][col];
+    }
+    else if (row === 8) {
+      return this.dynamicRowData[3][col];
+    }
+    else if (row === 9) {
+      return this.dynamicRowData[4][col];
+    }
   }
 
   savePageState(row: number, col: number): void {
@@ -568,6 +626,21 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
     }
     else if (row === 4) {
       margin = this.seriesMargin;
+    }
+    else if (row === 5) {
+      margin = this.dynamicRowOneMargin;
+    }
+    else if (row === 6) {
+      margin = this.dynamicRowTwoMargin;
+    }
+    else if (row === 7) {
+      margin = this.dynamicRowThreeMargin;
+    }
+    else if (row === 8) {
+      margin = this.dynamicRowFourMargin;
+    }
+    else if (row === 9) {
+      margin = this.dynamicRowFiveMargin;
     }
 
     const pageState = {
@@ -594,23 +667,6 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
   restoreRightMargin(pageState: any, elementId: string, row: number): void {
     if (pageState) {
       //console.log('Page state: ', pageState);
-
-      let marginVariable = null;
-      if (row === 0) {
-        marginVariable = 'recommendedMargin';
-      }
-      else if (row === 1) {
-        marginVariable = 'mostViewedMargin';
-      }
-      else if (row === 2) {
-        marginVariable = 'newestMargin';
-      }
-      else if (row === 3) {
-        marginVariable = 'categoriesMargin';
-      }
-      else if (row === 4) {
-        marginVariable = 'seriesMargin';
-      }
 
       let marginValue = pageState['rightMargin'];
       let elem = this.commonService.getElementById(elementId);
@@ -646,6 +702,21 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
     else if (row === 4) {
       this.seriesMargin = value;
     }
+    else if (row === 5) {
+      this.dynamicRowOneMargin = value;
+    }
+    else if (row === 6) {
+      this.dynamicRowTwoMargin = value;
+    }
+    else if (row === 7) {
+      this.dynamicRowThreeMargin = value;
+    }
+    else if (row === 8) {
+      this.dynamicRowFourMargin = value;
+    }
+    else if (row === 9) {
+      this.dynamicRowFiveMargin = value;
+    }
   }
 
   restoreBottomMargin(pageState: any): void {
@@ -665,6 +736,11 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
     this.commonService.showElementById('newestBusyLoader');
     this.commonService.showElementById('categoriesBusyLoader');
     this.commonService.showElementById('seriesBusyLoader');
+    this.commonService.showElementById('dynamicRowOneBusyLoader');
+    this.commonService.showElementById('dynamicRowTwoBusyLoader');
+    this.commonService.showElementById('dynamicRowThreeBusyLoader');
+    this.commonService.showElementById('dynamicRowFourBusyLoader');
+    this.commonService.showElementById('dynamicRowFiveBusyLoader');
   }
 
   changeRowBackgroundColor(elementId: string, color: string): void {
@@ -708,6 +784,31 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
       }
 
       element = this.commonService.getElementById('seriesContainer');
+      if (element) {
+        element.style.height = rowHeight + 'px';
+      }
+
+      element = this.commonService.getElementById('dynamicRowOneContainer');
+      if (element) {
+        element.style.height = rowHeight + 'px';
+      }
+
+      element = this.commonService.getElementById('dynamicRowTwoContainer');
+      if (element) {
+        element.style.height = rowHeight + 'px';
+      }
+
+      element = this.commonService.getElementById('dynamicRowThreeContainer');
+      if (element) {
+        element.style.height = rowHeight + 'px';
+      }
+
+      element = this.commonService.getElementById('dynamicRowFourContainer');
+      if (element) {
+        element.style.height = rowHeight + 'px';
+      }
+
+      element = this.commonService.getElementById('dynamicRowFiveContainer');
       if (element) {
         element.style.height = rowHeight + 'px';
       }
@@ -938,49 +1039,273 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
   }
 
   readSeries(pageState: any): void {
-    let yesterdayGuide: any = this.commonService.getValueFromCache(programScheduleYesterdayDataKey);
-    if (!yesterdayGuide) {
-      this.programScheduleService.getGuideByDate(this.commonService.getYesterdayDate(), (gd) => {
-        if (gd !== null) {
-          this.commonService.cacheValue(programScheduleYesterdayDataKey, this.commonService.jsonToString(gd.data));
+    let seriesData = this.commonService.getValueFromCache(seriesDataKey);
+    if (!seriesData) {
+      this.getGuide(this.commonService.getDateByDateIndex(dateIndexDayBeforeYesterday), (data: any) => {
+        let guide = data;
+        this.getGuide(this.commonService.getDateByDateIndex(dateIndexYesterday), (data: any) => {
+          guide = guide.concat(data);
+          this.commonService.cacheValue(programSchedulePastDataKey, this.commonService.jsonToString(guide));
 
-          this.handleSeries(gd.data, pageState);
-        }
-        else {
-          this.commonService.hideElementById('seriesBusyLoader');
-          this.removeKeydownEventListener();
+          guide = guide.concat(this.commonService.stringToJson(this.commonService.getValueFromCache(programScheduleDataKey)));
+          this.seriesData = this.removeDuplicatesSeries(guide);
 
-          this.commonService.toPage(errorPage, null);
-        }
+          this.commonService.cacheValue(seriesDataKey, this.commonService.jsonToString(this.seriesData));
+          this.handleSeries(pageState);
+        });
       });
     }
     else {
       console.log('**Return series data from cache.');
-      this.handleSeries(this.commonService.stringToJson(yesterdayGuide), pageState);
+
+      this.seriesData = this.commonService.stringToJson(seriesData);
+      this.handleSeries(pageState);
     }
   }
 
-  handleSeries(guide: any, pageState: any): void {
-    if (guide) {
-      guide = guide.concat(this.commonService.stringToJson(this.commonService.getValueFromCache(programScheduleDataKey)));
+  handleSeries(pageState: any): void {
+    if (this.seriesData) {
+      //console.log('Series data: ', this.seriesData);
 
-      this.seriesData = this.removeDuplicates(guide);
-      if (this.seriesData) {
-        this.cdRef.detectChanges();
+      console.log('Series data length: ', this.seriesData.length);
 
-        //console.log('Series data: ', this.seriesData);
-        console.log('Series data length: ', this.seriesData.length);
+      const itemWidth = this.calculateItemWidth() + 20;
+      this.seriesRowWidth = this.seriesData.length * itemWidth;
+      this.cdRef.detectChanges();
 
-        const itemWidth = this.calculateItemWidth() + 20;
-        this.seriesRowWidth = this.seriesData.length * itemWidth;
-        this.cdRef.detectChanges();
+      this.restoreRightMargin(pageState, 'series', 4);
 
-        this.restoreRightMargin(pageState, 'series', 4);
+      this.commonService.hideElementById('seriesBusyLoader');
+      this.changeRowBackgroundColor('seriesContainer', '#ffffff');
 
-        this.commonService.hideElementById('seriesBusyLoader');
-        this.changeRowBackgroundColor('seriesContainer', '#ffffff');
+      this.readDynamicRows(pageState);
+    }
+  }
+
+  readDynamicRows(pageState: any): void {
+    let dynamicData = this.commonService.getValueFromCache(dynamicRowDataKey);
+    if (!dynamicData) {
+      let guide = this.commonService.stringToJson(this.commonService.getValueFromCache(programSchedulePastDataKey));
+      if (guide) {
+        guide = guide.concat(this.commonService.stringToJson(this.commonService.getValueFromCache(programScheduleDataKey)));
+        guide = this.removeDuplicatesProgram(guide);
+
+        for (let i = 0; i < guide.length; i++) {
+          let g = guide[i];
+          if (!g) {
+            continue;
+          }
+
+          this.addToMap(g);
+        }
+
+        //console.log('Map item: ', this.dynamicRowsMap);
+
+        let ids = this.shuffleIds(this.getCategoryIdsFromMap(4, 54));
+        if (ids.length < 5) {
+          ids = ids.concat(this.shuffleIds(this.getCategoryIdsFromMap(3, 3)));
+        }
+
+        //console.log('Ids: ', ids);
+
+        for (let i = 0; i < ids.length; i++) {
+          let key = ids[i];
+          if (!key) {
+            continue;
+          }
+
+          let data = null;
+          if (this.dynamicRowsMap[key] && this.dynamicRowsMap[key].length) {
+            data = this.dynamicRowsMap[key];
+          }
+
+          //console.log('Dynamic row data: ', data, ' Row: ', i);
+
+          if (i === 0 && data) {
+            this.dynamicRowData[i] = data;
+          }
+          else if (i === 1 && data) {
+            this.dynamicRowData[i] = data;
+          }
+          else if (i === 2 && data) {
+            this.dynamicRowData[i] = data;
+          }
+          else if (i === 3 && data) {
+            this.dynamicRowData[i] = data;
+          }
+          else if (i === 4 && data) {
+            this.dynamicRowData[i] = data;
+          }
+        }
+
+        this.commonService.cacheValue(dynamicRowDataKey, this.commonService.jsonToString(this.dynamicRowData));
+        this.dynamicRowData = this.commonService.stringToJson(this.commonService.getValueFromCache(dynamicRowDataKey));
       }
     }
+    else {
+      console.log('**Return dynamic rows data from cache.');
+      this.dynamicRowData = this.commonService.stringToJson(dynamicData);
+    }
+
+    //console.log('Dynamic rows data: ', this.dynamicRowData);
+
+    if (this.dynamicRowData) {
+      this.prepareElement(this.dynamicRowData[0], pageState, 'dynamicRowOneText', 'dynamicRowOneContainer',
+        'dynamicRowOne', 5, 'dynamicRowOneBusyLoader');
+
+      this.prepareElement(this.dynamicRowData[1], pageState, 'dynamicRowTwoText', 'dynamicRowTwoContainer',
+        'dynamicRowTwo', 6, 'dynamicRowTwoBusyLoader');
+
+      this.prepareElement(this.dynamicRowData[2], pageState, 'dynamicRowThreeText', 'dynamicRowThreeContainer',
+        'dynamicRowThree', 7, 'dynamicRowThreeBusyLoader');
+
+      this.prepareElement(this.dynamicRowData[3], pageState, 'dynamicRowFourText', 'dynamicRowFourContainer',
+        'dynamicRowFour', 8, 'dynamicRowFourBusyLoader');
+
+      this.prepareElement(this.dynamicRowData[4], pageState, 'dynamicRowFiveText', 'dynamicRowFiveContainer',
+        'dynamicRowFive', 9, 'dynamicRowFiveBusyLoader');
+    }
+  }
+
+  prepareElement(data: any, pageState: any, textId: string, containerId: string, rowId: string, rowNumber: number, busyLoaderId: string): void {
+    if (data) {
+      this.commonService.addToElement(textId, data[0].category);
+
+      const dataLength = data.length;
+      const itemWidth = this.calculateItemWidth() + 20;
+
+      if (rowId === 'dynamicRowOne') {
+        this.dynamicRowOneWidth = dataLength * itemWidth;
+      }
+      else if (rowId === 'dynamicRowTwo') {
+        this.dynamicRowTwoWidth = dataLength * itemWidth;
+      }
+      else if (rowId === 'dynamicRowThree') {
+        this.dynamicRowThreeWidth = dataLength * itemWidth;
+      }
+      else if (rowId === 'dynamicRowFour') {
+        this.dynamicRowFourWidth = dataLength * itemWidth;
+      }
+      else if (rowId === 'dynamicRowFive') {
+        this.dynamicRowFiveWidth = dataLength * itemWidth;
+      }
+
+      this.cdRef.detectChanges();
+
+      this.restoreRightMargin(pageState, rowId, rowNumber);
+
+      this.commonService.hideElementById(busyLoaderId);
+      this.changeRowBackgroundColor(containerId, '#ffffff');
+    }
+    else {
+      this.commonService.hideElementById(textId);
+      this.commonService.hideElementById(containerId);
+    }
+  }
+
+  getGuide(date: string, cb: Function): void {
+    this.programScheduleService.getGuideByDate(date, (gd: any) => {
+      if (gd !== null) {
+        cb(gd.data);
+      }
+      else {
+        this.commonService.hideElementById('seriesBusyLoader');
+        this.removeKeydownEventListener();
+
+        this.commonService.toPage(errorPage, null);
+      }
+    });
+  }
+
+  shuffleIds(ids: any): any {
+    for (let i = ids.length - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * (i + 1));
+      let tmp = ids[i];
+      ids[i] = ids[j];
+      ids[j] = tmp;
+    }
+    return ids;
+  }
+
+  getCategoryIdsFromMap(minProgramsInRow: number, maxProgramsInRow: number): any {
+    let ids = [];
+    for (let d in this.dynamicRowsMap) {
+      //console.log('Key: ', d, ' Value: ', this.dynamicRowsMap[d]);
+
+      const arrLen = this.dynamicRowsMap[d].length;
+      if (arrLen >= minProgramsInRow && arrLen <= maxProgramsInRow) {
+        ids.push(d);
+      }
+
+    }
+
+    //console.log('Ids: ', ids);
+    return ids;
+  }
+
+  addToMap(item: any): void {
+    if (this.dynamicRowsMap && item && item.cid) {
+      const cid = item.cid;
+
+      let array = this.dynamicRowsMap[cid];
+      if (!array) {
+        array = [];
+        array.push(item);
+      }
+      else {
+        array.push(item);
+      }
+
+      this.dynamicRowsMap[cid] = array;
+    }
+  }
+
+  removeDuplicatesSeries(guide: any): any {
+    let seen = [];
+    let retVal = [];
+    for (let i = 0; i < guide.length; i++) {
+      let { sid, episode_number, is_visible_on_vod, series, image_path, name_desc, localStartDate, duration_time } = guide[i];
+
+      if (!this.validateValue(sid) || !this.validateValue(episode_number) || !this.validateValue(is_visible_on_vod)) {
+        continue;
+      }
+
+      if (Number(episode_number) > 1 && is_visible_on_vod !== '-1' && seen.indexOf(sid) === -1) {
+        retVal.push({ sid, series, image_path, name_desc, localStartDate, duration_time });
+        seen.push(guide[i].sid);
+      }
+    }
+
+    return retVal;
+  }
+
+  removeDuplicatesProgram(guide: any): any {
+    let seen: any = [];
+    let retVal: any = [];
+    for (let i = 0; i < guide.length; i++) {
+      let { id, cid, category, is_visible_on_vod, image_path, broadcast_date_time, duration_time, name_desc } = guide[i];
+
+      if (!this.validateValue(id) || !this.validateValue(cid)
+        || !this.validateValue(category) || !this.validateValue(is_visible_on_vod)) {
+        continue;
+      }
+
+      if ((is_visible_on_vod === '1' || is_visible_on_vod === '2') && seen.indexOf(id) === -1) {
+        retVal.push(
+          {
+            id: id,
+            cid: cid,
+            category: category,
+            image_path: image_path,
+            broadcast_date_time: broadcast_date_time,
+            duration_time: duration_time,
+            name_desc: name_desc
+          });
+        seen.push(id);
+      }
+    }
+
+    return retVal;
   }
 
   getCategoriesCount(): number {
@@ -998,25 +1323,6 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
     if (categoriesText) {
       this.commonService.addToElement('categoriesText', categoriesText);
     }
-  }
-
-  removeDuplicates(guide: any): any {
-    let seen = [];
-    let retVal = [];
-    for (let i = 0; i < guide.length; i++) {
-      let { sid, episode_number, is_visible_on_vod, series, image_path, name_desc, localStartDate, duration_time } = guide[i];
-
-      if (!this.validateValue(sid) || !this.validateValue(episode_number) || !this.validateValue(is_visible_on_vod)) {
-        continue;
-      }
-
-      if (Number(episode_number) > 1 && is_visible_on_vod !== '-1' && seen.indexOf(sid) === -1) {
-        retVal.push({ sid, series, image_path, name_desc, localStartDate, duration_time });
-        seen.push(guide[i].sid);
-      }
-    }
-
-    return retVal;
   }
 
   validateValue(value: string): boolean {
