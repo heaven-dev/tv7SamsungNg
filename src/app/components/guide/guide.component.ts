@@ -253,7 +253,7 @@ export class GuideComponent implements OnInit, AfterViewInit {
 
           this.archiveService.getProgramInfo(this.guideDateData[row].id, (program: any) => {
             if (program !== null) {
-              this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
+              this.commonService.cacheJsonValue(selectedArchiveProgramKey, program[0]);
 
               this.savePageState(row);
 
@@ -381,7 +381,7 @@ export class GuideComponent implements OnInit, AfterViewInit {
       guideDateData: this.commonService.jsonToString(this.guideDateData)
     }
 
-    this.commonService.cacheValue(guidePageStateKey, this.commonService.jsonToString(pageState));
+    this.commonService.cacheJsonValue(guidePageStateKey, pageState);
   }
 
   deletePageState(): void {

@@ -251,7 +251,7 @@ export class FavoritesComponent implements OnInit, AfterViewInit {
 
             series = this.commonService.addSeriesProperties(series, sid);
 
-            this.commonService.cacheValue(selectedArchiveSeriesKey, this.commonService.jsonToString(series));
+            this.commonService.cacheJsonValue(selectedArchiveSeriesKey, series);
 
             this.commonService.hideElementById('favoritesBusyLoader');
 
@@ -268,7 +268,7 @@ export class FavoritesComponent implements OnInit, AfterViewInit {
           if (program !== null) {
             program = program[0];
 
-            this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program));
+            this.commonService.cacheJsonValue(selectedArchiveProgramKey, program);
 
             this.commonService.hideElementById('favoritesBusyLoader');
 
@@ -329,7 +329,7 @@ export class FavoritesComponent implements OnInit, AfterViewInit {
       bottomMargin: this.bottomMargin
     }
 
-    this.commonService.cacheValue(favoritesPageStateKey, this.commonService.jsonToString(pageState));
+    this.commonService.cacheJsonValue(favoritesPageStateKey, pageState);
   }
 
   deletePageState(): void {

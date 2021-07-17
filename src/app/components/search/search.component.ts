@@ -403,7 +403,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
     this.saveSearchValue(searchText);
 
-    this.commonService.cacheValue(searchPageStateKey, this.commonService.jsonToString(pageState));
+    this.commonService.cacheJsonValue(searchPageStateKey, pageState);
     this.commonService.toPage(searchResultPage, searchPage);
   }
 

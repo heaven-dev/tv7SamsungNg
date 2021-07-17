@@ -52,7 +52,7 @@ export class LandingComponent implements OnInit, AfterViewInit {
 
             //console.log('Guide data: ', guide);
 
-            this.commonService.cacheValue(programScheduleDataKey, this.commonService.jsonToString(guide));
+            this.commonService.cacheJsonValue(programScheduleDataKey, guide);
 
             this.openTvMainPage();
           }
@@ -90,7 +90,7 @@ export class LandingComponent implements OnInit, AfterViewInit {
           'tvModel': tvModel
         }
 
-        this.commonService.cacheValue(platformInfoKey, this.commonService.jsonToString(json));
+        this.commonService.cacheJsonValue(platformInfoKey, json);
 
         const split = platformVersion.split('.');
 

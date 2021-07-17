@@ -77,7 +77,7 @@ export class SeriesInfoComponent implements OnInit, AfterViewInit {
     this.localeService.setLocaleText('addedToFavoritesText');
     this.localeService.setLocaleText('removedFromFavoritesText');
 
-    this.selectedSeries = this.commonService.stringToJson(this.commonService.getValueFromCache(selectedArchiveSeriesKey));
+    this.selectedSeries = this.commonService.getJsonFromCache(selectedArchiveSeriesKey);
     if (this.selectedSeries) {
       //console.log('Selected series: ', this.selectedSeries);
 
@@ -191,7 +191,7 @@ export class SeriesInfoComponent implements OnInit, AfterViewInit {
       else if (contentId === seriesIconContainer) {
         this.removeKeydownEventListener();
 
-        this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(this.selectedSeries));
+        this.commonService.cacheJsonValue(selectedArchiveProgramKey, this.selectedSeries);
         this.commonService.toPage(seriesProgramsPage, seriesInfoPage);
       }
     }

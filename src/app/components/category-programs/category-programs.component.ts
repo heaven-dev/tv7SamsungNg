@@ -88,7 +88,7 @@ export class CategoryProgramsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     const pageState = this.getPageState();
 
-    this.selectedCategory = this.commonService.stringToJson(this.commonService.getValueFromCache(selectedCategoryKey));
+    this.selectedCategory = this.commonService.getJsonFromCache(selectedCategoryKey);
     if (this.selectedCategory) {
       this.updateProperties();
 
@@ -328,7 +328,7 @@ export class CategoryProgramsComponent implements OnInit, AfterViewInit {
       offset: this.offset
     }
 
-    this.commonService.cacheValue(categoriesPageStateKey, this.commonService.jsonToString(pageState));
+    this.commonService.cacheJsonValue(categoriesPageStateKey, pageState);
   }
 
   deletePageState(): void {
@@ -380,7 +380,7 @@ export class CategoryProgramsComponent implements OnInit, AfterViewInit {
 
             series = this.commonService.addSeriesProperties(series, sid);
 
-            this.commonService.cacheValue(selectedArchiveSeriesKey, this.commonService.jsonToString(series));
+            this.commonService.cacheJsonValue(selectedArchiveSeriesKey, series);
 
             this.commonService.hideElementById('categoryProgramsBusyLoader');
 
@@ -397,7 +397,7 @@ export class CategoryProgramsComponent implements OnInit, AfterViewInit {
           if (program !== null) {
             program = program[0];
 
-            this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program));
+            this.commonService.cacheJsonValue(selectedArchiveProgramKey, program);
 
             this.commonService.hideElementById('categoryProgramsBusyLoader');
 

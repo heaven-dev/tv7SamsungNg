@@ -657,11 +657,11 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
 
     //console.log('Save page state: ', pageState);
 
-    this.commonService.cacheValue(archivePageStateKey, this.commonService.jsonToString(pageState));
+    this.commonService.cacheJsonValue(archivePageStateKey, pageState);
   }
 
   getPageState(): any {
-    return this.commonService.stringToJson(this.commonService.getValueFromCache(archivePageStateKey));
+    return this.commonService.getJsonFromCache(archivePageStateKey);
   }
 
   restoreRightMargin(pageState: any, elementId: string, row: number): void {
@@ -817,7 +817,7 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
 
   toCategoryProgramsPage(category: any): void {
     if (category) {
-      this.commonService.cacheValue(selectedCategoryKey, this.commonService.jsonToString(category));
+      this.commonService.cacheJsonValue(selectedCategoryKey, category);
       this.removeKeydownEventListener();
       this.commonService.toPage(categoryProgramsPage, archiveMainPage);
     }
@@ -833,7 +833,7 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
 
       this.archiveService.getProgramInfo(data.id, (program: any) => {
         if (program != null) {
-          this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
+          this.commonService.cacheJsonValue(selectedArchiveProgramKey, program[0]);
 
           this.commonService.hideElementById('commonBusyLoader');
           this.commonService.toPage(programInfoPage, archiveMainPage);
@@ -864,7 +864,7 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
 
           //console.log('Selected series: ', series);
 
-          this.commonService.cacheValue(selectedArchiveSeriesKey, this.commonService.jsonToString(series));
+          this.commonService.cacheJsonValue(selectedArchiveSeriesKey, series);
 
           this.commonService.hideElementById('commonBusyLoader');
           this.commonService.toPage(seriesInfoPage, archiveMainPage);
@@ -1046,10 +1046,10 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
         this.getGuide(this.commonService.getDateByDateIndex(dateIndexYesterday), (data: any) => {
           this.fourDaysGuide = this.fourDaysGuide.concat(data);
 
-          this.fourDaysGuide = this.fourDaysGuide.concat(this.commonService.stringToJson(this.commonService.getValueFromCache(programScheduleDataKey)));
+          this.fourDaysGuide = this.fourDaysGuide.concat(this.commonService.getJsonFromCache(programScheduleDataKey));
           this.seriesData = this.removeDuplicatesSeries();
 
-          this.commonService.cacheValue(seriesDataKey, this.commonService.jsonToString(this.seriesData));
+          this.commonService.cacheJsonValue(seriesDataKey, this.seriesData);
           this.handleSeries(pageState);
         });
       });
@@ -1134,8 +1134,8 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
         }
       }
 
-      this.commonService.cacheValue(dynamicRowDataKey, this.commonService.jsonToString(this.dynamicRowData));
-      this.dynamicRowData = this.commonService.stringToJson(this.commonService.getValueFromCache(dynamicRowDataKey));
+      this.commonService.cacheJsonValue(dynamicRowDataKey, this.dynamicRowData);
+      this.dynamicRowData = this.commonService.getJsonFromCache(dynamicRowDataKey);
 
       this.dynamicRowsMap = {};
       this.fourDaysGuide = [];

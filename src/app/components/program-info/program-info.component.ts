@@ -79,7 +79,7 @@ export class ProgramInfoComponent implements OnInit, AfterViewInit {
     this.localeService.setLocaleText('addedToFavoritesText');
     this.localeService.setLocaleText('removedFromFavoritesText');
 
-    this.selectedProgram = this.commonService.stringToJson(this.commonService.getValueFromCache(selectedArchiveProgramKey));
+    this.selectedProgram = this.commonService.getJsonFromCache(selectedArchiveProgramKey);
     if (this.selectedProgram) {
       //console.log('Program data: ', this.selectedProgram);
 

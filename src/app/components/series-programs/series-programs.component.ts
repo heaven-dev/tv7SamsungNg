@@ -89,7 +89,7 @@ export class SeriesProgramsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.localeService.setLocaleText('seriesText');
 
-    this.selectedProgram = this.commonService.stringToJson(this.commonService.getValueFromCache(selectedArchiveProgramKey));
+    this.selectedProgram = this.commonService.getJsonFromCache(selectedArchiveProgramKey);
     if (this.selectedProgram) {
       //console.log('Selected program: ', this.selectedProgram);
 
@@ -219,7 +219,7 @@ export class SeriesProgramsComponent implements OnInit, AfterViewInit {
 
           this.archiveService.getProgramInfo(this.seriesData[row].id, (program: any) => {
             if (program !== null) {
-              this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program[0]));
+              this.commonService.cacheJsonValue(selectedArchiveProgramKey, program[0]);
 
               this.savePageState(row);
 
@@ -345,7 +345,7 @@ export class SeriesProgramsComponent implements OnInit, AfterViewInit {
       offset: this.offset
     };
 
-    this.commonService.cacheValue(seriesPageStateKey, this.commonService.jsonToString(pageState));
+    this.commonService.cacheJsonValue(seriesPageStateKey, pageState);
   }
 
   deletePageState(): void {

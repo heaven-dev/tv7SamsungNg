@@ -218,6 +218,19 @@ export class CommonService {
     }
   }
 
+  cacheJsonValue(key: string, value: any): void {
+    if (value) {
+      sessionStorage.setItem(key, this.jsonToString(value));
+    }
+  }
+
+  getJsonFromCache(key: string): any {
+    const value = sessionStorage.getItem(key);
+    if (value) {
+      return this.stringToJson(value);
+    }
+  }
+
   cacheValue(key: string, value: string): void {
     sessionStorage.setItem(key, value);
   }

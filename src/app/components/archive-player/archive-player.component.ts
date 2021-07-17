@@ -100,7 +100,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
 
     this.commonService.screenSaverOff();
 
-    this.selectedProgram = this.commonService.stringToJson(this.commonService.getValueFromCache(selectedArchiveProgramKey));
+    this.selectedProgram = this.commonService.getJsonFromCache(selectedArchiveProgramKey);
 
     this.archiveLanguage = this.localeService.getArchiveLanguage();
 
@@ -621,7 +621,7 @@ export class ArchivePlayerComponent implements OnInit, OnDestroy {
       this.saveVideoStatus();
 
       this.selectedProgram = this.newestPrograms[col];
-      this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(this.selectedProgram));
+      this.commonService.cacheJsonValue(selectedArchiveProgramKey, this.selectedProgram);
 
       this.playerOptions.sources.src = this.getVideoUrl(this.archiveLanguage);
 

@@ -296,7 +296,7 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
 
             series = this.commonService.addSeriesProperties(series, series_id);
 
-            this.commonService.cacheValue(selectedArchiveSeriesKey, this.commonService.jsonToString(series));
+            this.commonService.cacheJsonValue(selectedArchiveSeriesKey, series);
 
             this.commonService.hideElementById('searchResultBusyLoader');
 
@@ -313,7 +313,7 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
           if (program !== null) {
             program = program[0];
 
-            this.commonService.cacheValue(selectedArchiveProgramKey, this.commonService.jsonToString(program));
+            this.commonService.cacheJsonValue(selectedArchiveProgramKey, program);
 
             this.commonService.hideElementById('searchResultBusyLoader');
 
@@ -374,7 +374,7 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
       searchData: this.commonService.jsonToString(this.searchData)
     }
 
-    this.commonService.cacheValue(searchResultPageStateKey, this.commonService.jsonToString(pageState));
+    this.commonService.cacheJsonValue(searchResultPageStateKey, pageState);
   }
 
   deletePageState(): void {

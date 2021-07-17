@@ -296,7 +296,7 @@ export class TvMainComponent implements OnInit, AfterViewInit {
             if (gTomorrow !== null) {
               this.guideData = gToday.concat(gTomorrow.data);
 
-              this.commonService.cacheValue(programScheduleDataKey, this.commonService.jsonToString(this.guideData));
+              this.commonService.cacheJsonValue(programScheduleDataKey, this.guideData);
 
               this.updatePage(true);
             }
