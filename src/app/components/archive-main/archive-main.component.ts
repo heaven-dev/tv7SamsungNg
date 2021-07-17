@@ -33,7 +33,6 @@ import {
   categoryRowNumber,
   seriesRowNumber,
   programScheduleDataKey,
-  programSchedulePastDataKey,
   dateIndexDayBeforeYesterday,
   dateIndexYesterday,
   dateIndexToday,
@@ -64,6 +63,7 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
 
   dynamicRowsMap: any = {};
   dynamicRowData: any = {};
+  fourDaysGuide: any = [];
 
   recommendedMargin: number = 0;
   mostViewedMargin: number = 0;
@@ -1042,13 +1042,12 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
     let seriesData = this.commonService.getValueFromCache(seriesDataKey);
     if (!seriesData) {
       this.getGuide(this.commonService.getDateByDateIndex(dateIndexDayBeforeYesterday), (data: any) => {
-        let guide = data;
+        this.fourDaysGuide = data;
         this.getGuide(this.commonService.getDateByDateIndex(dateIndexYesterday), (data: any) => {
-          guide = guide.concat(data);
-          this.commonService.cacheValue(programSchedulePastDataKey, this.commonService.jsonToString(guide));
+          this.fourDaysGuide = this.fourDaysGuide.concat(data);
 
-          guide = guide.concat(this.commonService.stringToJson(this.commonService.getValueFromCache(programScheduleDataKey)));
-          this.seriesData = this.removeDuplicatesSeries(guide);
+          this.fourDaysGuide = this.fourDaysGuide.concat(this.commonService.stringToJson(this.commonService.getValueFromCache(programScheduleDataKey)));
+          this.seriesData = this.removeDuplicatesSeries();
 
           this.commonService.cacheValue(seriesDataKey, this.commonService.jsonToString(this.seriesData));
           this.handleSeries(pageState);
@@ -1085,62 +1084,61 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
   readDynamicRows(pageState: any): void {
     let dynamicData = this.commonService.getValueFromCache(dynamicRowDataKey);
     if (!dynamicData) {
-      let guide = this.commonService.stringToJson(this.commonService.getValueFromCache(programSchedulePastDataKey));
-      if (guide) {
-        guide = guide.concat(this.commonService.stringToJson(this.commonService.getValueFromCache(programScheduleDataKey)));
-        guide = this.removeDuplicatesProgram(guide);
+      let guide = this.removeDuplicatesProgram();
 
-        for (let i = 0; i < guide.length; i++) {
-          let g = guide[i];
-          if (!g) {
-            continue;
-          }
-
-          this.addToMap(g);
+      for (let i = 0; i < guide.length; i++) {
+        let g = guide[i];
+        if (!g) {
+          continue;
         }
 
-        //console.log('Map item: ', this.dynamicRowsMap);
-
-        let ids = this.shuffleIds(this.getCategoryIdsFromMap(4, 54));
-        if (ids.length < 5) {
-          ids = ids.concat(this.shuffleIds(this.getCategoryIdsFromMap(3, 3)));
-        }
-
-        //console.log('Ids: ', ids);
-
-        for (let i = 0; i < ids.length; i++) {
-          let key = ids[i];
-          if (!key) {
-            continue;
-          }
-
-          let data = null;
-          if (this.dynamicRowsMap[key] && this.dynamicRowsMap[key].length) {
-            data = this.dynamicRowsMap[key];
-          }
-
-          //console.log('Dynamic row data: ', data, ' Row: ', i);
-
-          if (i === 0 && data) {
-            this.dynamicRowData[i] = data;
-          }
-          else if (i === 1 && data) {
-            this.dynamicRowData[i] = data;
-          }
-          else if (i === 2 && data) {
-            this.dynamicRowData[i] = data;
-          }
-          else if (i === 3 && data) {
-            this.dynamicRowData[i] = data;
-          }
-          else if (i === 4 && data) {
-            this.dynamicRowData[i] = data;
-          }
-        }
-
-        this.commonService.cacheValue(dynamicRowDataKey, this.commonService.jsonToString(this.dynamicRowData));
-        this.dynamicRowData = this.commonService.stringToJson(this.commonService.getValueFromCache(dynamicRowDataKey));
+        this.addToMap(g);
       }
+
+      //console.log('Map item: ', this.dynamicRowsMap);
+
+      let ids = this.shuffleIds(this.getCategoryIdsFromMap(4, 54));
+      if (ids.length < 5) {
+        ids = ids.concat(this.shuffleIds(this.getCategoryIdsFromMap(3, 3)));
+      }
+
+      //console.log('Ids: ', ids);
+
+      for (let i = 0; i < ids.length; i++) {
+        let key = ids[i];
+        if (!key) {
+          continue;
+        }
+
+        let data = null;
+        if (this.dynamicRowsMap[key] && this.dynamicRowsMap[key].length) {
+          data = this.dynamicRowsMap[key];
+        }
+
+        //console.log('Dynamic row data: ', data, ' Row: ', i);
+
+        if (i === 0 && data) {
+          this.dynamicRowData[i] = data;
+        }
+        else if (i === 1 && data) {
+          this.dynamicRowData[i] = data;
+        }
+        else if (i === 2 && data) {
+          this.dynamicRowData[i] = data;
+        }
+        else if (i === 3 && data) {
+          this.dynamicRowData[i] = data;
+        }
+        else if (i === 4 && data) {
+          this.dynamicRowData[i] = data;
+        }
+      }
+
+      this.commonService.cacheValue(dynamicRowDataKey, this.commonService.jsonToString(this.dynamicRowData));
+      this.dynamicRowData = this.commonService.stringToJson(this.commonService.getValueFromCache(dynamicRowDataKey));
+
+      this.dynamicRowsMap = {};
+      this.fourDaysGuide = [];
     }
     else {
       console.log('**Return dynamic rows data from cache.');
@@ -1260,11 +1258,11 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
     }
   }
 
-  removeDuplicatesSeries(guide: any): any {
+  removeDuplicatesSeries(): any {
     let seen = [];
     let retVal = [];
-    for (let i = 0; i < guide.length; i++) {
-      let { sid, episode_number, is_visible_on_vod, series, image_path, name_desc, localStartDate, duration_time } = guide[i];
+    for (let i = 0; i < this.fourDaysGuide.length; i++) {
+      let { sid, episode_number, is_visible_on_vod, series, image_path, name_desc, localStartDate, duration_time } = this.fourDaysGuide[i];
 
       if (!this.validateValue(sid) || !this.validateValue(episode_number) || !this.validateValue(is_visible_on_vod)) {
         continue;
@@ -1272,18 +1270,18 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
 
       if (Number(episode_number) > 1 && is_visible_on_vod !== '-1' && seen.indexOf(sid) === -1) {
         retVal.push({ sid, series, image_path, name_desc, localStartDate, duration_time });
-        seen.push(guide[i].sid);
+        seen.push(sid);
       }
     }
 
     return retVal;
   }
 
-  removeDuplicatesProgram(guide: any): any {
+  removeDuplicatesProgram(): any {
     let seen: any = [];
     let retVal: any = [];
-    for (let i = 0; i < guide.length; i++) {
-      let { id, cid, category, is_visible_on_vod, image_path, broadcast_date_time, duration_time, name_desc } = guide[i];
+    for (let i = 0; i < this.fourDaysGuide.length; i++) {
+      let { id, cid, category, is_visible_on_vod, image_path, broadcast_date_time, duration_time, name_desc } = this.fourDaysGuide[i];
 
       if (!this.validateValue(id) || !this.validateValue(cid)
         || !this.validateValue(category) || !this.validateValue(is_visible_on_vod)) {

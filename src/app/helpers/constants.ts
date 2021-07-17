@@ -110,7 +110,6 @@ export const audioIndexParam = 'audioindex';
 export const tvBrand = 'samsungTV';
 
 export const programScheduleDataKey = 'programScheduleDataKey';
-export const programSchedulePastDataKey = 'programSchedulePastDataKey';
 export const platformVersionKey = 'platformVersionKey';
 export const platformInfoKey = 'platformInfoKey';
 
