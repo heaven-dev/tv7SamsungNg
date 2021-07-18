@@ -46,6 +46,11 @@ const archiveLanguageEt: string = 'ET1';
 const archiveLanguageRu: string = 'RU1';
 const archiveLanguageSv: string = 'SV1';
 
+const archivePageCategoriesFi: any = [13, 11, 4, 8];
+const archivePageCategoriesEt: any = [4, 11, 24, 8];
+const archivePageCategoriesRu: any = [4, 15, 26, 1];
+const archivePageCategoriesSv: any = [23, 8, 4, 15];
+
 const keyboardLetters: any = {
   1: [
     { n: 'q', c: 'Q' },
@@ -590,6 +595,23 @@ export class LocaleService {
     }
 
     return logo;
+  }
+
+  getArchivePageCategories(): any {
+    let categories: any = '';
+    if (selectedLocale === localeFi) {
+      categories = archivePageCategoriesFi;
+    }
+    else if (selectedLocale === localeEt) {
+      categories = archivePageCategoriesEt;
+    }
+    else if (selectedLocale === localeRu) {
+      categories = archivePageCategoriesRu;
+    }
+    else if (selectedLocale === localeSv) {
+      categories = archivePageCategoriesSv;
+    }
+    return categories;
   }
 
   getChannelLogo(): string {

@@ -32,7 +32,7 @@
 .newestProgramsText,
 .categoriesText,
 .seriesText,
-.dynamicRowText {
+.categoryRowText {
 	font-size: 32px;
 	font-weight: bold;
 	color: #444444;
@@ -46,7 +46,6 @@
 }
 
 .categoryNameText,
-.categoryBackText,
 .seriesNameText {
 	width: calc(100% - 20px);
 	padding: 10px;
@@ -68,7 +67,7 @@
 .newestPrograms,
 .categories,
 .series,
-.dynamicRow {
+.categoryRow {
 	height: 100%;
 	position: relative;
 	display: -webkit-flex;
@@ -95,7 +94,7 @@
 .programItem,
 .categoriesItem,
 .seriesItem,
-.categoriesBackItem {
+.categoriesBoxItem {
 	position: relative;
 	border: 10px solid #444444;
 	outline: none;
@@ -126,20 +125,15 @@
 	margin-left: 10px;
 }
 
-.categoriesItem,
-.categoriesBackItem {
+.categoriesItem {
 	text-align: center;
 	background-color: #eeeeee;
 }
 
-.categoriesBackItem {
-	width: 346px;
-}
-
 .programItem:focus,
 .categoriesItem:focus,
-.categoriesBackItem:focus,
-.seriesItem:focus {
+.seriesItem:focus,
+.categoriesBoxItem:focus {
 	border: 10px solid #0099CC;
 	border-radius: 4px;
 	/*
@@ -188,23 +182,15 @@
 	bottom: 0;
 }
 
-.categoriesIconText {
+.categoriesBoxItem {
 	display: -webkit-flex;
 	display: flex;
 	align-items: center;
 	width: 346px;
+	background-color: #eeeeee;
 }
 
-.categoryBackText {
-	width: initial;
-}
-
-.backIconContainer {
-	width: 100px;
-	height: 100px;
-}
-
-.backIcon {
-	width: 100px;
-	height: 100px;
+.categoriesBoxItemIcon {
+	width: 346px;
+	height: 150px;
 }

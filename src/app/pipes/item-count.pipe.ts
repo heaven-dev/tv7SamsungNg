@@ -1,10 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'dynamicRow'
+  name: 'itemCount'
 })
-export class DynamicRowPipe implements PipeTransform {
+export class ItemCountPipe implements PipeTransform {
   transform(value: any, ...args: any[]): any {
-    return value[args[0]];
+    return value.length;
   }
 }

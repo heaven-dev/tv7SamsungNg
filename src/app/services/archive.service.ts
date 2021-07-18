@@ -130,8 +130,13 @@ export class ArchiveService {
   }
 
   getNewestPrograms(date: string, limit: number, offset: number, category: any, cb: Function): void {
-    if (!this.isCacheExpired(cacheExpirationKey + newestProgramsKey)) {
-      const newest = this.getDataFromCache(newestProgramsKey);
+    let categoryId = '';
+    if (category) {
+      categoryId = category;
+    }
+
+    if (!this.isCacheExpired(cacheExpirationKey + newestProgramsKey + categoryId)) {
+      const newest = this.getDataFromCache(newestProgramsKey + categoryId);
       if (newest) {
         console.log('**Return newest data from cache.');
         cb(newest);
@@ -157,7 +162,7 @@ export class ArchiveService {
           data = this.filterResponse(data, newestProgramsMethod);
 
           if (data && data.length) {
-            this.cacheData(newestProgramsKey, this.commonService.jsonToString(data));
+            this.cacheData(newestProgramsKey + categoryId, this.commonService.jsonToString(data));
           }
 
           cb(data);
@@ -210,7 +215,7 @@ export class ArchiveService {
     }
     else {
       // Read sub categories to cache
-      this.getSubCategories(() => {});
+      this.getSubCategories(() => { });
 
       const url = this.localeService.getArchiveUrl() + parentCategoriesMethod;
 
@@ -530,6 +535,10 @@ export class ArchiveService {
         if (method === programInfoMethod) {
           resultItem.path = this.checkPropertyValue(sourceItem.path);
           resultItem.aspect_ratio = this.checkPropertyValue(sourceItem.aspect_ratio);
+        }
+
+        if (method === newestProgramsMethod) {
+          resultItem.cname = this.checkPropertyValue(sourceItem.cname);
         }
 
         result.push(resultItem);

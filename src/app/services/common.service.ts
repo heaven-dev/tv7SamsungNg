@@ -229,6 +229,7 @@ export class CommonService {
     if (value) {
       return this.stringToJson(value);
     }
+    return null;
   }
 
   cacheValue(key: string, value: string): void {

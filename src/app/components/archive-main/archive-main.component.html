@@ -123,14 +123,9 @@
                             <div class="categoryNameText" *ngIf="!c.parent_id" [ngStyle]="{'width': categoriesSeriesRowItemWidth + 'px'}">{{c.name}}</div>
                         </div>
                     </div>
-        
-                    <div id="3_{{getCategoriesCount()}}" *ngIf="subCategoriesVisible" class="categoriesBackItem" tabindex="0">
-                        <div class="categoriesIconText">
-                            <div class="backIconContainer">
-                                <img class="backIcon" src="assets/arrow_back.svg" alt=""/>
-                            </div>
-                            <div id="categoryBackText" class="categoryBackText" [ngStyle]="{'height': categoriesRowItemHeight + 'px', 'line-height': categoriesRowItemHeight + 'px'}"></div>
-                        </div>
+
+                    <div id="3_{{categories | itemCount}}" *ngIf="subCategoriesVisible"  class="categoriesBoxItem" tabindex="0">
+                        <img class="categoriesBoxItemIcon" src="assets/arrow_back.svg" alt=""/>
                     </div>
                 </div>
             </div>
@@ -171,9 +166,9 @@
                 </div>
             </div>
 
-            <div id="dynamicRowOneText" class="dynamicRowText"></div>
-            <div id="dynamicRowOneContainer" class="rowContainer">
-                <div id="dynamicRowOneBusyLoader" class="busyLoader">
+            <div id="categoryRowOneText" class="categoryRowText"></div>
+            <div id="categoryRowOneContainer" class="rowContainer">
+                <div id="categoryRowOneBusyLoader" class="busyLoader">
                     <div></div>
                     <div></div>
                     <div></div>
@@ -188,19 +183,23 @@
                     <div></div>
                 </div>
 
-                <div id="dynamicRowOne" class="dynamicRow" [ngStyle]="{'width': dynamicRowOneWidth + 'px'}">
-                    <div id="5_{{i}}" *ngFor="let d of dynamicRowData | dynamicRow: 0; let i = index" class="programItem dynamicRowItem" [ngStyle]="{'min-width': programRowItemWidth + 'px'}" tabindex="0">
-                        <div class="programDate">{{d.broadcast_date_time}}</div>
-                        <div class="programTime">{{d.duration_time}}</div>
-                        <img class="programImg" [ngStyle]="{'width': programRowItemWidth + 'px', 'height': programRowItemHeight + 'px'}" src="{{d.image_path}}" onerror="if (this.src != 'assets/tv7logo.png') this.src='assets/tv7logo.png';" alt="" />
-                        <div class="programDesc">{{d.name_desc}}</div>
+                <div id="categoryRowOne" class="categoryRow" [ngStyle]="{'width': categoryRowOneWidth + 'px'}">
+                    <div id="5_{{i}}" *ngFor="let c of categoryRowOneData; let i = index" class="programItem categoryRowItem" [ngStyle]="{'min-width': programRowItemWidth + 'px'}" tabindex="0">
+                        <div class="programDate">{{c.broadcast_date_time}}</div>
+                        <div class="programTime">{{c.duration_time}}</div>
+                        <img class="programImg" [ngStyle]="{'width': programRowItemWidth + 'px', 'height': programRowItemHeight + 'px'}" src="{{c.image_path}}" onerror="if (this.src != 'assets/tv7logo.png') this.src='assets/tv7logo.png';" alt="" />
+                        <div class="programDesc">{{c.name_desc}}</div>
+                    </div>
+
+                    <div id="5_{{categoryRowOneData | itemCount}}" class="categoriesBoxItem" tabindex="0">
+                        <img class="categoriesBoxItemIcon" src="assets/more.svg" alt=""/>
                     </div>
                 </div>
             </div>
 
-            <div id="dynamicRowTwoText" class="dynamicRowText"></div>
-            <div id="dynamicRowTwoContainer" class="rowContainer">
-                <div id="dynamicRowTwoBusyLoader" class="busyLoader">
+            <div id="categoryRowTwoText" class="categoryRowText"></div>
+            <div id="categoryRowTwoContainer" class="rowContainer">
+                <div id="categoryRowTwoBusyLoader" class="busyLoader">
                     <div></div>
                     <div></div>
                     <div></div>
@@ -215,19 +214,23 @@
                     <div></div>
                 </div>
 
-                <div id="dynamicRowTwo" class="dynamicRow" [ngStyle]="{'width': dynamicRowTwoWidth + 'px'}">
-                    <div id="6_{{i}}" *ngFor="let d of dynamicRowData | dynamicRow: 1; let i = index" class="programItem dynamicRowItem" [ngStyle]="{'min-width': programRowItemWidth + 'px'}" tabindex="0">
-                        <div class="programDate">{{d.broadcast_date_time}}</div>
-                        <div class="programTime">{{d.duration_time}}</div>
-                        <img class="programImg" [ngStyle]="{'width': programRowItemWidth + 'px', 'height': programRowItemHeight + 'px'}" src="{{d.image_path}}" onerror="if (this.src != 'assets/tv7logo.png') this.src='assets/tv7logo.png';" alt="" />
-                        <div class="programDesc">{{d.name_desc}}</div>
+                <div id="categoryRowTwo" class="categoryRow" [ngStyle]="{'width': categoryRowTwoWidth + 'px'}">
+                    <div id="6_{{i}}" *ngFor="let c of categoryRowTwoData; let i = index" class="programItem categoryRowItem" [ngStyle]="{'min-width': programRowItemWidth + 'px'}" tabindex="0">
+                        <div class="programDate">{{c.broadcast_date_time}}</div>
+                        <div class="programTime">{{c.duration_time}}</div>
+                        <img class="programImg" [ngStyle]="{'width': programRowItemWidth + 'px', 'height': programRowItemHeight + 'px'}" src="{{c.image_path}}" onerror="if (this.src != 'assets/tv7logo.png') this.src='assets/tv7logo.png';" alt="" />
+                        <div class="programDesc">{{c.name_desc}}</div>
+                    </div>
+
+                    <div id="6_{{categoryRowTwoData | itemCount}}" class="categoriesBoxItem" tabindex="0">
+                        <img class="categoriesBoxItemIcon" src="assets/more.svg" alt=""/>
                     </div>
                 </div>
             </div>
 
-            <div id="dynamicRowThreeText" class="dynamicRowText"></div>
-            <div id="dynamicRowThreeContainer" class="rowContainer">
-                <div id="dynamicRowThreeBusyLoader" class="busyLoader">
+            <div id="categoryRowThreeText" class="categoryRowText"></div>
+            <div id="categoryRowThreeContainer" class="rowContainer">
+                <div id="categoryRowThreeBusyLoader" class="busyLoader">
                     <div></div>
                     <div></div>
                     <div></div>
@@ -242,19 +245,23 @@
                     <div></div>
                 </div>
 
-                <div id="dynamicRowThree" class="dynamicRow" [ngStyle]="{'width': dynamicRowThreeWidth + 'px'}">
-                    <div id="7_{{i}}" *ngFor="let d of dynamicRowData | dynamicRow: 2; let i = index" class="programItem dynamicRowItem" [ngStyle]="{'min-width': programRowItemWidth + 'px'}" tabindex="0">
-                        <div class="programDate">{{d.broadcast_date_time}}</div>
-                        <div class="programTime">{{d.duration_time}}</div>
-                        <img class="programImg" [ngStyle]="{'width': programRowItemWidth + 'px', 'height': programRowItemHeight + 'px'}" src="{{d.image_path}}" onerror="if (this.src != 'assets/tv7logo.png') this.src='assets/tv7logo.png';" alt="" />
-                        <div class="programDesc">{{d.name_desc}}</div>
+                <div id="categoryRowThree" class="categoryRow" [ngStyle]="{'width': categoryRowThreeWidth + 'px'}">
+                    <div id="7_{{i}}" *ngFor="let c of categoryRowThreeData; let i = index" class="programItem categoryRowItem" [ngStyle]="{'min-width': programRowItemWidth + 'px'}" tabindex="0">
+                        <div class="programDate">{{c.broadcast_date_time}}</div>
+                        <div class="programTime">{{c.duration_time}}</div>
+                        <img class="programImg" [ngStyle]="{'width': programRowItemWidth + 'px', 'height': programRowItemHeight + 'px'}" src="{{c.image_path}}" onerror="if (this.src != 'assets/tv7logo.png') this.src='assets/tv7logo.png';" alt="" />
+                        <div class="programDesc">{{c.name_desc}}</div>
+                    </div>
+
+                    <div id="7_{{categoryRowThreeData | itemCount}}" class="categoriesBoxItem" tabindex="0">
+                        <img class="categoriesBoxItemIcon" src="assets/more.svg" alt=""/>
                     </div>
                 </div>
             </div>
 
-            <div id="dynamicRowFourText" class="dynamicRowText"></div>
-            <div id="dynamicRowFourContainer" class="rowContainer">
-                <div id="dynamicRowFourBusyLoader" class="busyLoader">
+            <div id="categoryRowFourText" class="categoryRowText"></div>
+            <div id="categoryRowFourContainer" class="rowContainer">
+                <div id="categoryRowFourBusyLoader" class="busyLoader">
                     <div></div>
                     <div></div>
                     <div></div>
@@ -269,39 +276,16 @@
                     <div></div>
                 </div>
 
-                <div id="dynamicRowFour" class="dynamicRow" [ngStyle]="{'width': dynamicRowFourWidth + 'px'}">
-                    <div id="8_{{i}}" *ngFor="let d of dynamicRowData | dynamicRow: 3; let i = index" class="programItem dynamicRowItem" [ngStyle]="{'min-width': programRowItemWidth + 'px'}" tabindex="0">
-                        <div class="programDate">{{d.broadcast_date_time}}</div>
-                        <div class="programTime">{{d.duration_time}}</div>
-                        <img class="programImg" [ngStyle]="{'width': programRowItemWidth + 'px', 'height': programRowItemHeight + 'px'}" src="{{d.image_path}}" onerror="if (this.src != 'assets/tv7logo.png') this.src='assets/tv7logo.png';" alt="" />
-                        <div class="programDesc">{{d.name_desc}}</div>
+                <div id="categoryRowFour" class="categoryRow" [ngStyle]="{'width': categoryRowFourWidth + 'px'}">
+                    <div id="8_{{i}}" *ngFor="let c of categoryRowFourData let i = index" class="programItem categoryRowItem" [ngStyle]="{'min-width': programRowItemWidth + 'px'}" tabindex="0">
+                        <div class="programDate">{{c.broadcast_date_time}}</div>
+                        <div class="programTime">{{c.duration_time}}</div>
+                        <img class="programImg" [ngStyle]="{'width': programRowItemWidth + 'px', 'height': programRowItemHeight + 'px'}" src="{{c.image_path}}" onerror="if (this.src != 'assets/tv7logo.png') this.src='assets/tv7logo.png';" alt="" />
+                        <div class="programDesc">{{c.name_desc}}</div>
                     </div>
-                </div>
-            </div>
 
-            <div id="dynamicRowFiveText" class="dynamicRowText"></div>
-            <div id="dynamicRowFiveContainer" class="rowContainer">
-                <div id="dynamicRowFiveBusyLoader" class="busyLoader">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-
-                <div id="dynamicRowFive" class="dynamicRow" [ngStyle]="{'width': dynamicRowFiveWidth + 'px'}">
-                    <div id="9_{{i}}" *ngFor="let d of dynamicRowData | dynamicRow: 4; let i = index" class="programItem dynamicRowItem" [ngStyle]="{'min-width': programRowItemWidth + 'px'}" tabindex="0">
-                        <div class="programDate">{{d.broadcast_date_time}}</div>
-                        <div class="programTime">{{d.duration_time}}</div>
-                        <img class="programImg" [ngStyle]="{'width': programRowItemWidth + 'px', 'height': programRowItemHeight + 'px'}" src="{{d.image_path}}" onerror="if (this.src != 'assets/tv7logo.png') this.src='assets/tv7logo.png';" alt="" />
-                        <div class="programDesc">{{d.name_desc}}</div>
+                    <div id="8_{{categoryRowFourData | itemCount}}" class="categoriesBoxItem" tabindex="0">
+                        <img class="categoriesBoxItemIcon" src="assets/more.svg" alt=""/>
                     </div>
                 </div>
             </div>

@@ -136,7 +136,6 @@ export const videoStatusDataKey = 'videoStatusDataKey';
 export const savedSearchDataKey = 'savedSearchDataKey';
 export const visiblePageKey = 'visiblePageKey';
 export const seriesDataKey = 'seriesDataKey';
-export const dynamicRowDataKey = 'dynamicRowDataKey';
 
 export const channelUrlKey = 'channelUrlKey';
 
