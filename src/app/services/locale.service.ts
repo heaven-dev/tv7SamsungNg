@@ -46,10 +46,69 @@ const archiveLanguageEt: string = 'ET1';
 const archiveLanguageRu: string = 'RU1';
 const archiveLanguageSv: string = 'SV1';
 
-const archivePageCategoriesFi: any = [13, 11, 4, 8];
-const archivePageCategoriesEt: any = [4, 11, 24, 8];
-const archivePageCategoriesRu: any = [4, 15, 26, 1];
-const archivePageCategoriesSv: any = [23, 8, 4, 15];
+const archivePageCategoriesFi: any = [
+  11,
+  6,
+  15,
+  18,
+  17,
+  8,
+  12,
+  5,
+  25,
+  1,
+  7,
+  2,
+  13,
+  4,
+  10,
+  9,
+  14,
+  3
+];
+const archivePageCategoriesEt: any = [
+  24,
+  8,
+  13,
+  4,
+  1,
+  7,
+  2,
+  6,
+  3,
+  15,
+  5
+];
+const archivePageCategoriesRu: any = [
+  26,
+  1,
+  6,
+  3,
+  10,
+  35,
+  25,
+  8,
+  15,
+  4,
+  14
+];
+const archivePageCategoriesSv: any = [
+  1,
+  10,
+  9,
+  6,
+  3,
+  8,
+  15,
+  7,
+  11,
+  5,
+  25,
+  18,
+  4,
+  23,
+  2
+];
 
 const keyboardLetters: any = {
   1: [

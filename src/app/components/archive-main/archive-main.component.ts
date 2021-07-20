@@ -174,8 +174,11 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
 
     const categoryIds = this.localeService.getArchivePageCategories();
     if (categoryIds) {
-      for (let i = 0; i < categoryIds.length; i++) {
-        this.readNewestProgramsByCategoryId(todayDate, 5, 0, categoryIds[i], i, this.pageState);
+      const selectedCategoryIds = this.commonService.selectCategoriesToRows(categoryIds);
+      if (selectedCategoryIds) {
+        for (let i = 0; i < selectedCategoryIds.length; i++) {
+          this.readNewestProgramsByCategoryId(todayDate, 5, 0, selectedCategoryIds[i], i, this.pageState);
+        }
       }
     }
 
@@ -192,6 +195,7 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
   keyDownEventListener(e: any): void {
     const keyCode = e.keyCode;
     const contentId = e.target.id;
+    const type = e.target.getAttribute('type');
 
     //console.log('Key code : ', keyCode, ' Target element: ', contentId);
 
@@ -336,7 +340,7 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
             this.toSeriesInfoPage(row, col);
           }
           else {
-            if ((row === 5 || row === 6 || row === 7 || row === 8) && col === 5) {
+            if ((row === 5 || row === 6 || row === 7 || row === 8) && type === 'moreBox') {
               this.toCategoriesPage(row, col);
             }
             else {
@@ -820,14 +824,28 @@ export class ArchiveMainComponent implements OnInit, AfterViewInit {
 
     this.archiveService.getSubCategories((data: any) => {
       if (data !== null) {
-        let categoryId = this.localeService.getArchivePageCategories();
-        categoryId = categoryId[row - 5];
-        if (!categoryId) {
+        let cid = null;
+        if (row === 5) {
+          cid = this.categoryRowOneData[0].cid;
+        }
+        if (row === 6) {
+          cid = this.categoryRowTwoData[0].cid;
+        }
+        if (row === 7) {
+          cid = this.categoryRowThreeData[0].cid;
+        }
+        if (row === 8) {
+          cid = this.categoryRowFourData[0].cid;
+        }
+
+        //console.log('Cid: ', cid);
+
+        if (!cid) {
           return;
         }
 
         let category = data.find((c: any) => {
-          return c.category_id === String(categoryId);
+          return c.category_id === String(cid);
         });
 
         if (!category) {

@@ -539,6 +539,7 @@ export class ArchiveService {
 
         if (method === newestProgramsMethod) {
           resultItem.cname = this.checkPropertyValue(sourceItem.cname);
+          resultItem.cid = this.checkPropertyValue(sourceItem.cid);
         }
 
         result.push(resultItem);

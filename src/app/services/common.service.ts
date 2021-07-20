@@ -20,6 +20,8 @@ import {
   originPageKey,
   visiblePageKey,
   errorTextKey,
+  categoryRowCount,
+  selectedCategoriesRowKey,
   noNetworkConnectionText
 } from '../helpers/constants';
 
@@ -374,6 +376,36 @@ export class CommonService {
     series.name_desc = series.name;
     series.is_series = true;
     return series;
+  }
+
+  selectCategoriesToRows(categoryIds: any): any {
+    let selectedCategoryIds: any = [];
+
+    selectedCategoryIds = this.getJsonFromCache(selectedCategoriesRowKey);
+    if (selectedCategoryIds) {
+      return selectedCategoryIds;
+    }
+
+    selectedCategoryIds = [];
+
+    if (categoryIds && categoryIds.length >= categoryRowCount) {
+      for (let i = 0; i < categoryRowCount; i++) {
+        const id = categoryIds[Math.floor(Math.random() * categoryIds.length)];
+        selectedCategoryIds.push(id);
+
+        const index = categoryIds.indexOf(id);
+        if (index !== -1) {
+          categoryIds.splice(index, 1);
+        }
+
+        //console.log('categoryIds: ', categoryIds);
+        //console.log('selectedCategoryIds: ', selectedCategoryIds);
+      }
+    }
+
+    this.cacheJsonValue(selectedCategoriesRowKey, selectedCategoryIds);
+
+    return selectedCategoryIds;
   }
 
   screenSaverOn(): void {

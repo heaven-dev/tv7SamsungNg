@@ -136,6 +136,7 @@ export const videoStatusDataKey = 'videoStatusDataKey';
 export const savedSearchDataKey = 'savedSearchDataKey';
 export const visiblePageKey = 'visiblePageKey';
 export const seriesDataKey = 'seriesDataKey';
+export const selectedCategoriesRowKey = 'selectedCategoriesRowKey';
 
 export const channelUrlKey = 'channelUrlKey';
 
@@ -177,3 +178,5 @@ export const dateIndexDayBeforeYesterday = -2;
 export const dateIndexYesterday = -1;
 export const dateIndexToday = 0;
 export const dateIndexTomorrow = 1;
+
+export const categoryRowCount = 4;
